@@ -18,7 +18,14 @@ export default function MissionSpotlight() {
             </span>
           </div>
           
-          <h4 className="text-xl font-bold text-white mb-3">Mission 11: House Fire</h4>
+          <h4 className="text-xl font-bold text-white mb-3">Mission 176: House Fire</h4>
+          
+          <div className="mb-6">
+            <p className="text-gray-400 text-sm mb-2">Description:</p>
+            <p className="text-gray-200 text-sm leading-relaxed mb-4">
+              Mission: To help a woman & her dog who lost their home to a house fire. This mission will help replace items lost in the fire.
+            </p>
+          </div>
           
           <div className="mb-6">
             <p className="text-gray-400 text-sm mb-2">Status:</p>
