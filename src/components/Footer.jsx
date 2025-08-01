@@ -11,7 +11,7 @@ export default function Footer() {
             </p>
             <p className="text-gray-400 text-sm">
               501(c)(3) Nonprofit Organization<br />
-              EIN: XX-XXXXXXX
+              EIN: 99-2813860
             </p>
           </div>
 
