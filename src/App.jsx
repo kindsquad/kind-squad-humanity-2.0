@@ -20,7 +20,7 @@ function HomePage() {
         <Hero />
       </div>
       {/* Mission Spotlight - Very Dark Background */}
-      <div style={{backgroundColor: '#0c0c0c'}}>
+      <div style={{backgroundColor: '#0c0c0c'}} className="py-8 md:py-12">
         <MissionSpotlight />
       </div>
       {/* Annual Missions - Black background */}

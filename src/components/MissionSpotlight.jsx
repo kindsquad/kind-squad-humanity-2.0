@@ -1,6 +1,6 @@
 export default function MissionSpotlight() {
   return (
-    <section className="py-8 md:py-16">
+    <section className="py-4 md:py-8">
       <div className="max-w-4xl mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-sm font-semibold text-yellow-400 tracking-wide uppercase mb-4">
