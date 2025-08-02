@@ -1,6 +1,9 @@
+import { useNavigate } from 'react-router-dom'
 import worldMapImage from '../assets/world-map.jpg'
 
 export default function Hero() {
+  const navigate = useNavigate()
+
   return (
     <section className="relative bg-black overflow-hidden">
       {/* World Map Background */}
@@ -43,16 +46,28 @@ export default function Hero() {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-4 md:mb-8">
-          <button className="w-3/4 sm:w-auto bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
+          <button 
+            onClick={() => window.open('https://www.zeffy.com/en-US/donation-form/kind-squad-general-fund', '_blank')}
+            className="w-3/4 sm:w-auto bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors"
+          >
             Donate Now
           </button>
-          <button className="w-3/4 sm:w-auto bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
+          <button 
+            onClick={() => navigate('/request-help')}
+            className="w-3/4 sm:w-auto bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors"
+          >
             Request Help
           </button>
-          <button className="w-3/4 sm:w-auto bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
+          <button 
+            onClick={() => navigate('/member')}
+            className="w-3/4 sm:w-auto bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors"
+          >
             Become A Member
           </button>
-          <button className="w-3/4 sm:w-auto bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors">
+          <button 
+            onClick={() => navigate('/start-chapter')}
+            className="w-3/4 sm:w-auto bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition-colors"
+          >
             Start a Chapter
           </button>
         </div>
