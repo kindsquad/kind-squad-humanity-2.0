@@ -41,6 +41,9 @@ function App() {
         <Route path="/member" element={<MemberDashboard />} />
         <Route path="/chapter" element={<ChapterDashboard />} />
         <Route path="/missions" element={<Missions />} />
+        <Route path="/request-help" element={<div className="min-h-screen bg-black text-white p-8"><h1>Request Help - Coming Soon</h1></div>} />
+        <Route path="/start-chapter" element={<div className="min-h-screen bg-black text-white p-8"><h1>Start a Chapter - Coming Soon</h1></div>} />
+        <Route path="/events" element={<div className="min-h-screen bg-black text-white p-8"><h1>Events - Coming Soon</h1></div>} />
       </Routes>
     </Router>
   )

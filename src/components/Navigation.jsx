@@ -10,13 +10,13 @@ export default function Navigation({ currentPage = '', showTitle = true, title =
 
   const menuItems = [
     { path: "/", label: "🏠 Homepage", key: "homepage" },
-    { path: "/#/admin", label: "⚙️ Admin Dashboard", key: "admin" },
-    { path: "/#/member", label: "👤 Member Dashboard", key: "member" },
-    { path: "/#/chapter", label: "🏢 Chapter Dashboard", key: "chapter" },
-    { path: "/#/missions", label: "🎯 Missions", key: "missions" },
-    { path: "/#/request-help", label: "🆘 Request Help", key: "request-help" },
-    { path: "/#/start-chapter", label: "🚀 Start a Chapter", key: "start-chapter" },
-    { path: "/#/events", label: "📅 Events", key: "events" }
+    { path: "/admin", label: "⚙️ Admin Dashboard", key: "admin" },
+    { path: "/member", label: "👤 Member Dashboard", key: "member" },
+    { path: "/chapter", label: "🏢 Chapter Dashboard", key: "chapter" },
+    { path: "/missions", label: "🎯 Missions", key: "missions" },
+    { path: "/request-help", label: "🆘 Request Help", key: "request-help" },
+    { path: "/start-chapter", label: "🚀 Start a Chapter", key: "start-chapter" },
+    { path: "/events", label: "📅 Events", key: "events" }
   ]
 
   return (
