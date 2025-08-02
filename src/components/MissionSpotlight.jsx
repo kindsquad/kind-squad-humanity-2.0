@@ -33,10 +33,10 @@ export default function MissionSpotlight() {
               <span className="bg-red-500/20 text-red-400 px-3 py-1 rounded-full text-sm">
                 Active
               </span>
-              <span className="bg-orange-500/20 text-orange-400 px-3 py-1 rounded-full text-sm">
+              <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">
                 In Progress
               </span>
-              <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+              <span className="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm">
                 Completed
               </span>
             </div>
@@ -65,7 +65,7 @@ export default function MissionSpotlight() {
             <div className="w-full bg-gray-700 rounded-full h-3">
               <div className="bg-green-500 h-3 rounded-full" style={{width: '100%'}}></div>
             </div>
-            <p className="text-sm text-green-400 mt-2 font-semibold">100% funded - Mission Completed! 🎉</p>
+            <p className="text-sm text-orange-400 mt-2 font-semibold">100% funded - Awaiting delivery 📦</p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
@@ -87,15 +87,15 @@ export default function MissionSpotlight() {
           <div className="hidden md:flex justify-center items-center gap-6 text-sm">
             <div className="flex items-center gap-2">
               <span className="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">Active</span>
-              <span className="text-gray-300">Currently accepting donations</span>
+              <span className="text-gray-300">Accepting donations</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-medium">In Progress</span>
-              <span className="text-gray-300">Currently being worked on</span>
+              <span className="text-gray-300">Funded, awaiting delivery</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">Completed</span>
-              <span className="text-gray-300">Delivered!</span>
+              <span className="text-gray-300">Delivered & finished!</span>
             </div>
           </div>
           
@@ -117,13 +117,13 @@ export default function MissionSpotlight() {
             {/* Row 3: Descriptions in 3 columns */}
             <div className="grid grid-cols-3 gap-2 text-xs text-gray-300">
               <div className="text-center">
-                <span>Currently accepting donations</span>
+                <span>Accepting donations</span>
               </div>
               <div className="text-center">
-                <span>Currently being worked on</span>
+                <span>Funded, awaiting delivery</span>
               </div>
               <div className="text-center">
-                <span>Delivered!</span>
+                <span>Delivered & finished!</span>
               </div>
             </div>
           </div>
