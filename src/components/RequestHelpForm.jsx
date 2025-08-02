@@ -70,16 +70,34 @@ const RequestHelpForm = () => {
   };
 
   const handleFileUpload = (field, files) => {
-    if (field === 'supportingDocs') {
-      setFormData(prev => ({
-        ...prev,
-        [field]: [...prev[field], ...Array.from(files)]
-      }));
-    } else {
-      setFormData(prev => ({
-        ...prev,
-        [field]: files[0]
-      }));
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    const validFiles = [];
+    const errors = [];
+
+    Array.from(files).forEach(file => {
+      if (file.size > maxSize) {
+        errors.push(`${file.name} is too large (max 10MB)`);
+      } else {
+        validFiles.push(file);
+      }
+    });
+
+    if (errors.length > 0) {
+      alert(`Upload errors:\n${errors.join('\n')}`);
+    }
+
+    if (validFiles.length > 0) {
+      if (field === 'supportingDocs') {
+        setFormData(prev => ({
+          ...prev,
+          [field]: [...prev[field], ...validFiles]
+        }));
+      } else {
+        setFormData(prev => ({
+          ...prev,
+          [field]: validFiles[0]
+        }));
+      }
     }
   };
 
@@ -457,7 +475,25 @@ const RequestHelpForm = () => {
         <label className="block text-sm font-medium text-gray-300 mb-2">
           ID Verification * (Driver's License, State ID, or Passport)
         </label>
-        <div className="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center">
+        <div 
+          className="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center hover:border-yellow-500 transition-colors duration-200"
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.currentTarget.classList.add('border-yellow-500', 'bg-gray-800');
+          }}
+          onDragLeave={(e) => {
+            e.preventDefault();
+            e.currentTarget.classList.remove('border-yellow-500', 'bg-gray-800');
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            e.currentTarget.classList.remove('border-yellow-500', 'bg-gray-800');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+              handleFileUpload('idDocument', files);
+            }
+          }}
+        >
           <input
             type="file"
             accept="image/*,.pdf"
@@ -471,17 +507,23 @@ const RequestHelpForm = () => {
                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
-            <p className="text-white">Click to upload ID document</p>
+            <p className="text-white">Click to upload or drag & drop ID document</p>
             <p className="text-gray-400 text-sm">PNG, JPG, or PDF up to 10MB</p>
           </label>
         </div>
         
         {formData.idDocument && (
-          <div className="mt-2 p-3 bg-gray-800 rounded-md flex items-center justify-between">
-            <span className="text-white text-sm">{formData.idDocument.name}</span>
+          <div className="mt-2 p-3 bg-gray-800 rounded-md flex items-center justify-between border border-green-500">
+            <div className="flex items-center">
+              <svg className="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span className="text-white text-sm">{formData.idDocument.name}</span>
+              <span className="text-gray-400 text-xs ml-2">({(formData.idDocument.size / 1024 / 1024).toFixed(2)} MB)</span>
+            </div>
             <button
               onClick={() => removeFile('idDocument')}
-              className="text-red-400 hover:text-red-300"
+              className="text-red-400 hover:text-red-300 text-sm"
             >
               Remove
             </button>
@@ -494,7 +536,25 @@ const RequestHelpForm = () => {
         <label className="block text-sm font-medium text-gray-300 mb-2">
           Supporting Documents * (Bills, estimates, photos, articles, etc.)
         </label>
-        <div className="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center">
+        <div 
+          className="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center hover:border-yellow-500 transition-colors duration-200"
+          onDragOver={(e) => {
+            e.preventDefault();
+            e.currentTarget.classList.add('border-yellow-500', 'bg-gray-800');
+          }}
+          onDragLeave={(e) => {
+            e.preventDefault();
+            e.currentTarget.classList.remove('border-yellow-500', 'bg-gray-800');
+          }}
+          onDrop={(e) => {
+            e.preventDefault();
+            e.currentTarget.classList.remove('border-yellow-500', 'bg-gray-800');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+              handleFileUpload('supportingDocs', files);
+            }
+          }}
+        >
           <input
             type="file"
             accept="image/*,.pdf,.doc,.docx"
@@ -509,19 +569,26 @@ const RequestHelpForm = () => {
                 <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
-            <p className="text-white">Click to upload supporting documents</p>
-            <p className="text-gray-400 text-sm">Multiple files accepted: Images, PDFs, Word docs</p>
+            <p className="text-white">Click to upload or drag & drop supporting documents</p>
+            <p className="text-gray-400 text-sm">Multiple files accepted: Images, PDFs, Word docs up to 10MB each</p>
           </label>
         </div>
         
         {formData.supportingDocs.length > 0 && (
           <div className="mt-4 space-y-2">
+            <p className="text-sm text-gray-300 mb-2">Uploaded documents ({formData.supportingDocs.length}):</p>
             {formData.supportingDocs.map((file, index) => (
-              <div key={index} className="p-3 bg-gray-800 rounded-md flex items-center justify-between">
-                <span className="text-white text-sm">{file.name}</span>
+              <div key={index} className="p-3 bg-gray-800 rounded-md flex items-center justify-between border border-green-500">
+                <div className="flex items-center">
+                  <svg className="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="text-white text-sm">{file.name}</span>
+                  <span className="text-gray-400 text-xs ml-2">({(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+                </div>
                 <button
                   onClick={() => removeFile('supportingDocs', index)}
-                  className="text-red-400 hover:text-red-300"
+                  className="text-red-400 hover:text-red-300 text-sm"
                 >
                   Remove
                 </button>
