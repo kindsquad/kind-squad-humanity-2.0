@@ -166,7 +166,7 @@ export default function Missions() {
 
   const getUrgencyColor = (urgency) => {
     switch(urgency) {
-      case 'high': return 'border-red-500 bg-red-500/10'
+      case 'high': return 'border-dark-blue bg-dark-blue/10'
       case 'medium': return 'border-yellow-500 bg-yellow-500/10'
       case 'low': return 'border-green-500 bg-green-500/10'
       default: return 'border-gray-500 bg-gray-500/10'
@@ -175,7 +175,7 @@ export default function Missions() {
 
   const getCategoryColor = (category) => {
     switch(category) {
-      case 'Emergency Relief': return 'bg-red-500'
+      case 'Emergency Relief': return 'bg-dark-blue'
       case 'Healthcare': return 'bg-blue-500'
       case 'Foster Kids': return 'bg-purple-500'
       case 'Community Support': return 'bg-green-500'
