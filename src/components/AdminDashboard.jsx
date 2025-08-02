@@ -225,10 +225,10 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-gray-950 text-white">
       <Header />
       
-      <div className="bg-gray-900">
+      <div className="bg-gray-950">
         {/* Organizational Stats Box */}
         <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 border-b border-yellow-400">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -264,7 +264,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Dashboard Header */}
-        <div className="bg-gray-800 border-b border-gray-700">
+        <div className="bg-gray-900 border-b border-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div className="flex flex-col space-y-4">
               <div>
@@ -298,13 +298,13 @@ const AdminDashboard = () => {
               
               {/* Section Navigation - Mobile Responsive */}
               <div className="mt-6">
-                <div className="grid grid-cols-2 md:flex md:flex-wrap gap-2 bg-gray-700 rounded-lg p-2">
+                <div className="grid grid-cols-2 md:flex md:flex-wrap gap-2 bg-gray-800 rounded-lg p-2">
                   <button
                     onClick={() => setActiveSection('requests')}
                     className={`px-3 py-2 rounded-md font-medium transition-colors text-sm ${
                       activeSection === 'requests'
                         ? 'bg-yellow-500 text-black'
-                        : 'text-gray-300 hover:text-white hover:bg-gray-600'
+                        : 'text-gray-300 hover:text-white hover:bg-gray-700'
                     }`}
                   >
                     📋 Requests
@@ -314,7 +314,7 @@ const AdminDashboard = () => {
                     className={`px-3 py-2 rounded-md font-medium transition-colors text-sm ${
                       activeSection === 'members'
                         ? 'bg-yellow-500 text-black'
-                        : 'text-gray-300 hover:text-white hover:bg-gray-600'
+                        : 'text-gray-300 hover:text-white hover:bg-gray-700'
                     }`}
                   >
                     👥 Members
@@ -324,7 +324,7 @@ const AdminDashboard = () => {
                     className={`px-3 py-2 rounded-md font-medium transition-colors text-sm ${
                       activeSection === 'chapters'
                         ? 'bg-yellow-500 text-black'
-                        : 'text-gray-300 hover:text-white hover:bg-gray-600'
+                        : 'text-gray-300 hover:text-white hover:bg-gray-700'
                     }`}
                   >
                     🏢 Chapters
@@ -334,7 +334,7 @@ const AdminDashboard = () => {
                     className={`px-3 py-2 rounded-md font-medium transition-colors text-sm ${
                       activeSection === 'alerts'
                         ? 'bg-yellow-500 text-black'
-                        : 'text-gray-300 hover:text-white hover:bg-gray-600'
+                        : 'text-gray-300 hover:text-white hover:bg-gray-700'
                     }`}
                   >
                     🚨 Alerts
@@ -359,13 +359,13 @@ const AdminDashboard = () => {
                     placeholder="Search requests..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
                   />
                 </div>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  className="px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
                 >
                   <option value="submittedDate">Sort by Date</option>
                   <option value="amountNeeded">Sort by Amount</option>
@@ -390,7 +390,7 @@ const AdminDashboard = () => {
                       className={`px-3 py-2 rounded-md font-medium transition-colors text-sm ${
                         activeTab === tab.key
                           ? 'bg-yellow-500 text-black'
-                          : 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white'
+                          : 'bg-gray-800 text-gray-300 hover:bg-gray-700 hover:text-white'
                       }`}
                     >
                       {tab.label} ({tab.count})
@@ -402,7 +402,7 @@ const AdminDashboard = () => {
               {/* Request Cards - Mobile Optimized */}
               <div className="grid grid-cols-1 gap-4">
                 {filteredRequests.map(request => (
-                  <div key={request.id} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
+                  <div key={request.id} className="bg-gray-900 border border-gray-800 rounded-lg p-4">
                     <div className="flex flex-col space-y-3">
                       <div className="flex justify-between items-start">
                         <div className="flex-1 min-w-0">
@@ -436,7 +436,7 @@ const AdminDashboard = () => {
                       
                       <p className="text-gray-300 text-sm line-clamp-2">{request.description}</p>
                       
-                      <div className="flex justify-between items-center pt-2 border-t border-gray-700">
+                      <div className="flex justify-between items-center pt-2 border-t border-gray-800">
                         <span className="text-gray-400 text-sm">📄 2 documents</span>
                         <button 
                           onClick={() => setSelectedRequest(request)}
@@ -455,7 +455,7 @@ const AdminDashboard = () => {
           {activeSection === 'members' && (
             <div>
               <h2 className="text-xl md:text-2xl font-bold text-white mb-6">Member Management</h2>
-              <div className="bg-gray-800 rounded-lg p-6">
+              <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
                 <p className="text-gray-300">Member management features coming soon...</p>
               </div>
             </div>
@@ -464,7 +464,7 @@ const AdminDashboard = () => {
           {activeSection === 'chapters' && (
             <div>
               <h2 className="text-xl md:text-2xl font-bold text-white mb-6">Chapter Management</h2>
-              <div className="bg-gray-800 rounded-lg p-6">
+              <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
                 <p className="text-gray-300">Chapter management features coming soon...</p>
               </div>
             </div>
@@ -473,7 +473,7 @@ const AdminDashboard = () => {
           {activeSection === 'alerts' && (
             <div>
               <h2 className="text-xl md:text-2xl font-bold text-white mb-6">Alerts & Merch Management</h2>
-              <div className="bg-gray-800 rounded-lg p-6">
+              <div className="bg-gray-900 border border-gray-800 rounded-lg p-6">
                 <p className="text-gray-300">Birthday alerts, anniversary tracking, and merch store integration coming soon...</p>
               </div>
             </div>

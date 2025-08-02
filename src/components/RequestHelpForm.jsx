@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import Header from './Header';
+import Footer from './Footer';
 
 const RequestHelpForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
-    // Personal Information
+    // Step 1: Personal Information
     firstName: '',
     lastName: '',
     email: '',
@@ -13,153 +15,83 @@ const RequestHelpForm = () => {
     state: '',
     zipCode: '',
     
-    // Request Details
+    // Step 2: Request Details
     requestType: '',
-    isForSelf: true,
-    recipientName: '',
-    recipientRelation: '',
     urgencyLevel: '',
     amountNeeded: '',
     description: '',
     
-    // Supporting Documents
+    // Step 3: Document Verification
     idDocument: null,
-    supportingDocs: [],
+    supportingDocuments: [],
     
-    // Additional Information
-    previousHelp: false,
+    // Step 4: Additional Information
+    requestingFor: 'myself',
+    previousHelp: '',
     otherResources: '',
     additionalInfo: ''
   });
 
   const [errors, setErrors] = useState({});
 
-  const requestTypes = [
-    { value: 'rent', label: 'Rent Assistance' },
-    { value: 'utilities', label: 'Utility Bills' },
-    { value: 'food', label: 'Food Assistance' },
-    { value: 'medical', label: 'Medical Expenses' },
-    { value: 'transportation', label: 'Transportation/Car Repairs' },
-    { value: 'domestic_violence', label: 'Domestic Violence Support' },
-    { value: 'shelter', label: 'Emergency Shelter' },
-    { value: 'disaster', label: 'Disaster Relief' },
-    { value: 'care_package', label: 'Care Package' },
-    { value: 'other', label: 'Other Emergency Need' }
-  ];
-
-  const urgencyLevels = [
-    { value: 'immediate', label: 'Immediate (24-48 hours)', color: 'text-red-400' },
-    { value: 'urgent', label: 'Urgent (1 week)', color: 'text-orange-400' },
-    { value: 'important', label: 'Important (2-4 weeks)', color: 'text-yellow-400' },
-    { value: 'standard', label: 'Standard (1-2 months)', color: 'text-green-400' }
-  ];
-
-  const handleInputChange = (field, value) => {
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [field]: value
+      [name]: value
     }));
     
     // Clear error when user starts typing
-    if (errors[field]) {
+    if (errors[name]) {
       setErrors(prev => ({
         ...prev,
-        [field]: ''
+        [name]: ''
       }));
     }
   };
 
-  const handleFileUpload = (field, files) => {
-    const maxSize = 10 * 1024 * 1024; // 10MB
-    const validFiles = [];
-    const errors = [];
-
-    Array.from(files).forEach(file => {
-      if (file.size > maxSize) {
-        errors.push(`${file.name} is too large (max 10MB)`);
-      } else {
-        validFiles.push(file);
-      }
-    });
-
-    if (errors.length > 0) {
-      alert(`Upload errors:\n${errors.join('\n')}`);
-    }
-
-    if (validFiles.length > 0) {
-      if (field === 'supportingDocs') {
-        setFormData(prev => ({
-          ...prev,
-          [field]: [...prev[field], ...validFiles]
-        }));
-      } else {
-        setFormData(prev => ({
-          ...prev,
-          [field]: validFiles[0]
-        }));
-      }
-    }
-  };
-
-  const removeFile = (field, index = null) => {
-    if (field === 'supportingDocs' && index !== null) {
+  const handleFileUpload = (e, fieldName) => {
+    const files = Array.from(e.target.files);
+    
+    if (fieldName === 'idDocument') {
       setFormData(prev => ({
         ...prev,
-        [field]: prev[field].filter((_, i) => i !== index)
+        idDocument: files[0]
       }));
-    } else {
+    } else if (fieldName === 'supportingDocuments') {
       setFormData(prev => ({
         ...prev,
-        [field]: null
+        supportingDocuments: [...prev.supportingDocuments, ...files]
       }));
     }
   };
 
   const validateStep = (step) => {
     const newErrors = {};
-
+    
     if (step === 1) {
-      if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
-      if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
-      if (!formData.email.trim()) newErrors.email = 'Email is required';
-      if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
-      if (!formData.address.trim()) newErrors.address = 'Address is required';
-      if (!formData.city.trim()) newErrors.city = 'City is required';
-      if (!formData.state.trim()) newErrors.state = 'State is required';
-      if (!formData.zipCode.trim()) newErrors.zipCode = 'ZIP code is required';
+      if (!formData.firstName) newErrors.firstName = 'First name is required';
+      if (!formData.lastName) newErrors.lastName = 'Last name is required';
+      if (!formData.email) newErrors.email = 'Email is required';
+      if (!formData.phone) newErrors.phone = 'Phone number is required';
+      if (!formData.address) newErrors.address = 'Address is required';
+      if (!formData.city) newErrors.city = 'City is required';
+      if (!formData.state) newErrors.state = 'State is required';
+      if (!formData.zipCode) newErrors.zipCode = 'ZIP code is required';
+    } else if (step === 2) {
+      if (!formData.requestType) newErrors.requestType = 'Assistance type is required';
+      if (!formData.urgencyLevel) newErrors.urgencyLevel = 'Urgency level is required';
+      if (!formData.amountNeeded) newErrors.amountNeeded = 'Amount needed is required';
+      if (!formData.description) newErrors.description = 'Description is required';
     }
-
-    if (step === 2) {
-      if (!formData.requestType) newErrors.requestType = 'Please select a request type';
-      if (!formData.isForSelf && !formData.recipientName.trim()) {
-        newErrors.recipientName = 'Recipient name is required';
-      }
-      if (!formData.urgencyLevel) newErrors.urgencyLevel = 'Please select urgency level';
-      if (!formData.amountNeeded || formData.amountNeeded.trim() === '') newErrors.amountNeeded = 'Amount needed is required';
-      if (!formData.description.trim()) newErrors.description = 'Description is required';
-    }
-
-    if (step === 3) {
-      if (!formData.idDocument) newErrors.idDocument = 'ID verification is required';
-      if (formData.supportingDocs.length === 0) {
-        newErrors.supportingDocs = 'At least one supporting document is required';
-      }
-    }
-
+    
     setErrors(newErrors);
-    console.log('Validation for step', step, ':', newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const nextStep = () => {
-    console.log('Current form data:', formData);
-    console.log('Current step:', currentStep);
-    
     if (validateStep(currentStep)) {
-      console.log('Validation passed, advancing to next step');
       setCurrentStep(prev => Math.min(prev + 1, 4));
-    } else {
-      console.log('Validation failed, errors:', errors);
     }
   };
 
@@ -167,601 +99,517 @@ const RequestHelpForm = () => {
     setCurrentStep(prev => Math.max(prev - 1, 1));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     if (validateStep(currentStep)) {
-      // Here we would submit to the backend/admin dashboard
       console.log('Form submitted:', formData);
-      alert('Request submitted successfully! You will receive an email confirmation shortly.');
-      // Reset form or redirect to member dashboard
-    }
-  };
-
-  const renderStepIndicator = () => (
-    <div className="flex items-center justify-center mb-8">
-      {[1, 2, 3, 4].map((step) => (
-        <div key={step} className="flex items-center">
-          <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-            step <= currentStep 
-              ? 'bg-yellow-500 text-black' 
-              : 'bg-gray-700 text-gray-400'
-          }`}>
-            {step}
-          </div>
-          {step < 4 && (
-            <div className={`w-12 h-0.5 mx-2 ${
-              step < currentStep ? 'bg-yellow-500' : 'bg-gray-700'
-            }`} />
-          )}
-        </div>
-      ))}
-    </div>
-  );
-
-  const renderStep1 = () => (
-    <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-white mb-4">Personal Information</h3>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            First Name *
-          </label>
-          <input
-            type="text"
-            value={formData.firstName}
-            onChange={(e) => handleInputChange('firstName', e.target.value)}
-            className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            placeholder="Enter your first name"
-          />
-          {errors.firstName && <p className="text-red-400 text-sm mt-1">{errors.firstName}</p>}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Last Name *
-          </label>
-          <input
-            type="text"
-            value={formData.lastName}
-            onChange={(e) => handleInputChange('lastName', e.target.value)}
-            className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            placeholder="Enter your last name"
-          />
-          {errors.lastName && <p className="text-red-400 text-sm mt-1">{errors.lastName}</p>}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Email Address *
-          </label>
-          <input
-            type="email"
-            value={formData.email}
-            onChange={(e) => handleInputChange('email', e.target.value)}
-            className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            placeholder="Enter your email address"
-          />
-          {errors.email && <p className="text-red-400 text-sm mt-1">{errors.email}</p>}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            Phone Number *
-          </label>
-          <input
-            type="tel"
-            value={formData.phone}
-            onChange={(e) => handleInputChange('phone', e.target.value)}
-            className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            placeholder="Enter your phone number"
-          />
-          {errors.phone && <p className="text-red-400 text-sm mt-1">{errors.phone}</p>}
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-300 mb-2">
-          Street Address *
-        </label>
-        <input
-          type="text"
-          value={formData.address}
-          onChange={(e) => handleInputChange('address', e.target.value)}
-          className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-          placeholder="Enter your street address"
-        />
-        {errors.address && <p className="text-red-400 text-sm mt-1">{errors.address}</p>}
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            City *
-          </label>
-          <input
-            type="text"
-            value={formData.city}
-            onChange={(e) => handleInputChange('city', e.target.value)}
-            className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            placeholder="City"
-          />
-          {errors.city && <p className="text-red-400 text-sm mt-1">{errors.city}</p>}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            State *
-          </label>
-          <input
-            type="text"
-            value={formData.state}
-            onChange={(e) => handleInputChange('state', e.target.value)}
-            className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            placeholder="State"
-          />
-          {errors.state && <p className="text-red-400 text-sm mt-1">{errors.state}</p>}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-300 mb-2">
-            ZIP Code *
-          </label>
-          <input
-            type="text"
-            value={formData.zipCode}
-            onChange={(e) => handleInputChange('zipCode', e.target.value)}
-            className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            placeholder="ZIP"
-          />
-          {errors.zipCode && <p className="text-red-400 text-sm mt-1">{errors.zipCode}</p>}
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderStep2 = () => (
-    <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-white mb-4">Request Details</h3>
-      
-      <div>
-        <label className="block text-sm font-medium text-gray-300 mb-2">
-          Type of Assistance Needed *
-        </label>
-        <select
-          value={formData.requestType}
-          onChange={(e) => handleInputChange('requestType', e.target.value)}
-          className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-        >
-          <option value="">Select assistance type</option>
-          {requestTypes.map((type) => (
-            <option key={type.value} value={type.value}>
-              {type.label}
-            </option>
-          ))}
-        </select>
-        {errors.requestType && <p className="text-red-400 text-sm mt-1">{errors.requestType}</p>}
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-300 mb-4">
-          Who is this request for? *
-        </label>
-        <div className="space-y-3">
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="isForSelf"
-              checked={formData.isForSelf === true}
-              onChange={() => handleInputChange('isForSelf', true)}
-              className="mr-3 text-yellow-500 focus:ring-yellow-500"
-            />
-            <span className="text-white">Myself</span>
-          </label>
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="isForSelf"
-              checked={formData.isForSelf === false}
-              onChange={() => handleInputChange('isForSelf', false)}
-              className="mr-3 text-yellow-500 focus:ring-yellow-500"
-            />
-            <span className="text-white">Someone else</span>
-          </label>
-        </div>
-      </div>
-
-      {!formData.isForSelf && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Recipient Name *
-            </label>
-            <input
-              type="text"
-              value={formData.recipientName}
-              onChange={(e) => handleInputChange('recipientName', e.target.value)}
-              className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-              placeholder="Name of person receiving help"
-            />
-            {errors.recipientName && <p className="text-red-400 text-sm mt-1">{errors.recipientName}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Your Relationship to Recipient
-            </label>
-            <input
-              type="text"
-              value={formData.recipientRelation}
-              onChange={(e) => handleInputChange('recipientRelation', e.target.value)}
-              className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-              placeholder="e.g., Friend, Family member, Neighbor"
-            />
-          </div>
-        </div>
-      )}
-
-      <div>
-        <label className="block text-sm font-medium text-gray-300 mb-2">
-          Urgency Level *
-        </label>
-        <div className="space-y-2">
-          {urgencyLevels.map((level) => (
-            <label key={level.value} className="flex items-center">
-              <input
-                type="radio"
-                name="urgencyLevel"
-                value={level.value}
-                checked={formData.urgencyLevel === level.value}
-                onChange={(e) => handleInputChange('urgencyLevel', e.target.value)}
-                className="mr-3 text-yellow-500 focus:ring-yellow-500"
-              />
-              <span className={`${level.color} font-medium`}>{level.label}</span>
-            </label>
-          ))}
-        </div>
-        {errors.urgencyLevel && <p className="text-red-400 text-sm mt-1">{errors.urgencyLevel}</p>}
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-300 mb-2">
-          Amount Needed *
-        </label>
-        <div className="relative">
-          <span className="absolute left-3 top-2 text-gray-400">$</span>
-          <input
-            type="number"
-            value={formData.amountNeeded}
-            onChange={(e) => handleInputChange('amountNeeded', e.target.value)}
-            className="w-full pl-8 pr-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-            placeholder="0.00"
-            min="0"
-            step="0.01"
-          />
-        </div>
-        {errors.amountNeeded && <p className="text-red-400 text-sm mt-1">{errors.amountNeeded}</p>}
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-300 mb-2">
-          Detailed Description *
-        </label>
-        <textarea
-          value={formData.description}
-          onChange={(e) => handleInputChange('description', e.target.value)}
-          rows={4}
-          className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-          placeholder="Please provide a detailed description of your situation and how this assistance will help..."
-        />
-        {errors.description && <p className="text-red-400 text-sm mt-1">{errors.description}</p>}
-      </div>
-    </div>
-  );
-
-  const renderStep3 = () => (
-    <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-white mb-4">Verification & Supporting Documents</h3>
-      
-      <div className="bg-gray-800 p-4 rounded-lg border border-gray-600">
-        <h4 className="text-lg font-medium text-white mb-2">📋 Required Documents</h4>
-        <p className="text-gray-300 text-sm mb-4">
-          To prevent fraud and ensure assistance reaches those who truly need it, we require verification documents.
-        </p>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-300 mb-2">
-          ID Verification * (Driver's License, State ID, or Passport)
-        </label>
-        <div 
-          className="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center hover:border-yellow-500 transition-colors duration-200"
-          onDragOver={(e) => {
-            e.preventDefault();
-            e.currentTarget.classList.add('border-yellow-500', 'bg-gray-800');
-          }}
-          onDragLeave={(e) => {
-            e.preventDefault();
-            e.currentTarget.classList.remove('border-yellow-500', 'bg-gray-800');
-          }}
-          onDrop={(e) => {
-            e.preventDefault();
-            e.currentTarget.classList.remove('border-yellow-500', 'bg-gray-800');
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-              handleFileUpload('idDocument', files);
-            }
-          }}
-        >
-          <input
-            type="file"
-            accept="image/*,.pdf"
-            onChange={(e) => handleFileUpload('idDocument', e.target.files)}
-            className="hidden"
-            id="id-upload"
-          />
-          <label htmlFor="id-upload" className="cursor-pointer">
-            <div className="text-gray-400 mb-2">
-              <svg className="mx-auto h-12 w-12" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <p className="text-white">Click to upload or drag & drop ID document</p>
-            <p className="text-gray-400 text-sm">PNG, JPG, or PDF up to 10MB</p>
-          </label>
-        </div>
-        
-        {formData.idDocument && (
-          <div className="mt-2 p-3 bg-gray-800 rounded-md flex items-center justify-between border border-green-500">
-            <div className="flex items-center">
-              <svg className="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className="text-white text-sm">{formData.idDocument.name}</span>
-              <span className="text-gray-400 text-xs ml-2">({(formData.idDocument.size / 1024 / 1024).toFixed(2)} MB)</span>
-            </div>
-            <button
-              onClick={() => removeFile('idDocument')}
-              className="text-red-400 hover:text-red-300 text-sm"
-            >
-              Remove
-            </button>
-          </div>
-        )}
-        {errors.idDocument && <p className="text-red-400 text-sm mt-1">{errors.idDocument}</p>}
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-300 mb-2">
-          Supporting Documents * (Bills, estimates, photos, articles, etc.)
-        </label>
-        <div 
-          className="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center hover:border-yellow-500 transition-colors duration-200"
-          onDragOver={(e) => {
-            e.preventDefault();
-            e.currentTarget.classList.add('border-yellow-500', 'bg-gray-800');
-          }}
-          onDragLeave={(e) => {
-            e.preventDefault();
-            e.currentTarget.classList.remove('border-yellow-500', 'bg-gray-800');
-          }}
-          onDrop={(e) => {
-            e.preventDefault();
-            e.currentTarget.classList.remove('border-yellow-500', 'bg-gray-800');
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-              handleFileUpload('supportingDocs', files);
-            }
-          }}
-        >
-          <input
-            type="file"
-            accept="image/*,.pdf,.doc,.docx"
-            multiple
-            onChange={(e) => handleFileUpload('supportingDocs', e.target.files)}
-            className="hidden"
-            id="docs-upload"
-          />
-          <label htmlFor="docs-upload" className="cursor-pointer">
-            <div className="text-gray-400 mb-2">
-              <svg className="mx-auto h-12 w-12" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </div>
-            <p className="text-white">Click to upload or drag & drop supporting documents</p>
-            <p className="text-gray-400 text-sm">Multiple files accepted: Images, PDFs, Word docs up to 10MB each</p>
-          </label>
-        </div>
-        
-        {formData.supportingDocs.length > 0 && (
-          <div className="mt-4 space-y-2">
-            <p className="text-sm text-gray-300 mb-2">Uploaded documents ({formData.supportingDocs.length}):</p>
-            {formData.supportingDocs.map((file, index) => (
-              <div key={index} className="p-3 bg-gray-800 rounded-md flex items-center justify-between border border-green-500">
-                <div className="flex items-center">
-                  <svg className="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span className="text-white text-sm">{file.name}</span>
-                  <span className="text-gray-400 text-xs ml-2">({(file.size / 1024 / 1024).toFixed(2)} MB)</span>
-                </div>
-                <button
-                  onClick={() => removeFile('supportingDocs', index)}
-                  className="text-red-400 hover:text-red-300 text-sm"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-        {errors.supportingDocs && <p className="text-red-400 text-sm mt-1">{errors.supportingDocs}</p>}
-      </div>
-
-      <div className="bg-blue-900 p-4 rounded-lg border border-blue-700">
-        <h4 className="text-lg font-medium text-blue-200 mb-2">🔒 Privacy & Security</h4>
-        <p className="text-blue-200 text-sm">
-          All documents are securely stored and only viewed by Kind Squad board members for verification purposes. 
-          Your personal information remains confidential and is never shared publicly without your explicit consent.
-        </p>
-      </div>
-    </div>
-  );
-
-  const renderStep4 = () => (
-    <div className="space-y-6">
-      <h3 className="text-xl font-semibold text-white mb-4">Additional Information</h3>
-      
-      <div>
-        <label className="block text-sm font-medium text-gray-300 mb-4">
-          Have you received assistance from Kind Squad before?
-        </label>
-        <div className="space-y-3">
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="previousHelp"
-              checked={formData.previousHelp === false}
-              onChange={() => handleInputChange('previousHelp', false)}
-              className="mr-3 text-yellow-500 focus:ring-yellow-500"
-            />
-            <span className="text-white">No, this is my first request</span>
-          </label>
-          <label className="flex items-center">
-            <input
-              type="radio"
-              name="previousHelp"
-              checked={formData.previousHelp === true}
-              onChange={() => handleInputChange('previousHelp', true)}
-              className="mr-3 text-yellow-500 focus:ring-yellow-500"
-            />
-            <span className="text-white">Yes, I have received help before</span>
-          </label>
-        </div>
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-300 mb-2">
-          Other Resources You've Tried
-        </label>
-        <textarea
-          value={formData.otherResources}
-          onChange={(e) => handleInputChange('otherResources', e.target.value)}
-          rows={3}
-          className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-          placeholder="Please list any other organizations, government programs, or resources you've contacted for help..."
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium text-gray-300 mb-2">
-          Additional Information
-        </label>
-        <textarea
-          value={formData.additionalInfo}
-          onChange={(e) => handleInputChange('additionalInfo', e.target.value)}
-          rows={3}
-          className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-          placeholder="Any additional information that would help us understand your situation..."
-        />
-      </div>
-
-      <div className="bg-green-900 p-4 rounded-lg border border-green-700">
-        <h4 className="text-lg font-medium text-green-200 mb-2">✅ What Happens Next?</h4>
-        <div className="text-green-200 text-sm space-y-1">
-          <p>• Your request will be reviewed by our board within 24-48 hours</p>
-          <p>• You'll receive an email confirmation with your request status</p>
-          <p>• If approved, your mission will be posted and fundraising will begin</p>
-          <p>• You'll become a Kind Squad member with access to your personal dashboard</p>
-          <p>• You can track progress and choose how much to share with the community</p>
-        </div>
-      </div>
-
-      <div className="bg-yellow-900 p-4 rounded-lg border border-yellow-700">
-        <h4 className="text-lg font-medium text-yellow-200 mb-2">💛 Kind Squad Values</h4>
-        <p className="text-yellow-200 text-sm">
-          <strong>Do what you can, when you can, when you want.</strong> There's never any pressure. 
-          We believe in community support, dignity, and helping each other through difficult times.
-        </p>
-      </div>
-    </div>
-  );
-
-  const renderStepContent = () => {
-    switch (currentStep) {
-      case 1: return renderStep1();
-      case 2: return renderStep2();
-      case 3: return renderStep3();
-      case 4: return renderStep4();
-      default: return renderStep1();
+      alert('Request submitted successfully! We will review your application and contact you within 24-48 hours.');
     }
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-2xl mx-auto">
+    <div className="min-h-screen bg-gray-950 text-white">
+      <Header />
+      
+      <div className="bg-gray-950 py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2">Request Assistance</h1>
-            <p className="text-gray-300">
-              Join the Kind Squad community and get the help you need
-            </p>
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Request Assistance</h1>
+            <p className="text-gray-400 text-lg">We're here to help during your time of need</p>
           </div>
 
-          {/* Step Indicator */}
-          {renderStepIndicator()}
-
-          {/* Form Content */}
-          <div className="bg-gray-900 rounded-lg p-6 border border-gray-700">
-            {renderStepContent()}
-
-            {/* Navigation Buttons */}
-            <div className="flex justify-between mt-8">
-              <button
-                onClick={prevStep}
-                disabled={currentStep === 1}
-                className={`px-6 py-2 rounded-md font-medium ${
-                  currentStep === 1
-                    ? 'bg-gray-700 text-gray-500 cursor-not-allowed'
-                    : 'bg-gray-700 text-white hover:bg-gray-600'
-                }`}
-              >
-                Previous
-              </button>
-
-              {currentStep < 4 ? (
-                <button
-                  onClick={nextStep}
-                  className="px-6 py-2 bg-yellow-500 text-black rounded-md font-medium hover:bg-yellow-400"
-                >
-                  Next Step
-                </button>
-              ) : (
-                <button
-                  onClick={handleSubmit}
-                  className="px-6 py-2 bg-green-600 text-white rounded-md font-medium hover:bg-green-500"
-                >
-                  Submit Request
-                </button>
-              )}
+          {/* Progress Indicator */}
+          <div className="mb-8">
+            <div className="flex justify-between items-center">
+              {[1, 2, 3, 4].map((step) => (
+                <div key={step} className="flex items-center">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                    step <= currentStep 
+                      ? 'bg-yellow-500 text-black' 
+                      : 'bg-gray-800 text-gray-400 border border-gray-700'
+                  }`}>
+                    {step}
+                  </div>
+                  {step < 4 && (
+                    <div className={`w-full h-1 mx-2 ${
+                      step < currentStep ? 'bg-yellow-500' : 'bg-gray-800'
+                    }`} />
+                  )}
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-between mt-2 text-sm">
+              <span className={currentStep >= 1 ? 'text-yellow-500' : 'text-gray-400'}>Personal Info</span>
+              <span className={currentStep >= 2 ? 'text-yellow-500' : 'text-gray-400'}>Request Details</span>
+              <span className={currentStep >= 3 ? 'text-yellow-500' : 'text-gray-400'}>Documents</span>
+              <span className={currentStep >= 4 ? 'text-yellow-500' : 'text-gray-400'}>Additional Info</span>
             </div>
           </div>
 
-          {/* Progress Summary */}
-          <div className="mt-6 text-center">
-            <p className="text-gray-400 text-sm">
-              Step {currentStep} of 4: {
-                currentStep === 1 ? 'Personal Information' :
-                currentStep === 2 ? 'Request Details' :
-                currentStep === 3 ? 'Document Verification' :
-                'Additional Information'
-              }
+          {/* Form */}
+          <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 md:p-8">
+            <form onSubmit={handleSubmit}>
+              {/* Step 1: Personal Information */}
+              {currentStep === 1 && (
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-6">Personal Information</h2>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        First Name *
+                      </label>
+                      <input
+                        type="text"
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
+                          errors.firstName ? 'border-red-500' : 'border-gray-700'
+                        }`}
+                        placeholder="Enter your first name"
+                      />
+                      {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Last Name *
+                      </label>
+                      <input
+                        type="text"
+                        name="lastName"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
+                          errors.lastName ? 'border-red-500' : 'border-gray-700'
+                        }`}
+                        placeholder="Enter your last name"
+                      />
+                      {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
+                          errors.email ? 'border-red-500' : 'border-gray-700'
+                        }`}
+                        placeholder="Enter your email address"
+                      />
+                      {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Phone Number *
+                      </label>
+                      <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
+                          errors.phone ? 'border-red-500' : 'border-gray-700'
+                        }`}
+                        placeholder="Enter your phone number"
+                      />
+                      {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
+                    </div>
+
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Street Address *
+                      </label>
+                      <input
+                        type="text"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
+                          errors.address ? 'border-red-500' : 'border-gray-700'
+                        }`}
+                        placeholder="Enter your street address"
+                      />
+                      {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        City *
+                      </label>
+                      <input
+                        type="text"
+                        name="city"
+                        value={formData.city}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
+                          errors.city ? 'border-red-500' : 'border-gray-700'
+                        }`}
+                        placeholder="Enter your city"
+                      />
+                      {errors.city && <p className="text-red-500 text-sm mt-1">{errors.city}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        State *
+                      </label>
+                      <input
+                        type="text"
+                        name="state"
+                        value={formData.state}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
+                          errors.state ? 'border-red-500' : 'border-gray-700'
+                        }`}
+                        placeholder="Enter your state"
+                      />
+                      {errors.state && <p className="text-red-500 text-sm mt-1">{errors.state}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        ZIP Code *
+                      </label>
+                      <input
+                        type="text"
+                        name="zipCode"
+                        value={formData.zipCode}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
+                          errors.zipCode ? 'border-red-500' : 'border-gray-700'
+                        }`}
+                        placeholder="Enter your ZIP code"
+                      />
+                      {errors.zipCode && <p className="text-red-500 text-sm mt-1">{errors.zipCode}</p>}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 2: Request Details */}
+              {currentStep === 2 && (
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-6">Request Details</h2>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Type of Assistance Needed *
+                      </label>
+                      <select
+                        name="requestType"
+                        value={formData.requestType}
+                        onChange={handleInputChange}
+                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
+                          errors.requestType ? 'border-red-500' : 'border-gray-700'
+                        }`}
+                      >
+                        <option value="">Select assistance type</option>
+                        <option value="rent">Rent Assistance</option>
+                        <option value="utilities">Utility Bills</option>
+                        <option value="food">Food Assistance</option>
+                        <option value="medical">Medical Expenses</option>
+                        <option value="transportation">Transportation</option>
+                        <option value="domestic_violence">Domestic Violence Support</option>
+                        <option value="shelter">Emergency Shelter</option>
+                        <option value="other">Other</option>
+                      </select>
+                      {errors.requestType && <p className="text-red-500 text-sm mt-1">{errors.requestType}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Urgency Level *
+                      </label>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        {[
+                          { value: 'immediate', label: 'Immediate', color: 'border-red-500 text-red-400' },
+                          { value: 'urgent', label: 'Urgent', color: 'border-orange-500 text-orange-400' },
+                          { value: 'important', label: 'Important', color: 'border-blue-500 text-blue-400' },
+                          { value: 'standard', label: 'Standard', color: 'border-green-500 text-green-400' }
+                        ].map((urgency) => (
+                          <button
+                            key={urgency.value}
+                            type="button"
+                            onClick={() => handleInputChange({ target: { name: 'urgencyLevel', value: urgency.value } })}
+                            className={`p-3 border-2 rounded-md text-center transition-colors ${
+                              formData.urgencyLevel === urgency.value
+                                ? `${urgency.color} bg-gray-800`
+                                : 'border-gray-700 text-gray-400 hover:border-gray-600'
+                            }`}
+                          >
+                            {urgency.label}
+                          </button>
+                        ))}
+                      </div>
+                      {errors.urgencyLevel && <p className="text-red-500 text-sm mt-1">{errors.urgencyLevel}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Amount Needed *
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-3 text-gray-400">$</span>
+                        <input
+                          type="number"
+                          name="amountNeeded"
+                          value={formData.amountNeeded}
+                          onChange={handleInputChange}
+                          className={`w-full pl-8 pr-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
+                            errors.amountNeeded ? 'border-red-500' : 'border-gray-700'
+                          }`}
+                          placeholder="0.00"
+                        />
+                      </div>
+                      {errors.amountNeeded && <p className="text-red-500 text-sm mt-1">{errors.amountNeeded}</p>}
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Detailed Description *
+                      </label>
+                      <textarea
+                        name="description"
+                        value={formData.description}
+                        onChange={handleInputChange}
+                        rows={4}
+                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
+                          errors.description ? 'border-red-500' : 'border-gray-700'
+                        }`}
+                        placeholder="Please provide a detailed description of your situation and why you need assistance..."
+                      />
+                      {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 3: Document Verification */}
+              {currentStep === 3 && (
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-6">Document Verification</h2>
+                  
+                  <div className="space-y-6">
+                    <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
+                      <h3 className="text-lg font-semibold text-white mb-3">ID Verification</h3>
+                      <p className="text-gray-400 text-sm mb-4">
+                        Please upload a clear photo of your government-issued ID (driver's license, passport, or state ID)
+                      </p>
+                      
+                      <div className="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center hover:border-gray-500 transition-colors">
+                        <input
+                          type="file"
+                          accept="image/*,.pdf"
+                          onChange={(e) => handleFileUpload(e, 'idDocument')}
+                          className="hidden"
+                          id="id-upload"
+                        />
+                        <label htmlFor="id-upload" className="cursor-pointer">
+                          <div className="text-gray-400 mb-2">
+                            📄 Click to upload ID document
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            Supports: JPG, PNG, PDF (Max 10MB)
+                          </div>
+                        </label>
+                        {formData.idDocument && (
+                          <div className="mt-3 text-green-400 text-sm">
+                            ✓ {formData.idDocument.name}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
+                      <h3 className="text-lg font-semibold text-white mb-3">Supporting Documents</h3>
+                      <p className="text-gray-400 text-sm mb-4">
+                        Upload any supporting documents (bills, medical records, eviction notices, etc.)
+                      </p>
+                      
+                      <div className="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center hover:border-gray-500 transition-colors">
+                        <input
+                          type="file"
+                          multiple
+                          accept="image/*,.pdf,.doc,.docx"
+                          onChange={(e) => handleFileUpload(e, 'supportingDocuments')}
+                          className="hidden"
+                          id="supporting-upload"
+                        />
+                        <label htmlFor="supporting-upload" className="cursor-pointer">
+                          <div className="text-gray-400 mb-2">
+                            📎 Click to upload supporting documents
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            Multiple files supported (Max 10MB each)
+                          </div>
+                        </label>
+                        {formData.supportingDocuments.length > 0 && (
+                          <div className="mt-3 space-y-1">
+                            {formData.supportingDocuments.map((file, index) => (
+                              <div key={index} className="text-green-400 text-sm">
+                                ✓ {file.name}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="bg-blue-900/20 border border-blue-700 rounded-lg p-4">
+                      <h4 className="text-blue-400 font-semibold mb-2">🔒 Privacy & Security</h4>
+                      <p className="text-blue-300 text-sm">
+                        Your documents are encrypted and securely stored. They will only be viewed by authorized Kind Squad board members for verification purposes and will be deleted after your case is resolved.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Step 4: Additional Information */}
+              {currentStep === 4 && (
+                <div>
+                  <h2 className="text-2xl font-bold text-white mb-6">Additional Information</h2>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Who is this request for?
+                      </label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <button
+                          type="button"
+                          onClick={() => handleInputChange({ target: { name: 'requestingFor', value: 'myself' } })}
+                          className={`p-3 border-2 rounded-md text-center transition-colors ${
+                            formData.requestingFor === 'myself'
+                              ? 'border-yellow-500 text-yellow-400 bg-gray-800'
+                              : 'border-gray-700 text-gray-400 hover:border-gray-600'
+                          }`}
+                        >
+                          For Myself
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleInputChange({ target: { name: 'requestingFor', value: 'someone_else' } })}
+                          className={`p-3 border-2 rounded-md text-center transition-colors ${
+                            formData.requestingFor === 'someone_else'
+                              ? 'border-yellow-500 text-yellow-400 bg-gray-800'
+                              : 'border-gray-700 text-gray-400 hover:border-gray-600'
+                          }`}
+                        >
+                          For Someone Else
+                        </button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Have you received help from Kind Squad before?
+                      </label>
+                      <textarea
+                        name="previousHelp"
+                        value={formData.previousHelp}
+                        onChange={handleInputChange}
+                        rows={3}
+                        className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                        placeholder="If yes, please describe when and what type of assistance you received..."
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Have you sought help from other organizations?
+                      </label>
+                      <textarea
+                        name="otherResources"
+                        value={formData.otherResources}
+                        onChange={handleInputChange}
+                        rows={3}
+                        className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                        placeholder="Please list any other organizations you've contacted and the outcome..."
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Additional Information
+                      </label>
+                      <textarea
+                        name="additionalInfo"
+                        value={formData.additionalInfo}
+                        onChange={handleInputChange}
+                        rows={3}
+                        className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                        placeholder="Any additional information you'd like us to know..."
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Navigation Buttons */}
+              <div className="flex justify-between mt-8 pt-6 border-t border-gray-800">
+                <button
+                  type="button"
+                  onClick={prevStep}
+                  disabled={currentStep === 1}
+                  className={`px-6 py-3 rounded-md font-medium transition-colors ${
+                    currentStep === 1
+                      ? 'bg-gray-800 text-gray-500 cursor-not-allowed'
+                      : 'bg-gray-700 text-white hover:bg-gray-600'
+                  }`}
+                >
+                  Previous
+                </button>
+
+                {currentStep < 4 ? (
+                  <button
+                    type="button"
+                    onClick={nextStep}
+                    className="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-black rounded-md font-medium transition-colors"
+                  >
+                    Next Step
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-md font-medium transition-colors"
+                  >
+                    Submit Request
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+
+          {/* Help Information */}
+          <div className="mt-8 bg-gray-900 border border-gray-800 rounded-lg p-6">
+            <h3 className="text-lg font-semibold text-white mb-3">Need Help?</h3>
+            <p className="text-gray-400 mb-4">
+              If you need assistance completing this form or have questions about our process, please don't hesitate to reach out.
             </p>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <a href="mailto:help@kindsquad.org" className="text-yellow-500 hover:text-yellow-400 transition-colors">
+                📧 help@kindsquad.org
+              </a>
+              <a href="tel:+1-555-KIND-HELP" className="text-yellow-500 hover:text-yellow-400 transition-colors">
+                📞 1-555-KIND-HELP
+              </a>
+            </div>
           </div>
         </div>
       </div>
+      
+      <Footer />
     </div>
   );
 };
