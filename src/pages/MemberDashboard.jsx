@@ -334,7 +334,7 @@ export default function MemberDashboard() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <div className="w-4 h-4 bg-red-500 rounded mr-3"></div>
+                      <div className="w-4 h-4 bg-dark-blue rounded mr-3"></div>
                       <span className="text-white">Emergency Relief</span>
                     </div>
                     <span className="text-gray-400">8 missions</span>

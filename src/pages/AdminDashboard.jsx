@@ -6,7 +6,7 @@ export default function AdminDashboard() {
   const [selectedCategory, setSelectedCategory] = useState('all')
 
   const missionCategories = {
-    'Emergency Relief': { count: 23, amount: 45600, color: 'bg-red-500', recent: 'House Fire Relief' },
+    'Emergency Relief': { count: 23, amount: 45600, color: 'bg-dark-blue', recent: 'House Fire Relief' },
     'Foster Kids': { count: 18, amount: 89400, color: 'bg-purple-500', recent: 'Art Kits Distribution' },
     'Community Support': { count: 35, amount: 52300, color: 'bg-green-500', recent: 'Veteran Support' },
     'Basic Needs': { count: 28, amount: 31200, color: 'bg-blue-500', recent: 'Groceries for Family' },
