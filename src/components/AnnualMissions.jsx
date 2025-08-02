@@ -23,7 +23,7 @@ export default function AnnualMissions() {
     {
       id: 3,
       title: "Food Drive",
-      description: "Collecting Non-Perishable Food Donations for Lorraine's Soup Kitchen & Pantry",
+      description: "Collecting non-perishable food to help eliminate food insecurity",
       category: "Basic Needs",
       categoryColor: "bg-blue-500",
       target: 5000,
