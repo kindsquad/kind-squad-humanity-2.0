@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useTheme } from '../contexts/ThemeContext';
+import Header from './Header';
+import Footer from './Footer';
 
 const AdminDashboard = () => {
-  const { isDarkMode } = useTheme();
   const [activeSection, setActiveSection] = useState('requests');
   const [activeTab, setActiveTab] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
@@ -225,219 +225,229 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900">
-      {/* Header */}
-      <div className="bg-gray-800 border-b border-gray-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <h1 className="text-3xl font-bold text-white">Admin Dashboard</h1>
-              <p className="text-gray-400 mt-1">Manage requests, members, and chapters</p>
-            </div>
-            <div className="flex flex-wrap items-center gap-6 mt-4 lg:mt-0">
-              <div className="text-right">
-                <p className="text-sm text-gray-400">Total Requests</p>
-                <p className="text-2xl font-bold text-yellow-500">{requests.length}</p>
+    <div className="min-h-screen bg-black text-white">
+      <Header />
+      
+      <div className="bg-gray-900">
+        {/* Dashboard Header */}
+        <div className="bg-gray-800 border-b border-gray-700">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="flex flex-col space-y-4">
+              <div>
+                <h1 className="text-2xl md:text-3xl font-bold text-white">Admin Dashboard</h1>
+                <p className="text-gray-400 mt-1">Manage requests, members, and chapters</p>
               </div>
-              <div className="text-right">
-                <p className="text-sm text-gray-400">Active Members</p>
-                <p className="text-2xl font-bold text-green-500">{members.filter(m => m.status === 'active').length}</p>
+              
+              {/* Stats Grid - Mobile Responsive */}
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3 md:gap-6">
+                <div className="text-center">
+                  <p className="text-xs md:text-sm text-gray-400">Total Requests</p>
+                  <p className="text-lg md:text-2xl font-bold text-yellow-500">{requests.length}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-xs md:text-sm text-gray-400">Active Members</p>
+                  <p className="text-lg md:text-2xl font-bold text-green-500">{members.filter(m => m.status === 'active').length}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-xs md:text-sm text-gray-400">Active Chapters</p>
+                  <p className="text-lg md:text-2xl font-bold text-blue-500">{chapters.filter(c => c.status === 'active').length}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-xs md:text-sm text-gray-400">🎂 Birthdays</p>
+                  <p className="text-lg md:text-2xl font-bold text-pink-500">{getBirthdayAlerts().length}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-xs md:text-sm text-gray-400">🎉 Anniversaries</p>
+                  <p className="text-lg md:text-2xl font-bold text-purple-500">{getAnniversaryAlerts().length}</p>
+                </div>
               </div>
-              <div className="text-right">
-                <p className="text-sm text-gray-400">Active Chapters</p>
-                <p className="text-2xl font-bold text-blue-500">{chapters.filter(c => c.status === 'active').length}</p>
+              
+              {/* Section Navigation - Mobile Responsive */}
+              <div className="mt-6">
+                <div className="grid grid-cols-2 md:flex md:flex-wrap gap-2 bg-gray-700 rounded-lg p-2">
+                  <button
+                    onClick={() => setActiveSection('requests')}
+                    className={`px-3 py-2 rounded-md font-medium transition-colors text-sm ${
+                      activeSection === 'requests'
+                        ? 'bg-yellow-500 text-black'
+                        : 'text-gray-300 hover:text-white hover:bg-gray-600'
+                    }`}
+                  >
+                    📋 Requests
+                  </button>
+                  <button
+                    onClick={() => setActiveSection('members')}
+                    className={`px-3 py-2 rounded-md font-medium transition-colors text-sm ${
+                      activeSection === 'members'
+                        ? 'bg-yellow-500 text-black'
+                        : 'text-gray-300 hover:text-white hover:bg-gray-600'
+                    }`}
+                  >
+                    👥 Members
+                  </button>
+                  <button
+                    onClick={() => setActiveSection('chapters')}
+                    className={`px-3 py-2 rounded-md font-medium transition-colors text-sm ${
+                      activeSection === 'chapters'
+                        ? 'bg-yellow-500 text-black'
+                        : 'text-gray-300 hover:text-white hover:bg-gray-600'
+                    }`}
+                  >
+                    🏢 Chapters
+                  </button>
+                  <button
+                    onClick={() => setActiveSection('alerts')}
+                    className={`px-3 py-2 rounded-md font-medium transition-colors text-sm ${
+                      activeSection === 'alerts'
+                        ? 'bg-yellow-500 text-black'
+                        : 'text-gray-300 hover:text-white hover:bg-gray-600'
+                    }`}
+                  >
+                    🚨 Alerts
+                  </button>
+                </div>
               </div>
-              <div className="text-right">
-                <p className="text-sm text-gray-400">🎂 Birthdays This Week</p>
-                <p className="text-2xl font-bold text-pink-500">{getBirthdayAlerts().length}</p>
-              </div>
-              <div className="text-right">
-                <p className="text-sm text-gray-400">🎉 Anniversaries This Week</p>
-                <p className="text-2xl font-bold text-purple-500">{getAnniversaryAlerts().length}</p>
-              </div>
-            </div>
-          </div>
-          
-          {/* Section Navigation */}
-          <div className="mt-6">
-            <div className="flex flex-wrap gap-2 md:flex-nowrap md:space-x-1 bg-gray-700 rounded-lg p-2 md:p-1">
-              <button
-                onClick={() => setActiveSection('requests')}
-                className={`flex-1 md:flex-none px-3 md:px-6 py-2 rounded-md font-medium transition-colors text-sm md:text-base ${
-                  activeSection === 'requests'
-                    ? 'bg-yellow-500 text-black'
-                    : 'text-gray-300 hover:text-white hover:bg-gray-600'
-                }`}
-              >
-                📋 <span className="hidden sm:inline">Assistance </span>Requests
-              </button>
-              <button
-                onClick={() => setActiveSection('members')}
-                className={`flex-1 md:flex-none px-3 md:px-6 py-2 rounded-md font-medium transition-colors text-sm md:text-base ${
-                  activeSection === 'members'
-                    ? 'bg-yellow-500 text-black'
-                    : 'text-gray-300 hover:text-white hover:bg-gray-600'
-                }`}
-              >
-                👥 Members
-              </button>
-              <button
-                onClick={() => setActiveSection('chapters')}
-                className={`flex-1 md:flex-none px-3 md:px-6 py-2 rounded-md font-medium transition-colors text-sm md:text-base ${
-                  activeSection === 'chapters'
-                    ? 'bg-yellow-500 text-black'
-                    : 'text-gray-300 hover:text-white hover:bg-gray-600'
-                }`}
-              >
-                🏢 Chapters
-              </button>
-              <button
-                onClick={() => setActiveSection('alerts')}
-                className={`flex-1 md:flex-none px-3 md:px-6 py-2 rounded-md font-medium transition-colors text-sm md:text-base ${
-                  activeSection === 'alerts'
-                    ? 'bg-yellow-500 text-black'
-                    : 'text-gray-300 hover:text-white hover:bg-gray-600'
-                }`}
-              >
-                🚨 <span className="hidden sm:inline">Alerts & </span>Merch
-              </button>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Content Area */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {activeSection === 'requests' && (
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-6">Assistance Requests</h2>
-            
-            {/* Search and Filter */}
-            <div className="mb-6 flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
-                <input
-                  type="text"
-                  placeholder="Search requests by name, email, ID, or type..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                />
+        {/* Content Area */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {activeSection === 'requests' && (
+            <div>
+              <h2 className="text-xl md:text-2xl font-bold text-white mb-6">Assistance Requests</h2>
+              
+              {/* Search and Filter */}
+              <div className="mb-6 flex flex-col sm:flex-row gap-4">
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    placeholder="Search requests..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  />
+                </div>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                >
+                  <option value="submittedDate">Sort by Date</option>
+                  <option value="amountNeeded">Sort by Amount</option>
+                  <option value="urgencyLevel">Sort by Urgency</option>
+                  <option value="firstName">Sort by Name</option>
+                </select>
               </div>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-              >
-                <option value="submittedDate">Sort by Date</option>
-                <option value="amountNeeded">Sort by Amount</option>
-                <option value="urgencyLevel">Sort by Urgency</option>
-                <option value="firstName">Sort by Name</option>
-              </select>
-            </div>
 
-            {/* Status Tabs */}
-            <div className="mb-6">
-              <div className="flex flex-wrap gap-2">
-                {[
-                  { key: 'all', label: 'All Requests', count: requests.length },
-                  { key: 'pending', label: 'Pending', count: requests.filter(r => r.status === 'pending').length },
-                  { key: 'approved', label: 'Approved', count: requests.filter(r => r.status === 'approved').length },
-                  { key: 'rejected', label: 'Rejected', count: requests.filter(r => r.status === 'rejected').length },
-                  { key: 'completed', label: 'Completed', count: requests.filter(r => r.status === 'completed').length }
-                ].map(tab => (
-                  <button
-                    key={tab.key}
-                    onClick={() => setActiveTab(tab.key)}
-                    className={`px-4 py-2 rounded-md font-medium transition-colors ${
-                      activeTab === tab.key
-                        ? 'bg-yellow-500 text-black'
-                        : 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white'
-                    }`}
-                  >
-                    {tab.label} ({tab.count})
-                  </button>
+              {/* Status Tabs */}
+              <div className="mb-6">
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { key: 'all', label: 'All', count: requests.length },
+                    { key: 'pending', label: 'Pending', count: requests.filter(r => r.status === 'pending').length },
+                    { key: 'approved', label: 'Approved', count: requests.filter(r => r.status === 'approved').length },
+                    { key: 'rejected', label: 'Rejected', count: requests.filter(r => r.status === 'rejected').length },
+                    { key: 'completed', label: 'Completed', count: requests.filter(r => r.status === 'completed').length }
+                  ].map(tab => (
+                    <button
+                      key={tab.key}
+                      onClick={() => setActiveTab(tab.key)}
+                      className={`px-3 py-2 rounded-md font-medium transition-colors text-sm ${
+                        activeTab === tab.key
+                          ? 'bg-yellow-500 text-black'
+                          : 'bg-gray-700 text-gray-300 hover:bg-gray-600 hover:text-white'
+                      }`}
+                    >
+                      {tab.label} ({tab.count})
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Request Cards - Mobile Optimized */}
+              <div className="grid grid-cols-1 gap-4">
+                {filteredRequests.map(request => (
+                  <div key={request.id} className="bg-gray-800 border border-gray-700 rounded-lg p-4">
+                    <div className="flex flex-col space-y-3">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-lg font-semibold text-white truncate">{request.firstName} {request.lastName}</h3>
+                          <p className="text-gray-400 text-sm">{request.id} • {request.submittedDate}</p>
+                        </div>
+                        <div className="flex flex-col gap-1 ml-2">
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getUrgencyColor(request.urgencyLevel)}`}>
+                            {request.urgencyLevel.toUpperCase()}
+                          </span>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(request.status)}`}>
+                            {request.status.toUpperCase()}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 gap-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">Type:</span>
+                          <span className="text-white text-right">{getAssistanceTypeLabel(request.requestType)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">Amount:</span>
+                          <span className="text-yellow-500 font-semibold">${request.amountNeeded.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-400">Location:</span>
+                          <span className="text-white text-right">{request.address.split(',').slice(-2).join(',').trim()}</span>
+                        </div>
+                      </div>
+                      
+                      <p className="text-gray-300 text-sm line-clamp-2">{request.description}</p>
+                      
+                      <div className="flex justify-between items-center pt-2 border-t border-gray-700">
+                        <span className="text-gray-400 text-sm">📄 2 documents</span>
+                        <button 
+                          onClick={() => setSelectedRequest(request)}
+                          className="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-md font-medium transition-colors text-sm"
+                        >
+                          Review →
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>
+          )}
 
-            {/* Request Cards */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {filteredRequests.map(request => (
-                <div key={request.id} className="bg-gray-800 border border-gray-700 rounded-lg p-6">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <h3 className="text-lg font-semibold text-white">{request.firstName} {request.lastName}</h3>
-                      <p className="text-gray-400 text-sm">{request.id} • {request.submittedDate}</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getUrgencyColor(request.urgencyLevel)}`}>
-                        {request.urgencyLevel.toUpperCase()}
-                      </span>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(request.status)}`}>
-                        {request.status.toUpperCase()}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Type:</span>
-                      <span className="text-white">{getAssistanceTypeLabel(request.requestType)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Amount:</span>
-                      <span className="text-yellow-500 font-semibold">${request.amountNeeded.toLocaleString()}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Location:</span>
-                      <span className="text-white">{request.address.split(',').slice(-2).join(',').trim()}</span>
-                    </div>
-                  </div>
-                  
-                  <p className="text-gray-300 text-sm mt-4 line-clamp-2">{request.description}</p>
-                  
-                  <div className="mt-4 flex justify-between items-center">
-                    <span className="text-gray-400 text-sm">📄 2 documents</span>
-                    <button 
-                      onClick={() => setSelectedRequest(request)}
-                      className="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-md font-medium transition-colors"
-                    >
-                      Review →
-                    </button>
-                  </div>
-                </div>
-              ))}
+          {activeSection === 'members' && (
+            <div>
+              <h2 className="text-xl md:text-2xl font-bold text-white mb-6">Member Management</h2>
+              <div className="bg-gray-800 rounded-lg p-6">
+                <p className="text-gray-300">Member management features coming soon...</p>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {activeSection === 'members' && (
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-6">Member Management</h2>
-            <div className="bg-gray-800 rounded-lg p-6">
-              <p className="text-gray-300">Member management features coming soon...</p>
+          {activeSection === 'chapters' && (
+            <div>
+              <h2 className="text-xl md:text-2xl font-bold text-white mb-6">Chapter Management</h2>
+              <div className="bg-gray-800 rounded-lg p-6">
+                <p className="text-gray-300">Chapter management features coming soon...</p>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {activeSection === 'chapters' && (
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-6">Chapter Management</h2>
-            <div className="bg-gray-800 rounded-lg p-6">
-              <p className="text-gray-300">Chapter management features coming soon...</p>
+          {activeSection === 'alerts' && (
+            <div>
+              <h2 className="text-xl md:text-2xl font-bold text-white mb-6">Alerts & Merch Management</h2>
+              <div className="bg-gray-800 rounded-lg p-6">
+                <p className="text-gray-300">Birthday alerts, anniversary tracking, and merch store integration coming soon...</p>
+              </div>
             </div>
-          </div>
-        )}
-
-        {activeSection === 'alerts' && (
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-6">Alerts & Merch Management</h2>
-            <div className="bg-gray-800 rounded-lg p-6">
-              <p className="text-gray-300">Birthday alerts, anniversary tracking, and merch store integration coming soon...</p>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
+      
+      <Footer />
     </div>
   );
 };
