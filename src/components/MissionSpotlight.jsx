@@ -33,10 +33,10 @@ export default function MissionSpotlight() {
               <span className="bg-red-500/20 text-red-400 px-3 py-1 rounded-full text-sm">
                 Active
               </span>
-              <span className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+              <span className="bg-orange-500/20 text-orange-400 px-3 py-1 rounded-full text-sm">
                 In Progress
               </span>
-              <span className="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-sm">
+              <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
                 Completed
               </span>
             </div>
@@ -60,12 +60,12 @@ export default function MissionSpotlight() {
           <div className="mb-6">
             <div className="flex justify-between items-center mb-2">
               <span className="text-gray-400">Amount Raised</span>
-              <span className="text-yellow-400 font-semibold">$500</span>
+              <span className="text-yellow-400 font-semibold">$655</span>
             </div>
             <div className="w-full bg-gray-700 rounded-full h-3">
-              <div className="bg-orange-500 h-3 rounded-full" style={{width: '76%'}}></div>
+              <div className="bg-green-500 h-3 rounded-full" style={{width: '100%'}}></div>
             </div>
-            <p className="text-sm text-gray-400 mt-2">76% funded - In Progress</p>
+            <p className="text-sm text-green-400 mt-2 font-semibold">100% funded - Mission Completed! 🎉</p>
           </div>
 
           <div className="flex flex-col sm:flex-row gap-3">
