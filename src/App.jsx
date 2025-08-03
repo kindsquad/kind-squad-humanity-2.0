@@ -10,6 +10,7 @@ import MemberDashboard from './pages/MemberDashboard'
 import ChapterDashboard from './pages/ChapterDashboard'
 import Missions from './pages/Missions'
 import RequestHelpForm from './components/RequestHelpForm'
+import MembershipLanding from './components/MembershipLanding'
 import './App.css'
 
 function HomePage() {
@@ -44,6 +45,8 @@ function App() {
         <Route path="/chapter" element={<ChapterDashboard />} />
         <Route path="/missions" element={<Missions />} />
         <Route path="/request-help" element={<RequestHelpForm />} />
+        <Route path="/membership" element={<MembershipLanding />} />
+        <Route path="/join" element={<MembershipLanding />} />
         <Route path="/start-chapter" element={<div className="min-h-screen bg-black text-white p-8"><h1>Start a Chapter - Coming Soon</h1></div>} />
         <Route path="/events" element={<div className="min-h-screen bg-black text-white p-8"><h1>Events - Coming Soon</h1></div>} />
       </Routes>

@@ -10,6 +10,7 @@ export default function Navigation({ currentPage = '', showTitle = true, title =
 
   const menuItems = [
     { path: "/", label: "🏠 Homepage", key: "homepage" },
+    { path: "/membership", label: "💎 Membership", key: "membership" },
     { path: "/admin-dashboard", label: "⚙️ Admin Dashboard", key: "admin" },
     { path: "/member", label: "👤 Member Dashboard", key: "member" },
     { path: "/chapter", label: "🏢 Chapter Dashboard", key: "chapter" },
