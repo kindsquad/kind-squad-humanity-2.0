@@ -39,11 +39,11 @@ const MembershipLanding = () => {
   const faqData = [
     {
       question: "Can I cancel my membership at any time?",
-      answer: "Yes, absolutely! You can cancel your Ambassador or Champion membership at any time with no penalties or fees. Your membership benefits will continue until the end of your current billing period, and you can always rejoin later."
+      answer: "Yes, absolutely! You can cancel your Kind Squad Friend or Family membership at any time with no penalties or fees. Your membership benefits will continue until the end of your current billing period, and you can always rejoin later."
     },
     {
       question: "How do I access the private community?",
-      answer: "Once you become an Ambassador or Champion member, you'll receive an email invitation to join our private community platform within 24 hours. This exclusive space is where members connect, share ideas, and collaborate on missions."
+      answer: "Once you become a Kind Squad Friend or Family member, you'll receive an email invitation to join our private community platform within 24 hours. This exclusive space is where members connect, share ideas, and collaborate on missions."
     },
     {
       question: "Where does my contribution go?",
@@ -110,16 +110,26 @@ const MembershipLanding = () => {
         .faq-icon.rotated {
           transform: rotate(180deg);
         }
+
+        .popular-badge {
+          background: linear-gradient(45deg, #EAB308, #F59E0B);
+          animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.8; }
+        }
       `}</style>
 
       {/* Hero Section */}
       <section className="py-16 text-center bg-gradient-to-br from-black to-gray-900">
         <div className="max-w-6xl mx-auto px-5">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent fade-in-up">
-            Join the Kind Squad
+          <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-yellow-400 to-yellow-500 bg-clip-text text-transparent fade-in-up">
+            Choose Your Impact Level
           </h1>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-8 fade-in-up">
-            Become part of a global movement recreating humanity through kindness. Choose your level of impact and help us spread hope and compassion without limits.
+          <p className="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto mb-8 fade-in-up leading-relaxed">
+            A $5 coffee gives you 20 minutes of caffeine. A $5 Kind Squad membership gives you a lifetime of impact.
           </p>
         </div>
       </section>
@@ -127,137 +137,117 @@ const MembershipLanding = () => {
       {/* Pricing Section */}
       <section className="py-16">
         <div className="max-w-6xl mx-auto px-5">
-          <h2 className="text-4xl font-bold text-center mb-12 scroll-animate">Choose Your Impact Level</h2>
           <div className="grid md:grid-cols-3 gap-8 mb-16">
             
-            {/* Supporter Tier */}
+            {/* Kind Squad (Free) */}
             <div className="pricing-card bg-gray-800 border border-gray-700 rounded-xl p-8 text-center relative scroll-animate">
-              <h3 className="text-2xl font-bold mb-2">Supporter</h3>
-              <div className="text-5xl font-bold text-yellow-400 mb-2">Free</div>
-              <div className="text-gray-400 mb-4">Always</div>
-              <p className="text-gray-400 mb-8">Start your kindness journey with our community of supporters</p>
+              <h3 className="text-2xl font-bold mb-2 text-white">KIND SQUAD</h3>
+              <div className="text-5xl font-bold text-gray-400 mb-2">Free</div>
+              <div className="text-gray-400 mb-4">Join the movement</div>
+              
               <ul className="text-left mb-8 space-y-3">
                 <li className="flex items-center gap-2">
                   <span className="text-green-400">✅</span>
-                  Access to public missions
+                  <span className="text-gray-300">SMS/push alerts for new missions</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-green-400">✅</span>
-                  Monthly impact newsletter
+                  <span className="text-gray-300">Access to mission updates</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-green-400">✅</span>
-                  Community updates
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-green-400">✅</span>
-                  Basic mission participation
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-green-400">✅</span>
-                  Social media community access
+                  <span className="text-gray-300">Community features on kindsquad.org</span>
                 </li>
               </ul>
+              
               <button 
-                className="cta-button w-full py-4 px-8 bg-transparent border-2 border-yellow-400 text-yellow-400 rounded-lg font-bold hover:bg-yellow-400 hover:text-black"
-                onClick={() => handleMembershipClick('Supporter', 'Join for Free')}
+                onClick={() => handleMembershipClick('Kind Squad', 'Join Kind Squad')}
+                className="cta-button w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 px-6 rounded-lg"
               >
-                Join for Free
+                Join Kind Squad
               </button>
             </div>
 
-            {/* Ambassador Tier */}
-            <div className="pricing-card bg-gray-800 border-2 border-yellow-400 rounded-xl p-8 text-center relative scroll-animate">
-              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-black px-4 py-1 rounded-full text-sm font-bold">
-                Most Popular
+            {/* Kind Squad Friend (Most Popular) */}
+            <div className="pricing-card bg-blue-900 border-2 border-yellow-500 rounded-xl p-8 text-center relative scroll-animate">
+              {/* Most Popular Badge */}
+              <div className="popular-badge absolute -top-4 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-black px-4 py-2 rounded-full text-sm font-bold">
+                MOST POPULAR
               </div>
-              <h3 className="text-2xl font-bold mb-2">Ambassador</h3>
-              <div className="text-5xl font-bold text-yellow-400 mb-2">$5</div>
-              <div className="text-gray-400 mb-4">per month</div>
-              <p className="text-gray-400 mb-8">Amplify your impact with exclusive access and priority support</p>
-              <ul className="text-left mb-8 space-y-3">
+              
+              <h3 className="text-2xl font-bold mb-2 text-blue-400">KIND SQUAD FRIEND</h3>
+              <div className="text-5xl font-bold text-blue-400 mb-2">$5</div>
+              <div className="text-gray-300 mb-4">/month</div>
+              <p className="text-gray-300 mb-6 italic">Same price as your morning coffee. Infinitely more meaningful.</p>
+              
+              <ul className="text-left mb-6 space-y-3">
                 <li className="flex items-center gap-2">
                   <span className="text-green-400">✅</span>
-                  Everything in Supporter
+                  <span className="text-gray-300">Everything in Kind Squad, PLUS:</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-green-400">✅</span>
-                  Private community access
+                  <span className="text-gray-300">Annual exclusive Kind Squad sticker pack</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-green-400">✅</span>
-                  Priority mission notifications
+                  <span className="text-gray-300">15% discount on all merchandise</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-green-400">✅</span>
-                  Exclusive member events
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-green-400">✅</span>
-                  Monthly impact reports
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-green-400">✅</span>
-                  Ambassador badge & recognition
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-green-400">✅</span>
-                  Early access to new programs
+                  <span className="text-gray-300">Friend badge on your profile</span>
                 </li>
               </ul>
+
+              <div className="bg-blue-800 border border-blue-600 rounded-lg p-4 mb-6">
+                <p className="text-blue-200 text-sm italic">
+                  "Your $5 doesn't buy coffee that's gone in 20 minutes—it funds kindness that lasts forever."
+                </p>
+              </div>
+              
               <button 
-                className="cta-button w-full py-4 px-8 bg-yellow-400 text-black rounded-lg font-bold hover:bg-yellow-500"
-                onClick={() => handleMembershipClick('Ambassador', 'Become an Ambassador')}
+                onClick={() => handleMembershipClick('Kind Squad Friend', 'Become a Kind Squad Friend')}
+                className="cta-button w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3 px-6 rounded-lg"
               >
-                Become an Ambassador
+                Become a Kind Squad Friend
               </button>
             </div>
 
-            {/* Champion Tier */}
-            <div className="pricing-card bg-gray-800 border border-gray-700 rounded-xl p-8 text-center relative scroll-animate">
-              <h3 className="text-2xl font-bold mb-2">Champion</h3>
-              <div className="text-5xl font-bold text-yellow-400 mb-2">$25</div>
-              <div className="text-gray-400 mb-4">per month</div>
-              <p className="text-gray-400 mb-8">Lead the movement with maximum impact and exclusive benefits</p>
+            {/* Kind Squad Family */}
+            <div className="pricing-card bg-yellow-900 border border-yellow-600 rounded-xl p-8 text-center relative scroll-animate">
+              <h3 className="text-2xl font-bold mb-2 text-yellow-400">KIND SQUAD FAMILY</h3>
+              <div className="text-5xl font-bold text-yellow-400 mb-2">$10</div>
+              <div className="text-gray-300 mb-4">/month</div>
+              <p className="text-gray-300 mb-6">Join our inner circle</p>
+              
               <ul className="text-left mb-8 space-y-3">
                 <li className="flex items-center gap-2">
                   <span className="text-green-400">✅</span>
-                  Everything in Ambassador
+                  <span className="text-gray-300">Everything in Kind Squad Friend, PLUS:</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-green-400">✅</span>
-                  Direct line to leadership team
+                  <span className="text-gray-300">Annual exclusive Kind Squad mug</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-green-400">✅</span>
-                  Quarterly strategy calls
+                  <span className="text-gray-300">20% discount + FREE SHIPPING on all merchandise</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-green-400">✅</span>
-                  Mission proposal privileges
+                  <span className="text-gray-300">Recognition on "Family Wall"</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-green-400">✅</span>
-                  Champion-only events
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-green-400">✅</span>
-                  Annual impact summit invitation
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-green-400">✅</span>
-                  Custom thank you package
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="text-green-400">✅</span>
-                  Tax-deductible receipts
+                  <span className="text-gray-300">Eligible for monthly Member Spotlight</span>
                 </li>
               </ul>
+              
               <button 
-                className="cta-button w-full py-4 px-8 bg-yellow-400 text-black rounded-lg font-bold hover:bg-yellow-500"
-                onClick={() => handleMembershipClick('Champion', 'Lead as a Champion')}
+                onClick={() => handleMembershipClick('Kind Squad Family', 'Become Kind Squad Family')}
+                className="cta-button w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3 px-6 rounded-lg"
               >
-                Lead as a Champion
+                Become Kind Squad Family
               </button>
             </div>
           </div>
@@ -267,51 +257,78 @@ const MembershipLanding = () => {
       {/* Feature Comparison Table */}
       <section className="py-16 bg-gray-900">
         <div className="max-w-6xl mx-auto px-5">
-          <h2 className="text-4xl font-bold text-center mb-12 scroll-animate">Compare Membership Benefits</h2>
-          <div className="overflow-x-auto">
-            <table className="w-full bg-gray-800 rounded-xl overflow-hidden scroll-animate">
-              <thead>
-                <tr className="bg-gray-700">
-                  <th className="p-4 text-left text-yellow-400 font-bold">Features</th>
-                  <th className="p-4 text-center text-yellow-400 font-bold">Supporter<br /><small>Free</small></th>
-                  <th className="p-4 text-center text-yellow-400 font-bold">Ambassador<br /><small>$5/mo</small></th>
-                  <th className="p-4 text-center text-yellow-400 font-bold">Champion<br /><small>$25/mo</small></th>
+          <h2 className="text-4xl font-bold text-center mb-12 scroll-animate">Compare All Features</h2>
+          <div className="overflow-x-auto scroll-animate">
+            <table className="w-full bg-gray-800 rounded-lg overflow-hidden">
+              <thead className="bg-gray-700">
+                <tr>
+                  <th className="text-left p-4 text-gray-300">Features</th>
+                  <th className="text-center p-4 text-gray-400">Kind Squad</th>
+                  <th className="text-center p-4 text-blue-400">Kind Squad Friend</th>
+                  <th className="text-center p-4 text-yellow-400">Kind Squad Family</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-700">
-                {[
-                  ['Access to public missions', true, true, true],
-                  ['Monthly impact newsletter', true, true, true],
-                  ['Community updates', true, true, true],
-                  ['Private community access', false, true, true],
-                  ['Priority mission notifications', false, true, true],
-                  ['Exclusive member events', false, true, true],
-                  ['Monthly impact reports', false, true, true],
-                  ['Direct line to leadership', false, false, true],
-                  ['Quarterly strategy calls', false, false, true],
-                  ['Mission proposal privileges', false, false, true],
-                  ['Annual impact summit', false, false, true],
-                  ['Tax-deductible receipts', false, false, true]
-                ].map(([feature, supporter, ambassador, champion], index) => (
-                  <tr key={index}>
-                    <td className="p-4 font-medium">{feature}</td>
-                    <td className="p-4 text-center">
-                      <span className={supporter ? "text-green-400 text-xl" : "text-red-400 text-xl"}>
-                        {supporter ? "✅" : "❌"}
-                      </span>
-                    </td>
-                    <td className="p-4 text-center">
-                      <span className={ambassador ? "text-green-400 text-xl" : "text-red-400 text-xl"}>
-                        {ambassador ? "✅" : "❌"}
-                      </span>
-                    </td>
-                    <td className="p-4 text-center">
-                      <span className={champion ? "text-green-400 text-xl" : "text-red-400 text-xl"}>
-                        {champion ? "✅" : "❌"}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
+              <tbody className="text-gray-300">
+                <tr className="border-t border-gray-700">
+                  <td className="p-4">SMS/push alerts for new missions</td>
+                  <td className="text-center p-4">✅</td>
+                  <td className="text-center p-4">✅</td>
+                  <td className="text-center p-4">✅</td>
+                </tr>
+                <tr className="border-t border-gray-700">
+                  <td className="p-4">Access to mission updates</td>
+                  <td className="text-center p-4">✅</td>
+                  <td className="text-center p-4">✅</td>
+                  <td className="text-center p-4">✅</td>
+                </tr>
+                <tr className="border-t border-gray-700">
+                  <td className="p-4">Community features on kindsquad.org</td>
+                  <td className="text-center p-4">✅</td>
+                  <td className="text-center p-4">✅</td>
+                  <td className="text-center p-4">✅</td>
+                </tr>
+                <tr className="border-t border-gray-700">
+                  <td className="p-4">Annual exclusive sticker pack</td>
+                  <td className="text-center p-4">❌</td>
+                  <td className="text-center p-4">✅</td>
+                  <td className="text-center p-4">✅</td>
+                </tr>
+                <tr className="border-t border-gray-700">
+                  <td className="p-4">Merchandise discount</td>
+                  <td className="text-center p-4">❌</td>
+                  <td className="text-center p-4">15%</td>
+                  <td className="text-center p-4">20%</td>
+                </tr>
+                <tr className="border-t border-gray-700">
+                  <td className="p-4">Profile badge</td>
+                  <td className="text-center p-4">❌</td>
+                  <td className="text-center p-4">Friend</td>
+                  <td className="text-center p-4">Family</td>
+                </tr>
+                <tr className="border-t border-gray-700">
+                  <td className="p-4">Annual exclusive mug</td>
+                  <td className="text-center p-4">❌</td>
+                  <td className="text-center p-4">❌</td>
+                  <td className="text-center p-4">✅</td>
+                </tr>
+                <tr className="border-t border-gray-700">
+                  <td className="p-4">Free shipping on merchandise</td>
+                  <td className="text-center p-4">❌</td>
+                  <td className="text-center p-4">❌</td>
+                  <td className="text-center p-4">✅</td>
+                </tr>
+                <tr className="border-t border-gray-700">
+                  <td className="p-4">Recognition on "Family Wall"</td>
+                  <td className="text-center p-4">❌</td>
+                  <td className="text-center p-4">❌</td>
+                  <td className="text-center p-4">✅</td>
+                </tr>
+                <tr className="border-t border-gray-700">
+                  <td className="p-4">Monthly Member Spotlight eligibility</td>
+                  <td className="text-center p-4">❌</td>
+                  <td className="text-center p-4">❌</td>
+                  <td className="text-center p-4">✅</td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -323,26 +340,35 @@ const MembershipLanding = () => {
         <div className="max-w-6xl mx-auto px-5">
           <h2 className="text-4xl font-bold text-center mb-12 scroll-animate">From the Heart of the Kind Squad</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-gray-800 border border-gray-700 rounded-xl p-8 scroll-animate">
-              <p className="text-gray-300 italic mb-4">
-                "Being an Ambassador has connected me with an incredible community of people who truly care about making a difference. The private community is so supportive and inspiring!"
-              </p>
-              <div className="text-yellow-400 font-bold">Sarah Martinez</div>
-              <div className="text-gray-400 text-sm">Ambassador Member since 2023</div>
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 scroll-animate">
+              <p className="text-gray-300 mb-4 italic">"Being a Kind Squad Friend has shown me that small acts of kindness can create ripple effects of change. My $5 monthly contribution feels like the best investment I've ever made."</p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">M</div>
+                <div>
+                  <div className="font-semibold text-white">Maria Rodriguez</div>
+                  <div className="text-blue-400 text-sm">Kind Squad Friend</div>
+                </div>
+              </div>
             </div>
-            <div className="bg-gray-800 border border-gray-700 rounded-xl p-8 scroll-animate">
-              <p className="text-gray-300 italic mb-4">
-                "As a Champion, I love having direct access to the leadership team and being able to propose missions that matter to my local community. It's amazing to see ideas become reality."
-              </p>
-              <div className="text-yellow-400 font-bold">Michael Chen</div>
-              <div className="text-gray-400 text-sm">Champion Member since 2022</div>
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 scroll-animate">
+              <p className="text-gray-300 mb-4 italic">"The Family membership has connected me with an incredible community. Seeing my name on the Family Wall and being featured in the Member Spotlight made me feel truly valued."</p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-yellow-600 rounded-full flex items-center justify-center text-white font-bold">J</div>
+                <div>
+                  <div className="font-semibold text-white">James Chen</div>
+                  <div className="text-yellow-400 text-sm">Kind Squad Family</div>
+                </div>
+              </div>
             </div>
-            <div className="bg-gray-800 border border-gray-700 rounded-xl p-8 scroll-animate">
-              <p className="text-gray-300 italic mb-4">
-                "I started as a free Supporter and quickly upgraded to Ambassador. The exclusive events and early access to programs make me feel like I'm truly part of something special."
-              </p>
-              <div className="text-yellow-400 font-bold">Emily Rodriguez</div>
-              <div className="text-gray-400 text-sm">Ambassador Member since 2024</div>
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 scroll-animate">
+              <p className="text-gray-300 mb-4 italic">"I started as a free member and quickly upgraded to Friend. The exclusive sticker pack and merchandise discounts are great, but the real value is being part of something bigger."</p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center text-white font-bold">S</div>
+                <div>
+                  <div className="font-semibold text-white">Sarah Johnson</div>
+                  <div className="text-blue-400 text-sm">Kind Squad Friend</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -352,19 +378,21 @@ const MembershipLanding = () => {
       <section className="py-16 bg-gray-900">
         <div className="max-w-4xl mx-auto px-5">
           <h2 className="text-4xl font-bold text-center mb-12 scroll-animate">Frequently Asked Questions</h2>
-          <div className="space-y-4">
+          <div className="space-y-4 scroll-animate">
             {faqData.map((faq, index) => (
-              <div key={index} className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden scroll-animate">
+              <div key={index} className="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden">
                 <button
-                  className="w-full p-6 text-left flex justify-between items-center hover:bg-gray-700 transition-colors"
                   onClick={() => toggleFAQ(index)}
+                  className="w-full text-left p-6 flex justify-between items-center hover:bg-gray-750 transition-colors"
                 >
-                  <span className="text-lg font-medium">{faq.question}</span>
-                  <span className={`faq-icon ${openFAQ === index ? 'rotated' : ''}`}>▼</span>
+                  <span className="font-semibold text-white">{faq.question}</span>
+                  <span className={`faq-icon text-yellow-400 text-xl ${openFAQ === index ? 'rotated' : ''}`}>
+                    ▼
+                  </span>
                 </button>
                 {openFAQ === index && (
-                  <div className="px-6 pb-6 text-gray-400">
-                    {faq.answer}
+                  <div className="px-6 pb-6">
+                    <p className="text-gray-300 leading-relaxed">{faq.answer}</p>
                   </div>
                 )}
               </div>
