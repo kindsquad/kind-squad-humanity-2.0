@@ -229,40 +229,6 @@ const AdminDashboard = () => {
       <Header />
       
       <div className="bg-gray-950">
-        {/* Organizational Stats Box */}
-        <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 border-b border-yellow-400">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <div className="text-center mb-4">
-              <h2 className="text-xl md:text-2xl font-bold text-black">Kind Squad® Impact Dashboard</h2>
-              <p className="text-black/80 text-sm md:text-base">Building humanity through kindness - Real-time organizational metrics</p>
-            </div>
-            
-            {/* Main Organizational Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
-              <div className="bg-black/10 backdrop-blur-sm rounded-lg p-4 text-center border border-black/20">
-                <div className="text-2xl md:text-3xl font-bold text-black mb-1">$127,450</div>
-                <div className="text-xs md:text-sm font-medium text-black/80">Total Raised</div>
-                <div className="text-xs text-black/60 mt-1">This Year</div>
-              </div>
-              <div className="bg-black/10 backdrop-blur-sm rounded-lg p-4 text-center border border-black/20">
-                <div className="text-2xl md:text-3xl font-bold text-black mb-1">89</div>
-                <div className="text-xs md:text-sm font-medium text-black/80">Total Missions</div>
-                <div className="text-xs text-black/60 mt-1">Completed</div>
-              </div>
-              <div className="bg-black/10 backdrop-blur-sm rounded-lg p-4 text-center border border-black/20">
-                <div className="text-2xl md:text-3xl font-bold text-black mb-1">342</div>
-                <div className="text-xs md:text-sm font-medium text-black/80">People Helped</div>
-                <div className="text-xs text-black/60 mt-1">Lives Changed</div>
-              </div>
-              <div className="bg-black/10 backdrop-blur-sm rounded-lg p-4 text-center border border-black/20">
-                <div className="text-2xl md:text-3xl font-bold text-black mb-1">156</div>
-                <div className="text-xs md:text-sm font-medium text-black/80">Active Members</div>
-                <div className="text-xs text-black/60 mt-1">Growing Daily</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Dashboard Header */}
         <div className="bg-gray-900 border-b border-gray-800">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -478,6 +444,40 @@ const AdminDashboard = () => {
               </div>
             </div>
           )}
+        </div>
+
+        {/* Organizational Stats Box - Moved to Bottom */}
+        <div className="bg-gradient-to-r from-yellow-500 to-yellow-600 border-t border-yellow-400">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div className="text-center mb-4">
+              <h2 className="text-xl md:text-2xl font-bold text-black">Kind Squad® Impact Dashboard</h2>
+              <p className="text-black/80 text-sm md:text-base">Building humanity through kindness - Real-time organizational metrics</p>
+            </div>
+            
+            {/* Main Organizational Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+              <div className="bg-black/10 backdrop-blur-sm rounded-lg p-4 text-center border border-black/20">
+                <div className="text-2xl md:text-3xl font-bold text-black mb-1">$127,450</div>
+                <div className="text-xs md:text-sm font-medium text-black/80">Total Raised</div>
+                <div className="text-xs text-black/60 mt-1">This Year</div>
+              </div>
+              <div className="bg-black/10 backdrop-blur-sm rounded-lg p-4 text-center border border-black/20">
+                <div className="text-2xl md:text-3xl font-bold text-black mb-1">89</div>
+                <div className="text-xs md:text-sm font-medium text-black/80">Total Missions</div>
+                <div className="text-xs text-black/60 mt-1">Completed</div>
+              </div>
+              <div className="bg-black/10 backdrop-blur-sm rounded-lg p-4 text-center border border-black/20">
+                <div className="text-2xl md:text-3xl font-bold text-black mb-1">342</div>
+                <div className="text-xs md:text-sm font-medium text-black/80">People Helped</div>
+                <div className="text-xs text-black/60 mt-1">Lives Changed</div>
+              </div>
+              <div className="bg-black/10 backdrop-blur-sm rounded-lg p-4 text-center border border-black/20">
+                <div className="text-2xl md:text-3xl font-bold text-black mb-1">156</div>
+                <div className="text-xs md:text-sm font-medium text-black/80">Active Members</div>
+                <div className="text-xs text-black/60 mt-1">Growing Daily</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       
