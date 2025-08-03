@@ -1,61 +1,117 @@
 import React, { useState } from 'react'
-import Navigation from '../components/Navigation'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 export default function MemberDashboard() {
   const [activeTab, setActiveTab] = useState('overview')
-  const [currentTier, setCurrentTier] = useState('Ambassador') // This would come from user data
+  const [currentTier, setCurrentTier] = useState('Friend') // This would come from user data
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+  const [showDowngradeModal, setShowDowngradeModal] = useState(false)
+  const [showCancelModal, setShowCancelModal] = useState(false)
+  const [cancelReason, setCancelReason] = useState('')
+  const [cancelFeedback, setCancelFeedback] = useState('')
 
   const tierInfo = {
-    'Supporter': {
-      name: 'Supporter',
+    'Member': {
+      name: 'Kind Squad® Member',
       price: 'Free',
       color: 'text-gray-400',
-      bgColor: 'bg-gray-700',
-      borderColor: 'border-gray-600'
+      bgColor: 'bg-gray-800',
+      borderColor: 'border-gray-600',
+      benefits: [
+        'Access to mission updates',
+        'Member dashboard',
+        '10% off Kind Squad® Merch'
+      ]
     },
-    'Ambassador': {
-      name: 'Ambassador',
+    'Friend': {
+      name: 'Kind Squad® Friend',
       price: '$5/month',
       color: 'text-blue-400',
       bgColor: 'bg-blue-900',
-      borderColor: 'border-blue-500'
+      borderColor: 'border-blue-500',
+      benefits: [
+        'Everything from Member, PLUS:',
+        'Annual exclusive Kind Squad® sticker pack',
+        '15% discount on merchandise store',
+        'Friend badge displayed on profile'
+      ]
     },
-    'Champion': {
-      name: 'Champion',
-      price: '$25/month',
+    'Family': {
+      name: 'Kind Squad® Family',
+      price: '$10/month',
       color: 'text-yellow-400',
       bgColor: 'bg-yellow-900',
-      borderColor: 'border-yellow-500'
+      borderColor: 'border-yellow-500',
+      benefits: [
+        'Everything from Friend, PLUS:',
+        'Annual exclusive Kind Squad® mug',
+        '20% discount + FREE SHIPPING on merchandise',
+        'Recognition on "Family Wall"',
+        'Eligible for monthly Member Spotlight'
+      ]
     }
   }
 
   const handleUpgrade = (newTier) => {
     console.log(`Upgrading to ${newTier}`)
     // Payment integration would go here
-    alert(`Thank you for upgrading to ${newTier}! Payment integration would be implemented here.`)
+    alert(`Thank you for upgrading to ${tierInfo[newTier].name}! Payment integration would be implemented here.`)
+    setCurrentTier(newTier)
     setShowUpgradeModal(false)
+  }
+
+  const handleDowngrade = (newTier) => {
+    console.log(`Downgrading to ${newTier}`)
+    setCurrentTier(newTier)
+    setShowDowngradeModal(false)
+    alert(`Your membership has been changed to ${tierInfo[newTier].name}. Changes will take effect at your next billing cycle.`)
+  }
+
+  const handleCancelMembership = () => {
+    if (!cancelReason) {
+      alert('Please select a reason for cancellation.')
+      return
+    }
+
+    // Send cancellation info to admin
+    const cancellationData = {
+      userId: 'user-123', // Would come from user context
+      currentTier: currentTier,
+      reason: cancelReason,
+      feedback: cancelFeedback,
+      timestamp: new Date().toISOString()
+    }
+
+    console.log('Sending cancellation data to admin:', cancellationData)
+    
+    // In real implementation, this would be sent to the admin dashboard
+    alert('Your cancellation request has been submitted. You will receive a confirmation email shortly.')
+    
+    setShowCancelModal(false)
+    setCancelReason('')
+    setCancelFeedback('')
   }
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <Navigation />
+      <Header />
 
       {/* Main Content */}
-      <div className="p-6">
-        <div className="max-w-7xl mx-auto">
+      <div className="bg-black py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Welcome Section */}
           <div className="mb-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between">
               <div>
                 <h1 className="text-4xl font-bold text-white mb-2">Welcome back, Sarah</h1>
-                <p className="text-gray-400">Thank you for being part of Humanity 2.0 since March 2021</p>
+                <p className="text-gray-400">Thank you for being part of Kind Squad since March 2021</p>
               </div>
               <div className={`mt-4 md:mt-0 ${tierInfo[currentTier].bgColor} ${tierInfo[currentTier].borderColor} border-2 rounded-lg p-4 text-center`}>
                 <div className={`text-sm ${tierInfo[currentTier].color} font-medium`}>Current Membership</div>
                 <div className={`text-xl font-bold ${tierInfo[currentTier].color}`}>{tierInfo[currentTier].name}</div>
                 <div className="text-gray-300 text-sm">{tierInfo[currentTier].price}</div>
-                {currentTier !== 'Champion' && (
+                {currentTier !== 'Family' && (
                   <button 
                     onClick={() => setShowUpgradeModal(true)}
                     className="mt-2 bg-yellow-500 text-black px-3 py-1 rounded text-sm font-medium hover:bg-yellow-400 transition-colors"
@@ -69,22 +125,22 @@ export default function MemberDashboard() {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
+            <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
               <div className="text-2xl font-bold text-yellow-400">12</div>
               <div className="text-gray-400">Total Donations</div>
               <div className="text-sm text-gray-500">This Year</div>
             </div>
-            <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
+            <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
               <div className="text-2xl font-bold text-green-400">$2,850</div>
               <div className="text-gray-400">Total Donated</div>
               <div className="text-sm text-gray-500">Lifetime</div>
             </div>
-            <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
+            <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
               <div className="text-2xl font-bold text-blue-400">45</div>
               <div className="text-gray-400">Hours Volunteered</div>
               <div className="text-sm text-gray-500">This Year</div>
             </div>
-            <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
+            <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
               <div className="text-2xl font-bold text-purple-400">8</div>
               <div className="text-gray-400">Lives Impacted</div>
               <div className="text-sm text-gray-500">Direct Impact</div>
@@ -93,7 +149,7 @@ export default function MemberDashboard() {
 
           {/* Navigation Tabs */}
           <div className="mb-8">
-            <div className="border-b border-gray-800">
+            <div className="border-b border-gray-700">
               <nav className="-mb-px flex space-x-8">
                 <button
                   onClick={() => setActiveTab('overview')}
@@ -143,24 +199,24 @@ export default function MemberDashboard() {
           {activeTab === 'overview' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Recent Activity */}
-              <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
                 <h3 className="text-xl font-bold text-white mb-6">Recent Activity</h3>
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
+                  <div className="flex items-center justify-between p-4 bg-gray-900 rounded-lg">
                     <div>
                       <p className="text-white font-medium">Food Drive Mission</p>
                       <p className="text-gray-400 text-sm">Donated $150 • July 25, 2024</p>
                     </div>
                     <div className="text-green-400 font-medium">Completed</div>
                   </div>
-                  <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
+                  <div className="flex items-center justify-between p-4 bg-gray-900 rounded-lg">
                     <div>
                       <p className="text-white font-medium">Veteran Support</p>
                       <p className="text-gray-400 text-sm">Volunteered 8 hours • July 20, 2024</p>
                     </div>
                     <div className="text-green-400 font-medium">Completed</div>
                   </div>
-                  <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg">
+                  <div className="flex items-center justify-between p-4 bg-gray-900 rounded-lg">
                     <div>
                       <p className="text-white font-medium">Water Bottle Drive</p>
                       <p className="text-gray-400 text-sm">Donated supplies • April 28, 2024</p>
@@ -170,11 +226,11 @@ export default function MemberDashboard() {
                 </div>
               </div>
 
-              {/* Upcoming Missions */}
-              <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
+              {/* Available Missions */}
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
                 <h3 className="text-xl font-bold text-white mb-6">Available Missions</h3>
                 <div className="space-y-4">
-                  <div className="p-4 bg-gray-800 rounded-lg border-l-4 border-yellow-500">
+                  <div className="p-4 bg-gray-900 rounded-lg border-l-4 border-yellow-500">
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="text-white font-medium">Emergency Shelter Support</h4>
                       <span className="text-red-400 text-xs font-medium bg-red-900 px-2 py-1 rounded">URGENT</span>
@@ -187,7 +243,7 @@ export default function MemberDashboard() {
                       </button>
                     </div>
                   </div>
-                  <div className="p-4 bg-gray-800 rounded-lg border-l-4 border-blue-500">
+                  <div className="p-4 bg-gray-900 rounded-lg border-l-4 border-blue-500">
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="text-white font-medium">School Supply Drive</h4>
                       <span className="text-blue-400 text-xs font-medium bg-blue-900 px-2 py-1 rounded">ACTIVE</span>
@@ -208,7 +264,7 @@ export default function MemberDashboard() {
           {activeTab === 'settings' && (
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Membership Management */}
-              <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
                 <h3 className="text-xl font-bold text-white mb-6">Membership Management</h3>
                 <div className="space-y-6">
                   {/* Current Tier Display */}
@@ -219,16 +275,24 @@ export default function MemberDashboard() {
                         <div className="text-gray-300">{tierInfo[currentTier].price}</div>
                         <div className="text-gray-400 text-sm mt-1">Member since March 2021</div>
                       </div>
-                      <div className="text-right">
-                        {currentTier !== 'Champion' && (
+                      <div className="text-right space-y-2">
+                        {currentTier !== 'Family' && (
                           <button 
                             onClick={() => setShowUpgradeModal(true)}
-                            className="bg-yellow-500 text-black px-4 py-2 rounded font-medium hover:bg-yellow-400 transition-colors"
+                            className="block bg-yellow-500 text-black px-4 py-2 rounded font-medium hover:bg-yellow-400 transition-colors"
                           >
                             Upgrade
                           </button>
                         )}
-                        {currentTier === 'Champion' && (
+                        {currentTier !== 'Member' && (
+                          <button 
+                            onClick={() => setShowDowngradeModal(true)}
+                            className="block bg-gray-600 text-white px-4 py-2 rounded font-medium hover:bg-gray-500 transition-colors"
+                          >
+                            Downgrade
+                          </button>
+                        )}
+                        {currentTier === 'Family' && (
                           <div className="text-yellow-400 font-medium">Highest Tier</div>
                         )}
                       </div>
@@ -239,78 +303,20 @@ export default function MemberDashboard() {
                   <div>
                     <h4 className="text-white font-medium mb-3">Your Current Benefits</h4>
                     <div className="space-y-2">
-                      {currentTier === 'Supporter' && (
-                        <>
-                          <div className="flex items-center gap-2 text-gray-300">
-                            <span className="text-green-400">✅</span>
-                            Access to public missions
-                          </div>
-                          <div className="flex items-center gap-2 text-gray-300">
-                            <span className="text-green-400">✅</span>
-                            Monthly impact newsletter
-                          </div>
-                          <div className="flex items-center gap-2 text-gray-300">
-                            <span className="text-green-400">✅</span>
-                            Community updates
-                          </div>
-                        </>
-                      )}
-                      {currentTier === 'Ambassador' && (
-                        <>
-                          <div className="flex items-center gap-2 text-gray-300">
-                            <span className="text-green-400">✅</span>
-                            All Supporter benefits
-                          </div>
-                          <div className="flex items-center gap-2 text-gray-300">
-                            <span className="text-green-400">✅</span>
-                            Private community access
-                          </div>
-                          <div className="flex items-center gap-2 text-gray-300">
-                            <span className="text-green-400">✅</span>
-                            Priority mission notifications
-                          </div>
-                          <div className="flex items-center gap-2 text-gray-300">
-                            <span className="text-green-400">✅</span>
-                            Exclusive member events
-                          </div>
-                          <div className="flex items-center gap-2 text-gray-300">
-                            <span className="text-green-400">✅</span>
-                            Ambassador badge & recognition
-                          </div>
-                        </>
-                      )}
-                      {currentTier === 'Champion' && (
-                        <>
-                          <div className="flex items-center gap-2 text-gray-300">
-                            <span className="text-green-400">✅</span>
-                            All Ambassador benefits
-                          </div>
-                          <div className="flex items-center gap-2 text-gray-300">
-                            <span className="text-green-400">✅</span>
-                            Direct line to leadership team
-                          </div>
-                          <div className="flex items-center gap-2 text-gray-300">
-                            <span className="text-green-400">✅</span>
-                            Quarterly strategy calls
-                          </div>
-                          <div className="flex items-center gap-2 text-gray-300">
-                            <span className="text-green-400">✅</span>
-                            Mission proposal privileges
-                          </div>
-                          <div className="flex items-center gap-2 text-gray-300">
-                            <span className="text-green-400">✅</span>
-                            Annual impact summit invitation
-                          </div>
-                        </>
-                      )}
+                      {tierInfo[currentTier].benefits.map((benefit, index) => (
+                        <div key={index} className="flex items-center gap-2 text-gray-300">
+                          <span className="text-green-400">✅</span>
+                          {benefit}
+                        </div>
+                      ))}
                     </div>
                   </div>
 
                   {/* Billing Information */}
-                  {currentTier !== 'Supporter' && (
+                  {currentTier !== 'Member' && (
                     <div>
                       <h4 className="text-white font-medium mb-3">Billing Information</h4>
-                      <div className="bg-gray-800 p-4 rounded-lg">
+                      <div className="bg-gray-900 p-4 rounded-lg">
                         <div className="flex justify-between items-center mb-2">
                           <span className="text-gray-300">Next billing date:</span>
                           <span className="text-white">August 15, 2025</span>
@@ -328,7 +334,10 @@ export default function MemberDashboard() {
                         <button className="text-yellow-400 hover:text-yellow-300 transition-colors">
                           Update Payment Method
                         </button>
-                        <button className="text-red-400 hover:text-red-300 transition-colors">
+                        <button 
+                          onClick={() => setShowCancelModal(true)}
+                          className="text-red-400 hover:text-red-300 transition-colors"
+                        >
                           Cancel Membership
                         </button>
                       </div>
@@ -338,7 +347,7 @@ export default function MemberDashboard() {
               </div>
 
               {/* Account Settings */}
-              <div className="bg-gray-900 p-6 rounded-lg border border-gray-800">
+              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
                 <h3 className="text-xl font-bold text-white mb-6">Account Settings</h3>
                 
                 {/* Account Information */}
@@ -350,7 +359,7 @@ export default function MemberDashboard() {
                       <input 
                         type="email" 
                         value="sarah.martinez@email.com" 
-                        className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-white"
+                        className="w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-white"
                         readOnly
                       />
                     </div>
@@ -359,7 +368,7 @@ export default function MemberDashboard() {
                       <input 
                         type="tel" 
                         value="+1 (555) 123-4567" 
-                        className="w-full bg-gray-800 border border-gray-700 rounded px-3 py-2 text-white"
+                        className="w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-white"
                         readOnly
                       />
                     </div>
@@ -408,88 +417,83 @@ export default function MemberDashboard() {
 
           {/* Upgrade Modal */}
           {showUpgradeModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-              <div className="bg-gray-900 rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+              <div className="bg-gray-800 rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-gray-700">
                 <div className="flex justify-between items-center mb-6">
                   <h3 className="text-2xl font-bold text-white">Upgrade Your Membership</h3>
                   <button 
                     onClick={() => setShowUpgradeModal(false)}
-                    className="text-gray-400 hover:text-white"
+                    className="text-gray-400 hover:text-white text-2xl"
                   >
-                    ✕
+                    ×
                   </button>
                 </div>
 
                 <div className="space-y-4">
-                  {currentTier === 'Supporter' && (
+                  {currentTier === 'Member' && (
                     <>
-                      {/* Ambassador Upgrade */}
+                      {/* Friend Upgrade */}
                       <div className="bg-blue-900 border-2 border-blue-500 rounded-lg p-4">
                         <div className="flex justify-between items-center mb-3">
                           <div>
-                            <h4 className="text-xl font-bold text-blue-400">Ambassador</h4>
+                            <h4 className="text-xl font-bold text-blue-400">Kind Squad® Friend</h4>
                             <p className="text-gray-300">$5/month</p>
                           </div>
                           <button 
-                            onClick={() => handleUpgrade('Ambassador')}
+                            onClick={() => handleUpgrade('Friend')}
                             className="bg-yellow-500 text-black px-4 py-2 rounded font-medium hover:bg-yellow-400 transition-colors"
                           >
-                            Upgrade to Ambassador
+                            Upgrade to Friend
                           </button>
                         </div>
                         <div className="text-gray-300 text-sm space-y-1">
-                          <div>✅ Private community access</div>
-                          <div>✅ Priority mission notifications</div>
-                          <div>✅ Exclusive member events</div>
-                          <div>✅ Ambassador badge & recognition</div>
+                          {tierInfo.Friend.benefits.map((benefit, index) => (
+                            <div key={index}>✅ {benefit}</div>
+                          ))}
                         </div>
                       </div>
 
-                      {/* Champion Upgrade */}
+                      {/* Family Upgrade */}
                       <div className="bg-yellow-900 border-2 border-yellow-500 rounded-lg p-4">
                         <div className="flex justify-between items-center mb-3">
                           <div>
-                            <h4 className="text-xl font-bold text-yellow-400">Champion</h4>
-                            <p className="text-gray-300">$25/month</p>
+                            <h4 className="text-xl font-bold text-yellow-400">Kind Squad® Family</h4>
+                            <p className="text-gray-300">$10/month</p>
                           </div>
                           <button 
-                            onClick={() => handleUpgrade('Champion')}
+                            onClick={() => handleUpgrade('Family')}
                             className="bg-yellow-500 text-black px-4 py-2 rounded font-medium hover:bg-yellow-400 transition-colors"
                           >
-                            Upgrade to Champion
+                            Upgrade to Family
                           </button>
                         </div>
                         <div className="text-gray-300 text-sm space-y-1">
-                          <div>✅ All Ambassador benefits</div>
-                          <div>✅ Direct line to leadership team</div>
-                          <div>✅ Quarterly strategy calls</div>
-                          <div>✅ Mission proposal privileges</div>
-                          <div>✅ Annual impact summit invitation</div>
+                          {tierInfo.Family.benefits.map((benefit, index) => (
+                            <div key={index}>✅ {benefit}</div>
+                          ))}
                         </div>
                       </div>
                     </>
                   )}
 
-                  {currentTier === 'Ambassador' && (
+                  {currentTier === 'Friend' && (
                     <div className="bg-yellow-900 border-2 border-yellow-500 rounded-lg p-4">
                       <div className="flex justify-between items-center mb-3">
                         <div>
-                          <h4 className="text-xl font-bold text-yellow-400">Champion</h4>
-                          <p className="text-gray-300">$25/month</p>
+                          <h4 className="text-xl font-bold text-yellow-400">Kind Squad® Family</h4>
+                          <p className="text-gray-300">$10/month</p>
                         </div>
                         <button 
-                          onClick={() => handleUpgrade('Champion')}
+                          onClick={() => handleUpgrade('Family')}
                           className="bg-yellow-500 text-black px-4 py-2 rounded font-medium hover:bg-yellow-400 transition-colors"
                         >
-                          Upgrade to Champion
+                          Upgrade to Family
                         </button>
                       </div>
                       <div className="text-gray-300 text-sm space-y-1">
-                        <div>✅ All Ambassador benefits</div>
-                        <div>✅ Direct line to leadership team</div>
-                        <div>✅ Quarterly strategy calls</div>
-                        <div>✅ Mission proposal privileges</div>
-                        <div>✅ Annual impact summit invitation</div>
+                        {tierInfo.Family.benefits.map((benefit, index) => (
+                          <div key={index}>✅ {benefit}</div>
+                        ))}
                       </div>
                     </div>
                   )}
@@ -506,8 +510,175 @@ export default function MemberDashboard() {
               </div>
             </div>
           )}
+
+          {/* Downgrade Modal */}
+          {showDowngradeModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+              <div className="bg-gray-800 rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-gray-700">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-2xl font-bold text-white">Change Your Membership</h3>
+                  <button 
+                    onClick={() => setShowDowngradeModal(false)}
+                    className="text-gray-400 hover:text-white text-2xl"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  {currentTier === 'Family' && (
+                    <>
+                      {/* Friend Downgrade */}
+                      <div className="bg-blue-900 border-2 border-blue-500 rounded-lg p-4">
+                        <div className="flex justify-between items-center mb-3">
+                          <div>
+                            <h4 className="text-xl font-bold text-blue-400">Kind Squad® Friend</h4>
+                            <p className="text-gray-300">$5/month</p>
+                          </div>
+                          <button 
+                            onClick={() => handleDowngrade('Friend')}
+                            className="bg-gray-600 text-white px-4 py-2 rounded font-medium hover:bg-gray-500 transition-colors"
+                          >
+                            Change to Friend
+                          </button>
+                        </div>
+                        <div className="text-gray-300 text-sm space-y-1">
+                          {tierInfo.Friend.benefits.map((benefit, index) => (
+                            <div key={index}>✅ {benefit}</div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Member Downgrade */}
+                      <div className="bg-gray-800 border-2 border-gray-600 rounded-lg p-4">
+                        <div className="flex justify-between items-center mb-3">
+                          <div>
+                            <h4 className="text-xl font-bold text-gray-400">Kind Squad® Member</h4>
+                            <p className="text-gray-300">Free</p>
+                          </div>
+                          <button 
+                            onClick={() => handleDowngrade('Member')}
+                            className="bg-gray-600 text-white px-4 py-2 rounded font-medium hover:bg-gray-500 transition-colors"
+                          >
+                            Change to Member
+                          </button>
+                        </div>
+                        <div className="text-gray-300 text-sm space-y-1">
+                          {tierInfo.Member.benefits.map((benefit, index) => (
+                            <div key={index}>✅ {benefit}</div>
+                          ))}
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {currentTier === 'Friend' && (
+                    <div className="bg-gray-800 border-2 border-gray-600 rounded-lg p-4">
+                      <div className="flex justify-between items-center mb-3">
+                        <div>
+                          <h4 className="text-xl font-bold text-gray-400">Kind Squad® Member</h4>
+                          <p className="text-gray-300">Free</p>
+                        </div>
+                        <button 
+                          onClick={() => handleDowngrade('Member')}
+                          className="bg-gray-600 text-white px-4 py-2 rounded font-medium hover:bg-gray-500 transition-colors"
+                        >
+                          Change to Member
+                        </button>
+                      </div>
+                      <div className="text-gray-300 text-sm space-y-1">
+                        {tierInfo.Member.benefits.map((benefit, index) => (
+                          <div key={index}>✅ {benefit}</div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-6 text-center">
+                  <button 
+                    onClick={() => setShowDowngradeModal(false)}
+                    className="text-gray-400 hover:text-white transition-colors"
+                  >
+                    Keep Current Plan
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Cancel Membership Modal */}
+          {showCancelModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+              <div className="bg-gray-800 rounded-lg p-6 max-w-lg w-full border border-gray-700">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-2xl font-bold text-white">Cancel Membership</h3>
+                  <button 
+                    onClick={() => setShowCancelModal(false)}
+                    className="text-gray-400 hover:text-white text-2xl"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  <p className="text-gray-300">We're sorry to see you go! Please help us improve by letting us know why you're canceling.</p>
+                  
+                  <div>
+                    <label className="block text-white font-medium mb-2">Reason for cancellation *</label>
+                    <select 
+                      value={cancelReason}
+                      onChange={(e) => setCancelReason(e.target.value)}
+                      className="w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-white"
+                    >
+                      <option value="">Please select a reason</option>
+                      <option value="too_expensive">Too expensive</option>
+                      <option value="not_using">Not using the benefits</option>
+                      <option value="technical_issues">Technical issues</option>
+                      <option value="found_alternative">Found an alternative</option>
+                      <option value="temporary_break">Taking a temporary break</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-white font-medium mb-2">Additional feedback (optional)</label>
+                    <textarea 
+                      value={cancelFeedback}
+                      onChange={(e) => setCancelFeedback(e.target.value)}
+                      placeholder="Tell us more about your experience or how we could improve..."
+                      className="w-full bg-gray-900 border border-gray-700 rounded px-3 py-2 text-white h-24 resize-none"
+                    />
+                  </div>
+
+                  <div className="bg-yellow-900 border border-yellow-600 rounded-lg p-4">
+                    <p className="text-yellow-200 text-sm">
+                      <strong>Note:</strong> Your membership will remain active until your next billing date. You'll continue to have access to all benefits until then.
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex gap-3 mt-6">
+                  <button 
+                    onClick={() => setShowCancelModal(false)}
+                    className="flex-1 bg-gray-600 text-white px-4 py-2 rounded font-medium hover:bg-gray-500 transition-colors"
+                  >
+                    Keep Membership
+                  </button>
+                  <button 
+                    onClick={handleCancelMembership}
+                    className="flex-1 bg-red-600 text-white px-4 py-2 rounded font-medium hover:bg-red-500 transition-colors"
+                  >
+                    Cancel Membership
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+
+      <Footer />
     </div>
   )
 }
