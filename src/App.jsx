@@ -5,12 +5,11 @@ import Hero from './components/Hero'
 import MissionSpotlight from './components/MissionSpotlight'
 import AnnualMissions from './components/AnnualMissions'
 import Footer from './components/Footer'
-import AdminDashboard from './pages/AdminDashboard'
+import AdminDashboardComponent from './components/AdminDashboard'
 import MemberDashboard from './pages/MemberDashboard'
 import ChapterDashboard from './pages/ChapterDashboard'
 import Missions from './pages/Missions'
 import RequestHelpForm from './components/RequestHelpForm'
-import AdminDashboardComponent from './components/AdminDashboard'
 import './App.css'
 
 function HomePage() {
@@ -39,7 +38,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin" element={<AdminDashboardComponent />} />
         <Route path="/admin-dashboard" element={<AdminDashboardComponent />} />
         <Route path="/member" element={<MemberDashboard />} />
         <Route path="/chapter" element={<ChapterDashboard />} />
