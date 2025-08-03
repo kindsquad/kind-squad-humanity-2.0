@@ -481,6 +481,139 @@ const AdminDashboard = () => {
         </div>
       </div>
       
+      {/* Request Review Modal */}
+      {selectedRequest && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-gray-900 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6">
+              {/* Modal Header */}
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold text-white">Request Review</h2>
+                  <p className="text-gray-400">{selectedRequest.id} • {selectedRequest.submittedDate}</p>
+                </div>
+                <button
+                  onClick={() => setSelectedRequest(null)}
+                  className="text-gray-400 hover:text-white text-2xl"
+                >
+                  ×
+                </button>
+              </div>
+
+              {/* Request Details */}
+              <div className="space-y-6">
+                {/* Personal Information */}
+                <div className="bg-gray-800 rounded-lg p-4">
+                  <h3 className="text-lg font-semibold text-white mb-3">Personal Information</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <span className="text-gray-400">Name:</span>
+                      <p className="text-white">{selectedRequest.firstName} {selectedRequest.lastName}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Email:</span>
+                      <p className="text-white">{selectedRequest.email}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Phone:</span>
+                      <p className="text-white">{selectedRequest.phone}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Address:</span>
+                      <p className="text-white">{selectedRequest.address}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Request Information */}
+                <div className="bg-gray-800 rounded-lg p-4">
+                  <h3 className="text-lg font-semibold text-white mb-3">Request Details</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
+                    <div>
+                      <span className="text-gray-400">Type:</span>
+                      <p className="text-white">{getAssistanceTypeLabel(selectedRequest.requestType)}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Amount Needed:</span>
+                      <p className="text-yellow-500 font-semibold">${selectedRequest.amountNeeded.toLocaleString()}</p>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Urgency Level:</span>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getUrgencyColor(selectedRequest.urgencyLevel)}`}>
+                        {selectedRequest.urgencyLevel.toUpperCase()}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-gray-400">Status:</span>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium border ${getStatusColor(selectedRequest.status)}`}>
+                        {selectedRequest.status.toUpperCase()}
+                      </span>
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-gray-400">Description:</span>
+                    <p className="text-white mt-1">{selectedRequest.description}</p>
+                  </div>
+                </div>
+
+                {/* Documents */}
+                <div className="bg-gray-800 rounded-lg p-4">
+                  <h3 className="text-lg font-semibold text-white mb-3">Documents</h3>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center p-3 bg-gray-700 rounded">
+                      <div>
+                        <p className="text-white font-medium">ID Verification</p>
+                        <p className="text-gray-400 text-sm">drivers_license.pdf • 2.1 MB</p>
+                      </div>
+                      <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                        View
+                      </button>
+                    </div>
+                    <div className="flex justify-between items-center p-3 bg-gray-700 rounded">
+                      <div>
+                        <p className="text-white font-medium">Supporting Document</p>
+                        <p className="text-gray-400 text-sm">medical_bill.pdf • 1.8 MB</p>
+                      </div>
+                      <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                        View
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-700">
+                  <button
+                    onClick={() => {
+                      // Handle approval logic here
+                      setSelectedRequest(null);
+                    }}
+                    className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-medium transition-colors"
+                  >
+                    ✓ Approve Request
+                  </button>
+                  <button
+                    onClick={() => {
+                      // Handle rejection logic here
+                      setSelectedRequest(null);
+                    }}
+                    className="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-lg font-medium transition-colors"
+                  >
+                    ✗ Reject Request
+                  </button>
+                  <button
+                    onClick={() => setSelectedRequest(null)}
+                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-3 px-4 rounded-lg font-medium transition-colors"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <Footer />
     </div>
   );
