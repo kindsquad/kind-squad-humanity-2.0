@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import AuthModal from './AuthModal';
 import notificationService from '../utils/notificationService';
 
 const AdminDashboard = () => {
@@ -12,6 +13,20 @@ const AdminDashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('date');
   const [activeTab, setActiveTab] = useState('all');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authMode, setAuthMode] = useState('signin');
+
+  // Check authentication status on component mount
+  useEffect(() => {
+    // In a real app, this would check for valid admin JWT token or session
+    const adminToken = localStorage.getItem('adminToken');
+    if (adminToken) {
+      setIsAuthenticated(true);
+    } else {
+      setShowAuthModal(true);
+    }
+  }, []);
 
   useEffect(() => {
     // Mock data for requests
@@ -111,27 +126,59 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-black text-white">
       <Header />
       
-      {/* Main Dashboard Content */}
-      <div className="bg-black py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-white mb-2">Admin Dashboard</h1>
-            <p className="text-gray-400">Manage requests, members, and chapters</p>
-          </div>
+      {/* Authentication Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        mode={authMode}
+        onModeChange={setAuthMode}
+        redirectToMembership={false} // Admin registration doesn't go through membership page
+      />
 
-          {/* Stats Grid - Clickable Navigation Cards */}
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-            <button 
-              onClick={() => {
-                setActiveSection('requests');
-                setActiveTab('pending');
-                setSearchTerm('');
-              }}
-              className="bg-gray-800 p-4 rounded-lg text-center border border-gray-700 hover:bg-gray-700 hover:scale-105 transition-all duration-200 cursor-pointer group"
-            >
-              <div className="text-sm text-gray-400 mb-1 group-hover:text-gray-300">Pending Requests</div>
-              <div className="text-2xl font-bold text-yellow-400 group-hover:text-yellow-300">{requests.filter(r => r.status === 'pending').length}</div>
-            </button>
+      {/* Show loading or sign in prompt if not authenticated */}
+      {!isAuthenticated ? (
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <h2 className="text-3xl font-bold text-white mb-4">Admin Dashboard</h2>
+            <p className="text-gray-400 mb-8">Please sign in with admin credentials to access the dashboard</p>
+            <div className="space-x-4">
+              <button
+                onClick={() => {
+                  setAuthMode('signin')
+                  setShowAuthModal(true)
+                }}
+                className="bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3 px-6 rounded-lg transition-colors"
+              >
+                Admin Sign In
+              </button>
+            </div>
+            <p className="text-gray-500 text-sm mt-4">
+              Admin access only. Contact system administrator for credentials.
+            </p>
+          </div>
+        </div>
+      ) : (
+        /* Main Dashboard Content - Only shown when authenticated */
+        <div className="bg-black py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-white mb-2">Admin Dashboard</h1>
+              <p className="text-gray-400">Manage requests, members, and chapters</p>
+            </div>
+
+            {/* Stats Grid - Clickable Navigation Cards */}
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+              <button 
+                onClick={() => {
+                  setActiveSection('requests');
+                  setActiveTab('pending');
+                  setSearchTerm('');
+                }}
+                className="bg-gray-800 p-4 rounded-lg text-center border border-gray-700 hover:bg-gray-700 hover:scale-105 transition-all duration-200 cursor-pointer group"
+              >
+                <div className="text-sm text-gray-400 mb-1 group-hover:text-gray-300">Pending Requests</div>
+                <div className="text-2xl font-bold text-yellow-400 group-hover:text-yellow-300">{requests.filter(r => r.status === 'pending').length}</div>
+              </button>
             <button 
               onClick={() => {
                 setActiveSection('members');
@@ -564,7 +611,7 @@ const AdminDashboard = () => {
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       <Footer />
     </div>

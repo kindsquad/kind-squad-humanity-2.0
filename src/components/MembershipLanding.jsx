@@ -4,8 +4,18 @@ import Footer from './Footer';
 
 const MembershipLanding = () => {
   const [openFAQ, setOpenFAQ] = useState(null);
+  const [pendingRegistration, setPendingRegistration] = useState(null);
+  const [showRegistrationModal, setShowRegistrationModal] = useState(false);
+  const [selectedTier, setSelectedTier] = useState(null);
 
   useEffect(() => {
+    // Check for pending registration data
+    const registrationData = localStorage.getItem('pendingRegistration');
+    if (registrationData) {
+      setPendingRegistration(JSON.parse(registrationData));
+      setShowRegistrationModal(true);
+    }
+
     // Scroll animation
     const handleScrollAnimation = () => {
       const elements = document.querySelectorAll('.scroll-animate');
@@ -30,10 +40,45 @@ const MembershipLanding = () => {
     setOpenFAQ(openFAQ === index ? null : index);
   };
 
-  const handleMembershipClick = (tierName, buttonText) => {
-    console.log(`Clicked: ${buttonText} for ${tierName} tier`);
-    // Add payment integration here
-    alert(`Thank you for your interest in the ${tierName} membership! Payment integration would be implemented here.`);
+  const handleMembershipClick = (tierName, price) => {
+    if (pendingRegistration) {
+      // Complete registration with selected tier
+      setSelectedTier({ name: tierName, price });
+      completeRegistration(tierName, price);
+    } else {
+      // Regular membership selection
+      console.log(`Clicked: ${tierName} tier`);
+      alert(`Thank you for your interest in the ${tierName} membership! Payment integration would be implemented here.`);
+    }
+  };
+
+  const completeRegistration = async (tierName, price) => {
+    try {
+      console.log('Completing registration:', {
+        ...pendingRegistration,
+        selectedTier: tierName,
+        price: price
+      });
+
+      // Simulate API call to complete registration
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      // Clear pending registration
+      localStorage.removeItem('pendingRegistration');
+      setPendingRegistration(null);
+      setShowRegistrationModal(false);
+
+      // Set auth token to simulate successful registration
+      localStorage.setItem('authToken', 'demo-token-' + Date.now());
+
+      alert(`Welcome to Kind Squad! Your ${tierName} membership has been activated. You can now access your member dashboard.`);
+      
+      // Redirect to member dashboard
+      window.location.hash = '#/member';
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('Registration failed. Please try again.');
+    }
   };
 
   const faqData = [
@@ -161,7 +206,7 @@ const MembershipLanding = () => {
               </ul>
               
               <button 
-                onClick={() => handleMembershipClick('Kind Squad', 'Join Kind Squad')}
+                onClick={() => handleMembershipClick('KIND SQUAD', 'Free')}
                 className="cta-button w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 px-6 rounded-lg"
               >
                 Join Kind Squad
@@ -206,7 +251,7 @@ const MembershipLanding = () => {
               </div>
               
               <button 
-                onClick={() => handleMembershipClick('Kind Squad Friend', 'Become a Kind Squad Friend')}
+                onClick={() => handleMembershipClick('KIND SQUAD FRIEND', '$5/month')}
                 className="cta-button w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3 px-6 rounded-lg"
               >
                 Become a Kind Squad Friend
@@ -244,7 +289,7 @@ const MembershipLanding = () => {
               </ul>
               
               <button 
-                onClick={() => handleMembershipClick('Kind Squad Family', 'Become Kind Squad Family')}
+                onClick={() => handleMembershipClick('KIND SQUAD FAMILY', '$10/month')}
                 className="cta-button w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-3 px-6 rounded-lg"
               >
                 Become Kind Squad Family
@@ -400,6 +445,42 @@ const MembershipLanding = () => {
           </div>
         </div>
       </section>
+
+      {/* Registration Completion Modal */}
+      {showRegistrationModal && pendingRegistration && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-800 rounded-lg p-6 max-w-md w-full border border-gray-700">
+            <div className="text-center mb-6">
+              <h3 className="text-2xl font-bold text-white mb-2">Complete Your Registration</h3>
+              <p className="text-gray-400">
+                Welcome {pendingRegistration.firstName}! Choose your membership tier to complete registration.
+              </p>
+            </div>
+
+            <div className="bg-yellow-900 border border-yellow-600 rounded-lg p-4 mb-6">
+              <p className="text-yellow-200 text-sm">
+                <strong>Account Details:</strong><br />
+                Name: {pendingRegistration.firstName} {pendingRegistration.lastName}<br />
+                Email: {pendingRegistration.email}
+                {pendingRegistration.phone && <><br />Phone: {pendingRegistration.phone}</>}
+              </p>
+            </div>
+
+            <p className="text-gray-300 text-center mb-6">
+              Select a membership tier below to activate your account and start making an impact!
+            </p>
+
+            <div className="text-center">
+              <button
+                onClick={() => setShowRegistrationModal(false)}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                Choose membership tier below ↓
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>
