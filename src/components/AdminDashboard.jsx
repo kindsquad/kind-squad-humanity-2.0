@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import notificationService from '../utils/notificationService';
 
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState('requests');
@@ -584,18 +585,88 @@ const AdminDashboard = () => {
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-700">
                   <button
-                    onClick={() => {
-                      // Handle approval logic here
-                      setSelectedRequest(null);
+                    onClick={async () => {
+                      try {
+                        // Update request status to approved
+                        const updatedRequests = requests.map(req => 
+                          req.id === selectedRequest.id 
+                            ? { ...req, status: 'approved' }
+                            : req
+                        );
+                        setRequests(updatedRequests);
+                        
+                        // Send approval notifications
+                        const result = await notificationService.sendApprovalNotification(selectedRequest);
+                        
+                        if (result.success) {
+                          // Show success message
+                          notificationService.showInAppNotification({
+                            title: '✅ Request Approved',
+                            message: `${selectedRequest.firstName}'s request has been approved and notifications sent.`,
+                            type: 'success'
+                          });
+                        } else {
+                          // Show error message
+                          notificationService.showInAppNotification({
+                            title: '⚠️ Approval Saved',
+                            message: 'Request approved but there was an issue sending notifications.',
+                            type: 'error'
+                          });
+                        }
+                        
+                        setSelectedRequest(null);
+                      } catch (error) {
+                        console.error('Error approving request:', error);
+                        notificationService.showInAppNotification({
+                          title: '❌ Error',
+                          message: 'There was an error processing the approval.',
+                          type: 'error'
+                        });
+                      }
                     }}
                     className="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-medium transition-colors"
                   >
                     ✓ Approve Request
                   </button>
                   <button
-                    onClick={() => {
-                      // Handle rejection logic here
-                      setSelectedRequest(null);
+                    onClick={async () => {
+                      try {
+                        // Update request status to rejected
+                        const updatedRequests = requests.map(req => 
+                          req.id === selectedRequest.id 
+                            ? { ...req, status: 'rejected' }
+                            : req
+                        );
+                        setRequests(updatedRequests);
+                        
+                        // Send rejection notifications
+                        const result = await notificationService.sendRejectionNotification(selectedRequest);
+                        
+                        if (result.success) {
+                          // Show success message
+                          notificationService.showInAppNotification({
+                            title: '📧 Request Rejected',
+                            message: `${selectedRequest.firstName}'s request has been rejected and notifications sent.`,
+                            type: 'info'
+                          });
+                        } else {
+                          // Show error message
+                          notificationService.showInAppNotification({
+                            title: '⚠️ Rejection Saved',
+                            message: 'Request rejected but there was an issue sending notifications.',
+                            type: 'error'
+                          });
+                        }
+                        
+                        setSelectedRequest(null);
+                      } catch (error) {
+                        console.error('Error rejecting request:', error);
+                        notificationService.showInAppNotification({
+                          title: '❌ Error',
+                          message: 'There was an error processing the rejection.',
+                          type: 'error'
+                        });
+                      }
                     }}
                     className="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-lg font-medium transition-colors"
                   >
