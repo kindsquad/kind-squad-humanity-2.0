@@ -10,13 +10,13 @@ const RequestHelpForm = () => {
     lastName: '',
     email: '',
     phone: '',
-    address: '',
+    streetAddress: '',
     city: '',
     state: '',
     zipCode: '',
     
     // Step 2: Request Details
-    requestType: '',
+    assistanceType: '',
     urgencyLevel: '',
     amountNeeded: '',
     description: '',
@@ -32,66 +32,52 @@ const RequestHelpForm = () => {
     additionalInfo: ''
   });
 
-  const [errors, setErrors] = useState({});
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
-    
-    // Clear error when user starts typing
-    if (errors[name]) {
-      setErrors(prev => ({
-        ...prev,
-        [name]: ''
-      }));
-    }
   };
 
-  const handleFileUpload = (e, fieldName) => {
-    const files = Array.from(e.target.files);
-    
-    if (fieldName === 'idDocument') {
+  const handleFileChange = (e) => {
+    const { name, files } = e.target;
+    if (name === 'idDocument') {
       setFormData(prev => ({
         ...prev,
-        idDocument: files[0]
+        [name]: files[0]
       }));
-    } else if (fieldName === 'supportingDocuments') {
+    } else if (name === 'supportingDocuments') {
       setFormData(prev => ({
         ...prev,
-        supportingDocuments: [...prev.supportingDocuments, ...files]
+        [name]: Array.from(files)
       }));
     }
   };
 
   const validateStep = (step) => {
-    const newErrors = {};
-    
-    if (step === 1) {
-      if (!formData.firstName) newErrors.firstName = 'First name is required';
-      if (!formData.lastName) newErrors.lastName = 'Last name is required';
-      if (!formData.email) newErrors.email = 'Email is required';
-      if (!formData.phone) newErrors.phone = 'Phone number is required';
-      if (!formData.address) newErrors.address = 'Address is required';
-      if (!formData.city) newErrors.city = 'City is required';
-      if (!formData.state) newErrors.state = 'State is required';
-      if (!formData.zipCode) newErrors.zipCode = 'ZIP code is required';
-    } else if (step === 2) {
-      if (!formData.requestType) newErrors.requestType = 'Assistance type is required';
-      if (!formData.urgencyLevel) newErrors.urgencyLevel = 'Urgency level is required';
-      if (!formData.amountNeeded) newErrors.amountNeeded = 'Amount needed is required';
-      if (!formData.description) newErrors.description = 'Description is required';
+    switch (step) {
+      case 1:
+        return formData.firstName && formData.lastName && formData.email && 
+               formData.phone && formData.streetAddress && formData.city && 
+               formData.state && formData.zipCode;
+      case 2:
+        return formData.assistanceType && formData.urgencyLevel && 
+               formData.amountNeeded && formData.description;
+      case 3:
+        return formData.idDocument;
+      case 4:
+        return true; // Optional step
+      default:
+        return false;
     }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
 
   const nextStep = () => {
     if (validateStep(currentStep)) {
       setCurrentStep(prev => Math.min(prev + 1, 4));
+    } else {
+      alert('Please fill in all required fields before proceeding.');
     }
   };
 
@@ -108,54 +94,58 @@ const RequestHelpForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white">
+    <div className="min-h-screen bg-black">
       <Header />
       
-      <div className="bg-gray-950 py-8">
+      <div className="bg-black py-8">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Request Assistance</h1>
-            <p className="text-gray-400 text-lg">We're here to help during your time of need</p>
-          </div>
+          <div className="bg-gray-800 border border-gray-700 rounded-lg shadow-xl overflow-hidden">
+            {/* Header */}
+            <div className="bg-yellow-500 px-6 py-4">
+              <h1 className="text-2xl font-bold text-black">Request Assistance</h1>
+              <p className="text-black opacity-90">We're here to help in your time of need</p>
+            </div>
 
-          {/* Progress Indicator */}
-          <div className="mb-8">
-            <div className="flex justify-between items-center">
-              {[1, 2, 3, 4].map((step) => (
-                <div key={step} className="flex items-center">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                    step <= currentStep 
-                      ? 'bg-yellow-500 text-black' 
-                      : 'bg-gray-800 text-gray-400 border border-gray-700'
-                  }`}>
-                    {step}
+            {/* Progress Indicator */}
+            <div className="bg-gray-800 px-6 py-4 border-b border-gray-700">
+              <div className="flex justify-between items-center">
+                {[1, 2, 3, 4].map((step) => (
+                  <div key={step} className="flex items-center">
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                      currentStep >= step 
+                        ? 'bg-yellow-500 text-black' 
+                        : 'bg-gray-700 text-gray-400 border border-gray-600'
+                    }`}>
+                      {step}
+                    </div>
+                    {step < 4 && (
+                      <div className={`w-16 h-1 mx-2 ${
+                        currentStep > step ? 'bg-yellow-500' : 'bg-gray-700'
+                      }`} />
+                    )}
                   </div>
-                  {step < 4 && (
-                    <div className={`w-full h-1 mx-2 ${
-                      step < currentStep ? 'bg-yellow-500' : 'bg-gray-800'
-                    }`} />
-                  )}
-                </div>
-              ))}
+                ))}
+              </div>
+              <div className="mt-2 text-center">
+                <span className="text-yellow-400 font-medium">
+                  Step {currentStep} of 4: {
+                    currentStep === 1 ? 'Personal Information' :
+                    currentStep === 2 ? 'Request Details' :
+                    currentStep === 3 ? 'Document Verification' :
+                    'Additional Information'
+                  }
+                </span>
+              </div>
             </div>
-            <div className="flex justify-between mt-2 text-sm">
-              <span className={currentStep >= 1 ? 'text-yellow-500' : 'text-gray-400'}>Personal Info</span>
-              <span className={currentStep >= 2 ? 'text-yellow-500' : 'text-gray-400'}>Request Details</span>
-              <span className={currentStep >= 3 ? 'text-yellow-500' : 'text-gray-400'}>Documents</span>
-              <span className={currentStep >= 4 ? 'text-yellow-500' : 'text-gray-400'}>Additional Info</span>
-            </div>
-          </div>
 
-          {/* Form */}
-          <div className="bg-gray-900 border border-gray-800 rounded-lg p-6 md:p-8">
-            <form onSubmit={handleSubmit}>
+            {/* Form Content */}
+            <form onSubmit={handleSubmit} className="p-6">
               {/* Step 1: Personal Information */}
               {currentStep === 1 && (
-                <div>
-                  <h2 className="text-2xl font-bold text-white mb-6">Personal Information</h2>
+                <div className="space-y-6">
+                  <h3 className="text-xl font-semibold text-white mb-4">Personal Information</h3>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">
                         First Name *
@@ -165,14 +155,11 @@ const RequestHelpForm = () => {
                         name="firstName"
                         value={formData.firstName}
                         onChange={handleInputChange}
-                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
-                          errors.firstName ? 'border-red-500' : 'border-gray-700'
-                        }`}
+                        className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                         placeholder="Enter your first name"
+                        required
                       />
-                      {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
                     </div>
-
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">
                         Last Name *
@@ -182,14 +169,14 @@ const RequestHelpForm = () => {
                         name="lastName"
                         value={formData.lastName}
                         onChange={handleInputChange}
-                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
-                          errors.lastName ? 'border-red-500' : 'border-gray-700'
-                        }`}
+                        className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
                         placeholder="Enter your last name"
+                        required
                       />
-                      {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
                     </div>
+                  </div>
 
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">
                         Email Address *
@@ -199,14 +186,11 @@ const RequestHelpForm = () => {
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
-                          errors.email ? 'border-red-500' : 'border-gray-700'
-                        }`}
-                        placeholder="Enter your email address"
+                        className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                        placeholder="your.email@example.com"
+                        required
                       />
-                      {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                     </div>
-
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">
                         Phone Number *
@@ -216,31 +200,29 @@ const RequestHelpForm = () => {
                         name="phone"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
-                          errors.phone ? 'border-red-500' : 'border-gray-700'
-                        }`}
-                        placeholder="Enter your phone number"
+                        className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                        placeholder="(555) 123-4567"
+                        required
                       />
-                      {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
                     </div>
+                  </div>
 
-                    <div className="md:col-span-2">
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Street Address *
-                      </label>
-                      <input
-                        type="text"
-                        name="address"
-                        value={formData.address}
-                        onChange={handleInputChange}
-                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
-                          errors.address ? 'border-red-500' : 'border-gray-700'
-                        }`}
-                        placeholder="Enter your street address"
-                      />
-                      {errors.address && <p className="text-red-500 text-sm mt-1">{errors.address}</p>}
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Street Address *
+                    </label>
+                    <input
+                      type="text"
+                      name="streetAddress"
+                      value={formData.streetAddress}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      placeholder="123 Main Street"
+                      required
+                    />
+                  </div>
 
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">
                         City *
@@ -250,14 +232,11 @@ const RequestHelpForm = () => {
                         name="city"
                         value={formData.city}
                         onChange={handleInputChange}
-                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
-                          errors.city ? 'border-red-500' : 'border-gray-700'
-                        }`}
-                        placeholder="Enter your city"
+                        className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                        placeholder="Springfield"
+                        required
                       />
-                      {errors.city && <p className="text-red-500 text-sm mt-1">{errors.city}</p>}
                     </div>
-
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">
                         State *
@@ -267,14 +246,11 @@ const RequestHelpForm = () => {
                         name="state"
                         value={formData.state}
                         onChange={handleInputChange}
-                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
-                          errors.state ? 'border-red-500' : 'border-gray-700'
-                        }`}
-                        placeholder="Enter your state"
+                        className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                        placeholder="IL"
+                        required
                       />
-                      {errors.state && <p className="text-red-500 text-sm mt-1">{errors.state}</p>}
                     </div>
-
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">
                         ZIP Code *
@@ -284,12 +260,10 @@ const RequestHelpForm = () => {
                         name="zipCode"
                         value={formData.zipCode}
                         onChange={handleInputChange}
-                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
-                          errors.zipCode ? 'border-red-500' : 'border-gray-700'
-                        }`}
-                        placeholder="Enter your ZIP code"
+                        className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                        placeholder="62701"
+                        required
                       />
-                      {errors.zipCode && <p className="text-red-500 text-sm mt-1">{errors.zipCode}</p>}
                     </div>
                   </div>
                 </div>
@@ -297,21 +271,20 @@ const RequestHelpForm = () => {
 
               {/* Step 2: Request Details */}
               {currentStep === 2 && (
-                <div>
-                  <h2 className="text-2xl font-bold text-white mb-6">Request Details</h2>
+                <div className="space-y-6">
+                  <h3 className="text-xl font-semibold text-white mb-4">Request Details</h3>
                   
-                  <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Type of Assistance Needed *
+                        Type of Assistance *
                       </label>
                       <select
-                        name="requestType"
-                        value={formData.requestType}
+                        name="assistanceType"
+                        value={formData.assistanceType}
                         onChange={handleInputChange}
-                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
-                          errors.requestType ? 'border-red-500' : 'border-gray-700'
-                        }`}
+                        className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                        required
                       >
                         <option value="">Select assistance type</option>
                         <option value="rent">Rent Assistance</option>
@@ -319,157 +292,151 @@ const RequestHelpForm = () => {
                         <option value="food">Food Assistance</option>
                         <option value="medical">Medical Expenses</option>
                         <option value="transportation">Transportation</option>
-                        <option value="domestic_violence">Domestic Violence Support</option>
+                        <option value="domestic-violence">Domestic Violence Support</option>
                         <option value="shelter">Emergency Shelter</option>
                         <option value="other">Other</option>
                       </select>
-                      {errors.requestType && <p className="text-red-500 text-sm mt-1">{errors.requestType}</p>}
                     </div>
-
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">
                         Urgency Level *
                       </label>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        {[
-                          { value: 'immediate', label: 'Immediate', color: 'border-red-500 text-red-400' },
-                          { value: 'urgent', label: 'Urgent', color: 'border-orange-500 text-orange-400' },
-                          { value: 'important', label: 'Important', color: 'border-blue-500 text-blue-400' },
-                          { value: 'standard', label: 'Standard', color: 'border-green-500 text-green-400' }
-                        ].map((urgency) => (
-                          <button
-                            key={urgency.value}
-                            type="button"
-                            onClick={() => handleInputChange({ target: { name: 'urgencyLevel', value: urgency.value } })}
-                            className={`p-3 border-2 rounded-md text-center transition-colors ${
-                              formData.urgencyLevel === urgency.value
-                                ? `${urgency.color} bg-gray-800`
-                                : 'border-gray-700 text-gray-400 hover:border-gray-600'
-                            }`}
-                          >
-                            {urgency.label}
-                          </button>
-                        ))}
-                      </div>
-                      {errors.urgencyLevel && <p className="text-red-500 text-sm mt-1">{errors.urgencyLevel}</p>}
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Amount Needed *
-                      </label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-3 text-gray-400">$</span>
-                        <input
-                          type="number"
-                          name="amountNeeded"
-                          value={formData.amountNeeded}
-                          onChange={handleInputChange}
-                          className={`w-full pl-8 pr-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
-                            errors.amountNeeded ? 'border-red-500' : 'border-gray-700'
-                          }`}
-                          placeholder="0.00"
-                        />
-                      </div>
-                      {errors.amountNeeded && <p className="text-red-500 text-sm mt-1">{errors.amountNeeded}</p>}
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Detailed Description *
-                      </label>
-                      <textarea
-                        name="description"
-                        value={formData.description}
+                      <select
+                        name="urgencyLevel"
+                        value={formData.urgencyLevel}
                         onChange={handleInputChange}
-                        rows={4}
-                        className={`w-full px-4 py-3 bg-gray-800 border rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500 ${
-                          errors.description ? 'border-red-500' : 'border-gray-700'
-                        }`}
-                        placeholder="Please provide a detailed description of your situation and why you need assistance..."
-                      />
-                      {errors.description && <p className="text-red-500 text-sm mt-1">{errors.description}</p>}
+                        className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                        required
+                      >
+                        <option value="">Select urgency</option>
+                        <option value="immediate" className="text-red-400">🔴 Immediate (24 hours)</option>
+                        <option value="urgent" className="text-orange-400">🟠 Urgent (3-5 days)</option>
+                        <option value="important" className="text-blue-400">🔵 Important (1-2 weeks)</option>
+                        <option value="standard" className="text-green-400">🟢 Standard (flexible)</option>
+                      </select>
                     </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Amount Needed *
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-2 text-gray-400">$</span>
+                      <input
+                        type="number"
+                        name="amountNeeded"
+                        value={formData.amountNeeded}
+                        onChange={handleInputChange}
+                        className="w-full pl-8 pr-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                        placeholder="0.00"
+                        min="0"
+                        step="0.01"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Detailed Description *
+                    </label>
+                    <textarea
+                      name="description"
+                      value={formData.description}
+                      onChange={handleInputChange}
+                      rows={4}
+                      className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      placeholder="Please provide a detailed explanation of your situation and how this assistance would help..."
+                      required
+                    />
                   </div>
                 </div>
               )}
 
               {/* Step 3: Document Verification */}
               {currentStep === 3 && (
-                <div>
-                  <h2 className="text-2xl font-bold text-white mb-6">Document Verification</h2>
+                <div className="space-y-6">
+                  <h3 className="text-xl font-semibold text-white mb-4">Document Verification</h3>
                   
-                  <div className="space-y-6">
-                    <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
-                      <h3 className="text-lg font-semibold text-white mb-3">ID Verification</h3>
-                      <p className="text-gray-400 text-sm mb-4">
-                        Please upload a clear photo of your government-issued ID (driver's license, passport, or state ID)
-                      </p>
-                      
-                      <div className="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center hover:border-gray-500 transition-colors">
-                        <input
-                          type="file"
-                          accept="image/*,.pdf"
-                          onChange={(e) => handleFileUpload(e, 'idDocument')}
-                          className="hidden"
-                          id="id-upload"
-                        />
-                        <label htmlFor="id-upload" className="cursor-pointer">
-                          <div className="text-gray-400 mb-2">
-                            📄 Click to upload ID document
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            Supports: JPG, PNG, PDF (Max 10MB)
-                          </div>
-                        </label>
-                        {formData.idDocument && (
-                          <div className="mt-3 text-green-400 text-sm">
-                            ✓ {formData.idDocument.name}
-                          </div>
-                        )}
+                  <div className="bg-gray-900 border border-gray-600 rounded-lg p-4 mb-6">
+                    <div className="flex items-start space-x-3">
+                      <div className="flex-shrink-0">
+                        <svg className="w-5 h-5 text-yellow-400 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-medium text-white">Privacy & Security</h4>
+                        <p className="text-sm text-gray-400 mt-1">
+                          Your documents are encrypted and only viewed by authorized board members for verification purposes. 
+                          We never share your personal information with third parties.
+                        </p>
                       </div>
                     </div>
+                  </div>
 
-                    <div className="bg-gray-800 border border-gray-700 rounded-lg p-4">
-                      <h3 className="text-lg font-semibold text-white mb-3">Supporting Documents</h3>
-                      <p className="text-gray-400 text-sm mb-4">
-                        Upload any supporting documents (bills, medical records, eviction notices, etc.)
-                      </p>
-                      
-                      <div className="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center hover:border-gray-500 transition-colors">
-                        <input
-                          type="file"
-                          multiple
-                          accept="image/*,.pdf,.doc,.docx"
-                          onChange={(e) => handleFileUpload(e, 'supportingDocuments')}
-                          className="hidden"
-                          id="supporting-upload"
-                        />
-                        <label htmlFor="supporting-upload" className="cursor-pointer">
-                          <div className="text-gray-400 mb-2">
-                            📎 Click to upload supporting documents
-                          </div>
-                          <div className="text-sm text-gray-500">
-                            Multiple files supported (Max 10MB each)
-                          </div>
-                        </label>
-                        {formData.supportingDocuments.length > 0 && (
-                          <div className="mt-3 space-y-1">
-                            {formData.supportingDocuments.map((file, index) => (
-                              <div key={index} className="text-green-400 text-sm">
-                                ✓ {file.name}
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      ID Verification (Required) *
+                    </label>
+                    <div className="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center hover:border-yellow-500 transition-colors">
+                      <input
+                        type="file"
+                        name="idDocument"
+                        onChange={handleFileChange}
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        className="hidden"
+                        id="id-upload"
+                        required
+                      />
+                      <label htmlFor="id-upload" className="cursor-pointer">
+                        <div className="text-gray-400 mb-2">
+                          <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                          </svg>
+                        </div>
+                        <p className="text-white font-medium">Upload Government-Issued ID</p>
+                        <p className="text-gray-400 text-sm mt-1">Driver's License, State ID, or Passport</p>
+                        <p className="text-gray-500 text-xs mt-2">PDF, JPG, PNG (Max 10MB)</p>
+                      </label>
+                      {formData.idDocument && (
+                        <p className="text-yellow-400 text-sm mt-2">✓ {formData.idDocument.name}</p>
+                      )}
                     </div>
+                  </div>
 
-                    <div className="bg-blue-900/20 border border-blue-700 rounded-lg p-4">
-                      <h4 className="text-blue-400 font-semibold mb-2">🔒 Privacy & Security</h4>
-                      <p className="text-blue-300 text-sm">
-                        Your documents are encrypted and securely stored. They will only be viewed by authorized Kind Squad board members for verification purposes and will be deleted after your case is resolved.
-                      </p>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Supporting Documents (Optional)
+                    </label>
+                    <div className="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center hover:border-yellow-500 transition-colors">
+                      <input
+                        type="file"
+                        name="supportingDocuments"
+                        onChange={handleFileChange}
+                        accept=".pdf,.jpg,.jpeg,.png"
+                        multiple
+                        className="hidden"
+                        id="supporting-upload"
+                      />
+                      <label htmlFor="supporting-upload" className="cursor-pointer">
+                        <div className="text-gray-400 mb-2">
+                          <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                          </svg>
+                        </div>
+                        <p className="text-white font-medium">Upload Supporting Documents</p>
+                        <p className="text-gray-400 text-sm mt-1">Bills, medical records, eviction notices, etc.</p>
+                        <p className="text-gray-500 text-xs mt-2">PDF, JPG, PNG (Max 10MB each)</p>
+                      </label>
+                      {formData.supportingDocuments.length > 0 && (
+                        <div className="mt-2">
+                          {formData.supportingDocuments.map((file, index) => (
+                            <p key={index} className="text-yellow-400 text-sm">✓ {file.name}</p>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -477,112 +444,107 @@ const RequestHelpForm = () => {
 
               {/* Step 4: Additional Information */}
               {currentStep === 4 && (
-                <div>
-                  <h2 className="text-2xl font-bold text-white mb-6">Additional Information</h2>
+                <div className="space-y-6">
+                  <h3 className="text-xl font-semibold text-white mb-4">Additional Information</h3>
                   
-                  <div className="space-y-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Who is this request for?
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-3">
+                      Who is this request for?
+                    </label>
+                    <div className="space-y-2">
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          name="requestingFor"
+                          value="myself"
+                          checked={formData.requestingFor === 'myself'}
+                          onChange={handleInputChange}
+                          className="text-yellow-500 focus:ring-yellow-500"
+                        />
+                        <span className="ml-2 text-white">For myself</span>
                       </label>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <button
-                          type="button"
-                          onClick={() => handleInputChange({ target: { name: 'requestingFor', value: 'myself' } })}
-                          className={`p-3 border-2 rounded-md text-center transition-colors ${
-                            formData.requestingFor === 'myself'
-                              ? 'border-yellow-500 text-yellow-400 bg-gray-800'
-                              : 'border-gray-700 text-gray-400 hover:border-gray-600'
-                          }`}
-                        >
-                          For Myself
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleInputChange({ target: { name: 'requestingFor', value: 'someone_else' } })}
-                          className={`p-3 border-2 rounded-md text-center transition-colors ${
-                            formData.requestingFor === 'someone_else'
-                              ? 'border-yellow-500 text-yellow-400 bg-gray-800'
-                              : 'border-gray-700 text-gray-400 hover:border-gray-600'
-                          }`}
-                        >
-                          For Someone Else
-                        </button>
-                      </div>
+                      <label className="flex items-center">
+                        <input
+                          type="radio"
+                          name="requestingFor"
+                          value="someone-else"
+                          checked={formData.requestingFor === 'someone-else'}
+                          onChange={handleInputChange}
+                          className="text-yellow-500 focus:ring-yellow-500"
+                        />
+                        <span className="ml-2 text-white">For someone else (anonymous)</span>
+                      </label>
                     </div>
+                  </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Have you received help from Kind Squad before?
-                      </label>
-                      <textarea
-                        name="previousHelp"
-                        value={formData.previousHelp}
-                        onChange={handleInputChange}
-                        rows={3}
-                        className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                        placeholder="If yes, please describe when and what type of assistance you received..."
-                      />
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Have you received help from Kind Squad before?
+                    </label>
+                    <textarea
+                      name="previousHelp"
+                      value={formData.previousHelp}
+                      onChange={handleInputChange}
+                      rows={3}
+                      className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      placeholder="If yes, please describe when and what type of assistance you received..."
+                    />
+                  </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Have you sought help from other organizations?
-                      </label>
-                      <textarea
-                        name="otherResources"
-                        value={formData.otherResources}
-                        onChange={handleInputChange}
-                        rows={3}
-                        className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                        placeholder="Please list any other organizations you've contacted and the outcome..."
-                      />
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Have you sought help from other organizations?
+                    </label>
+                    <textarea
+                      name="otherResources"
+                      value={formData.otherResources}
+                      onChange={handleInputChange}
+                      rows={3}
+                      className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      placeholder="Please list any other organizations you've contacted and the outcome..."
+                    />
+                  </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Additional Information
-                      </label>
-                      <textarea
-                        name="additionalInfo"
-                        value={formData.additionalInfo}
-                        onChange={handleInputChange}
-                        rows={3}
-                        className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                        placeholder="Any additional information you'd like us to know..."
-                      />
-                    </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Additional Information
+                    </label>
+                    <textarea
+                      name="additionalInfo"
+                      value={formData.additionalInfo}
+                      onChange={handleInputChange}
+                      rows={4}
+                      className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                      placeholder="Is there anything else you'd like us to know about your situation?"
+                    />
                   </div>
                 </div>
               )}
 
               {/* Navigation Buttons */}
-              <div className="flex justify-between mt-8 pt-6 border-t border-gray-800">
-                <button
-                  type="button"
-                  onClick={prevStep}
-                  disabled={currentStep === 1}
-                  className={`px-6 py-3 rounded-md font-medium transition-colors ${
-                    currentStep === 1
-                      ? 'bg-gray-800 text-gray-500 cursor-not-allowed'
-                      : 'bg-gray-700 text-white hover:bg-gray-600'
-                  }`}
-                >
-                  Previous
-                </button>
-
+              <div className="flex justify-between pt-6 border-t border-gray-700">
+                {currentStep > 1 && (
+                  <button
+                    type="button"
+                    onClick={prevStep}
+                    className="px-6 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors"
+                  >
+                    Previous
+                  </button>
+                )}
+                
                 {currentStep < 4 ? (
                   <button
                     type="button"
                     onClick={nextStep}
-                    className="px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-black rounded-md font-medium transition-colors"
+                    className="ml-auto px-6 py-2 bg-yellow-500 hover:bg-yellow-600 text-black rounded-lg font-medium transition-colors"
                   >
                     Next Step
                   </button>
                 ) : (
                   <button
                     type="submit"
-                    className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-md font-medium transition-colors"
+                    className="ml-auto px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-medium transition-colors"
                   >
                     Submit Request
                   </button>
@@ -590,25 +552,9 @@ const RequestHelpForm = () => {
               </div>
             </form>
           </div>
-
-          {/* Help Information */}
-          <div className="mt-8 bg-gray-900 border border-gray-800 rounded-lg p-6">
-            <h3 className="text-lg font-semibold text-white mb-3">Need Help?</h3>
-            <p className="text-gray-400 mb-4">
-              If you need assistance completing this form or have questions about our process, please don't hesitate to reach out.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a href="mailto:help@kindsquad.org" className="text-yellow-500 hover:text-yellow-400 transition-colors">
-                📧 help@kindsquad.org
-              </a>
-              <a href="tel:+1-555-KIND-HELP" className="text-yellow-500 hover:text-yellow-400 transition-colors">
-                📞 1-555-KIND-HELP
-              </a>
-            </div>
-          </div>
         </div>
       </div>
-      
+
       <Footer />
     </div>
   );
