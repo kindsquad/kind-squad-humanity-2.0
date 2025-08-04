@@ -389,6 +389,7 @@ const AdminDashboard = () => {
           )}
         </div>
       </div>
+      )}
 
       {/* Request Review Modal */}
       {selectedRequest && (

@@ -1,0 +1,24 @@
+{
+  "name": "Kind Squad® - Humanity 2.0",
+  "short_name": "Kind Squad®",
+  "description": "Recreating humanity by spreading hope and compassion",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0F172A",
+  "theme_color": "#EAB308",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
+
