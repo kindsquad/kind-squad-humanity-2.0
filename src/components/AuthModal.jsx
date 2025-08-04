@@ -71,7 +71,19 @@ const AuthModal = ({ isOpen, onClose, mode = 'signin', onModeChange, redirectToM
 
     try {
       if (mode === 'signin') {
-        // Sign in logic
+        // Check for demo credentials
+        if (formData.email === 'demo@kindsquad.org' && formData.password === '1') {
+          // Demo login successful
+          localStorage.setItem('authToken', 'demo-token-' + Date.now());
+          localStorage.setItem('userRole', 'member'); // Default to member role
+          alert('Demo login successful! Welcome to Kind Squad!');
+          onClose();
+          // Refresh the page to update authentication state
+          window.location.reload();
+          return;
+        }
+        
+        // Regular sign in logic
         console.log('Signing in:', { email: formData.email, password: formData.password });
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -135,6 +147,16 @@ const AuthModal = ({ isOpen, onClose, mode = 'signin', onModeChange, redirectToM
             ×
           </button>
         </div>
+
+        {mode === 'signin' && (
+          <div className="bg-yellow-900 border border-yellow-600 rounded-lg p-4 mb-6">
+            <p className="text-yellow-200 text-sm">
+              <strong>Demo Credentials:</strong><br />
+              Email: demo@kindsquad.org<br />
+              Password: 1
+            </p>
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {mode === 'register' && (

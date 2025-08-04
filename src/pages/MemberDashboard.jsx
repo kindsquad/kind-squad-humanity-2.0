@@ -176,27 +176,27 @@ export default function MemberDashboard() {
               </div>
             </div>
 
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                <div className="text-2xl font-bold text-yellow-400">12</div>
-                <div className="text-gray-400">Total Donations</div>
-                <div className="text-sm text-gray-500">This Year</div>
+            {/* Stats Cards - Mobile Optimized */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-8">
+              <div className="bg-gray-800 p-3 md:p-6 rounded-lg border border-gray-700">
+                <div className="text-xl md:text-2xl font-bold text-yellow-400">12</div>
+                <div className="text-gray-400 text-sm md:text-base">Total Donations</div>
+                <div className="text-xs md:text-sm text-gray-500">This Year</div>
               </div>
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                <div className="text-2xl font-bold text-green-400">$2,850</div>
-                <div className="text-gray-400">Total Donated</div>
-                <div className="text-sm text-gray-500">Lifetime</div>
+              <div className="bg-gray-800 p-3 md:p-6 rounded-lg border border-gray-700">
+                <div className="text-xl md:text-2xl font-bold text-green-400">$2,850</div>
+                <div className="text-gray-400 text-sm md:text-base">Total Donated</div>
+                <div className="text-xs md:text-sm text-gray-500">Lifetime</div>
               </div>
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                <div className="text-2xl font-bold text-blue-400">45</div>
-                <div className="text-gray-400">Hours Volunteered</div>
-                <div className="text-sm text-gray-500">This Year</div>
+              <div className="bg-gray-800 p-3 md:p-6 rounded-lg border border-gray-700">
+                <div className="text-xl md:text-2xl font-bold text-blue-400">45</div>
+                <div className="text-gray-400 text-sm md:text-base">Hours Volunteered</div>
+                <div className="text-xs md:text-sm text-gray-500">This Year</div>
               </div>
-              <div className="bg-gray-800 p-6 rounded-lg border border-gray-700">
-                <div className="text-2xl font-bold text-purple-400">8</div>
-                <div className="text-gray-400">Lives Impacted</div>
-                <div className="text-sm text-gray-500">Direct Impact</div>
+              <div className="bg-gray-800 p-3 md:p-6 rounded-lg border border-gray-700">
+                <div className="text-xl md:text-2xl font-bold text-purple-400">8</div>
+                <div className="text-gray-400 text-sm md:text-base">Lives Impacted</div>
+                <div className="text-xs md:text-sm text-gray-500">Direct Impact</div>
               </div>
             </div>
 

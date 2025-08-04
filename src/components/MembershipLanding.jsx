@@ -259,32 +259,32 @@ const MembershipLanding = () => {
             </div>
 
             {/* Kind Squad Family */}
-            <div className="pricing-card bg-yellow-900 border border-yellow-600 rounded-xl p-8 text-center relative scroll-animate">
-              <h3 className="text-2xl font-bold mb-2 text-yellow-400">KIND SQUAD FAMILY</h3>
-              <div className="text-5xl font-bold text-yellow-400 mb-2">$10</div>
-              <div className="text-gray-300 mb-4">/month</div>
-              <p className="text-gray-300 mb-6">Join our inner circle</p>
+            <div className="pricing-card bg-gradient-to-br from-yellow-800 to-yellow-900 border-2 border-yellow-500 rounded-xl p-8 text-center relative scroll-animate">
+              <h3 className="text-2xl font-bold mb-2 text-yellow-300">KIND SQUAD FAMILY</h3>
+              <div className="text-5xl font-bold text-yellow-300 mb-2">$10</div>
+              <div className="text-yellow-200 mb-4">/month</div>
+              <p className="text-yellow-200 mb-6">Join our inner circle</p>
               
               <ul className="text-left mb-8 space-y-3">
                 <li className="flex items-center gap-2">
                   <span className="text-green-400">✅</span>
-                  <span className="text-gray-300">Everything in Kind Squad Friend, PLUS:</span>
+                  <span className="text-yellow-100">Everything in Kind Squad Friend, PLUS:</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-green-400">✅</span>
-                  <span className="text-gray-300">Annual exclusive Kind Squad mug</span>
+                  <span className="text-yellow-100">Annual exclusive Kind Squad mug</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-green-400">✅</span>
-                  <span className="text-gray-300">20% discount + FREE SHIPPING on all merchandise</span>
+                  <span className="text-yellow-100">20% discount + FREE SHIPPING on all merchandise</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-green-400">✅</span>
-                  <span className="text-gray-300">Recognition on "Family Wall"</span>
+                  <span className="text-yellow-100">Recognition on "Family Wall"</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="text-green-400">✅</span>
-                  <span className="text-gray-300">Eligible for monthly Member Spotlight</span>
+                  <span className="text-yellow-100">Eligible for monthly Member Spotlight</span>
                 </li>
               </ul>
               
@@ -300,7 +300,7 @@ const MembershipLanding = () => {
       </section>
 
       {/* Feature Comparison Table */}
-      <section className="py-16 bg-gray-900">
+      <section className="py-8 bg-gray-900">
         <div className="max-w-6xl mx-auto px-5">
           <h2 className="text-4xl font-bold text-center mb-12 scroll-animate">Compare All Features</h2>
           <div className="overflow-x-auto scroll-animate">
