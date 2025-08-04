@@ -581,37 +581,36 @@ const AdminDashboard = () => {
           </div>
         </div>
       )}
-
       {/* Impact Dashboard at Bottom */}
-      <div className="bg-yellow-500 py-12">
+      <div className="bg-gray-900 py-12 border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-black mb-4">Kind Squad® Impact Dashboard</h2>
-          <p className="text-black mb-8">Building humanity through kindness - Real-time organizational metrics</p>
+          <h2 className="text-3xl font-bold text-white mb-4">Kind Squad® Impact Dashboard</h2>
+          <p className="text-gray-400 mb-8">Building humanity through kindness - Real-time organizational metrics</p>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="bg-yellow-600 rounded-lg p-6 text-black">
-              <div className="text-3xl font-bold mb-2">$127,450</div>
-              <div className="text-sm font-medium">Total Raised</div>
-              <div className="text-xs opacity-75">This Year</div>
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center hover:bg-gray-750 transition-colors">
+              <div className="text-3xl font-bold mb-2 text-yellow-400">$127,450</div>
+              <div className="text-sm font-medium text-white">Total Raised</div>
+              <div className="text-xs text-gray-400">This Year</div>
             </div>
-            <div className="bg-yellow-600 rounded-lg p-6 text-black">
-              <div className="text-3xl font-bold mb-2">89</div>
-              <div className="text-sm font-medium">Total Missions</div>
-              <div className="text-xs opacity-75">Completed</div>
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center hover:bg-gray-750 transition-colors">
+              <div className="text-3xl font-bold mb-2 text-yellow-400">89</div>
+              <div className="text-sm font-medium text-white">Total Missions</div>
+              <div className="text-xs text-gray-400">Completed</div>
             </div>
-            <div className="bg-yellow-600 rounded-lg p-6 text-black">
-              <div className="text-3xl font-bold mb-2">342</div>
-              <div className="text-sm font-medium">People Helped</div>
-              <div className="text-xs opacity-75">Lives Changed</div>
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center hover:bg-gray-750 transition-colors">
+              <div className="text-3xl font-bold mb-2 text-yellow-400">342</div>
+              <div className="text-sm font-medium text-white">People Helped</div>
+              <div className="text-xs text-gray-400">Lives Changed</div>
             </div>
-            <div className="bg-yellow-600 rounded-lg p-6 text-black">
-              <div className="text-3xl font-bold mb-2">156</div>
-              <div className="text-sm font-medium">Active Members</div>
-              <div className="text-xs opacity-75">Growing Daily</div>
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center hover:bg-gray-750 transition-colors">
+              <div className="text-3xl font-bold mb-2 text-yellow-400">156</div>
+              <div className="text-sm font-medium text-white">Active Members</div>
+              <div className="text-xs text-gray-400">Growing Daily</div>
             </div>
           </div>
         </div>
-      )}
+      </div>
 
       <Footer />
     </div>

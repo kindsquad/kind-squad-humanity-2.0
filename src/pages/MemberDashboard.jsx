@@ -27,43 +27,51 @@ export default function MemberDashboard() {
   }, [])
 
   const tierInfo = {
-    'Member': {
-      name: 'Kind Squad® Member',
+    'Community': {
+      name: 'Kind Squad Community',
       price: 'Free',
-      color: 'text-gray-400',
-      bgColor: 'bg-gray-800',
-      borderColor: 'border-gray-600',
-      benefits: [
-        'Access to mission updates',
-        'Member dashboard',
-        '10% off Kind Squad® Merch'
-      ]
-    },
-    'Friend': {
-      name: 'Kind Squad® Friend',
-      price: '$5/month',
       color: 'text-blue-400',
       bgColor: 'bg-blue-900',
       borderColor: 'border-blue-500',
       benefits: [
-        'Everything from Member, PLUS:',
-        'Annual exclusive Kind Squad® sticker pack',
-        '15% discount on merchandise store',
-        'Friend badge displayed on profile'
+        'Access to public missions',
+        'Monthly impact newsletter',
+        'Community updates',
+        'Basic mission participation',
+        'Social media community access'
+      ]
+    },
+    'Friend': {
+      name: 'Kind Squad Friend',
+      price: '$5/month',
+      color: 'text-pink-400',
+      bgColor: 'bg-pink-900',
+      borderColor: 'border-pink-500',
+      benefits: [
+        'Everything in Community',
+        'Private community access',
+        'Priority mission notifications',
+        'Exclusive member events',
+        'Monthly impact reports',
+        'Friend badge & recognition',
+        'Early access to new programs'
       ]
     },
     'Family': {
-      name: 'Kind Squad® Family',
+      name: 'Kind Squad Family',
       price: '$10/month',
-      color: 'text-yellow-400',
-      bgColor: 'bg-yellow-900',
-      borderColor: 'border-yellow-500',
+      color: 'text-purple-400',
+      bgColor: 'bg-purple-900',
+      borderColor: 'border-purple-500',
       benefits: [
-        'Everything from Friend, PLUS:',
-        'Annual exclusive Kind Squad® mug',
-        '20% discount + FREE SHIPPING on merchandise',
-        'Recognition on "Family Wall"',
-        'Eligible for monthly Member Spotlight'
+        'Everything in Friend',
+        'Direct line to leadership team',
+        'Monthly strategy calls',
+        'Mission proposal privileges',
+        'Family-only events',
+        'Annual impact summit invitation',
+        'Custom thank you package',
+        'Tax-deductible receipts'
       ]
     }
   }
