@@ -584,29 +584,29 @@ const AdminDashboard = () => {
       {/* Impact Dashboard at Bottom */}
       <div className="bg-gray-900 py-12 border-t border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">KIND SQUAD IMPACT DASHBOARD</h2>
-          <p className="text-gray-400 mb-8">Building humanity through kindness • Real-time organizational metrics</p>
+          <h2 className="text-4xl font-bold text-white mb-4 tracking-wide">KIND SQUAD IMPACT DASHBOARD</h2>
+          <p className="text-gray-400 mb-12 text-lg">Building humanity through kindness • Real-time organizational metrics</p>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center">
-              <div className="text-4xl font-bold mb-2 text-yellow-400">$127,450</div>
-              <div className="text-sm font-medium text-white uppercase tracking-wide">TOTAL RAISED</div>
-              <div className="text-xs text-gray-400 uppercase tracking-wide">THIS YEAR</div>
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-8 text-center">
+              <div className="text-5xl font-bold mb-3 text-yellow-400">$127,450</div>
+              <div className="text-sm font-medium text-white uppercase tracking-widest">TOTAL RAISED</div>
+              <div className="text-xs text-gray-400 uppercase tracking-widest mt-1">THIS YEAR</div>
             </div>
-            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center">
-              <div className="text-4xl font-bold mb-2 text-yellow-400">89</div>
-              <div className="text-sm font-medium text-white uppercase tracking-wide">TOTAL MISSIONS</div>
-              <div className="text-xs text-gray-400 uppercase tracking-wide">COMPLETED</div>
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-8 text-center">
+              <div className="text-5xl font-bold mb-3 text-yellow-400">89</div>
+              <div className="text-sm font-medium text-white uppercase tracking-widest">TOTAL MISSIONS</div>
+              <div className="text-xs text-gray-400 uppercase tracking-widest mt-1">COMPLETED</div>
             </div>
-            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center">
-              <div className="text-4xl font-bold mb-2 text-yellow-400">342</div>
-              <div className="text-sm font-medium text-white uppercase tracking-wide">PEOPLE HELPED</div>
-              <div className="text-xs text-gray-400 uppercase tracking-wide">LIVES CHANGED</div>
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-8 text-center">
+              <div className="text-5xl font-bold mb-3 text-yellow-400">342</div>
+              <div className="text-sm font-medium text-white uppercase tracking-widest">PEOPLE HELPED</div>
+              <div className="text-xs text-gray-400 uppercase tracking-widest mt-1">LIVES CHANGED</div>
             </div>
-            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6 text-center">
-              <div className="text-4xl font-bold mb-2 text-yellow-400">156</div>
-              <div className="text-sm font-medium text-white uppercase tracking-wide">ACTIVE MEMBERS</div>
-              <div className="text-xs text-gray-400 uppercase tracking-wide">GROWING DAILY</div>
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-8 text-center">
+              <div className="text-5xl font-bold mb-3 text-yellow-400">156</div>
+              <div className="text-sm font-medium text-white uppercase tracking-widest">ACTIVE MEMBERS</div>
+              <div className="text-xs text-gray-400 uppercase tracking-widest mt-1">GROWING DAILY</div>
             </div>
           </div>
         </div>
