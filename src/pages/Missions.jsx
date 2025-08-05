@@ -322,7 +322,7 @@ export default function Missions() {
             <div className="flex justify-between items-center mb-8">
               <h2 className="text-3xl font-bold text-white">Mission History</h2>
               <div className="text-gray-400">
-                <span className="text-yellow-400 font-bold">127+</span> Total Missions Completed
+                <span className="text-yellow-400 font-bold">176</span> Total Missions Completed
               </div>
             </div>
 
@@ -330,15 +330,15 @@ export default function Missions() {
               <div className="mb-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-yellow-400">127+</div>
+                  <div className="text-3xl font-bold text-yellow-400">176</div>
                   <div className="text-gray-400">Total Missions</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-yellow-400">$279,000+</div>
+                  <div className="text-3xl font-bold text-yellow-400">$284,368</div>
                   <div className="text-gray-400">Total Raised</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-yellow-400">8,400+</div>
+                  <div className="text-3xl font-bold text-yellow-400">13,056</div>
                   <div className="text-gray-400">People Helped</div>
                 </div>
                 <div className="text-center">

@@ -184,7 +184,7 @@ export default function AllMissions() {
               All Kind Squad Missions
             </h1>
             <p className="text-xl text-gray-400 mb-6">
-              Complete chronological history of our impact • 176 missions • 2020-2025
+              Complete chronological history of our impact • $284,368 raised • 13,056 people helped • 2020-2025
             </p>
             
             {/* Summary Stats */}
