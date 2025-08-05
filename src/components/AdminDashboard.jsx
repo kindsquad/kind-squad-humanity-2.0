@@ -541,22 +541,22 @@ const AdminDashboard = () => {
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="bg-gray-800 border border-gray-700 rounded-lg p-8 text-center">
-              <div className="text-5xl font-bold mb-3 text-yellow-400">$284,368</div>
+              <div className="text-2xl md:text-4xl font-bold mb-3 text-yellow-400">$284,368</div>
               <div className="text-sm font-medium text-white uppercase tracking-widest">TOTAL RAISED</div>
               <div className="text-xs text-gray-400 uppercase tracking-widest mt-1">THIS YEAR</div>
             </div>
             <div className="bg-gray-800 border border-gray-700 rounded-lg p-8 text-center">
-              <div className="text-5xl font-bold mb-3 text-yellow-400">176</div>
+              <div className="text-2xl md:text-4xl font-bold mb-3 text-yellow-400">176</div>
               <div className="text-sm font-medium text-white uppercase tracking-widest">TOTAL MISSIONS</div>
               <div className="text-xs text-gray-400 uppercase tracking-widest mt-1">COMPLETED</div>
             </div>
             <div className="bg-gray-800 border border-gray-700 rounded-lg p-8 text-center">
-              <div className="text-5xl font-bold mb-3 text-yellow-400">13,056</div>
+              <div className="text-2xl md:text-4xl font-bold mb-3 text-yellow-400">13,056</div>
               <div className="text-sm font-medium text-white uppercase tracking-widest">PEOPLE HELPED</div>
               <div className="text-xs text-gray-400 uppercase tracking-widest mt-1">LIVES CHANGED</div>
             </div>
             <div className="bg-gray-800 border border-gray-700 rounded-lg p-8 text-center">
-              <div className="text-5xl font-bold mb-3 text-yellow-400">2,647</div>
+              <div className="text-2xl md:text-4xl font-bold mb-3 text-yellow-400">2,647</div>
               <div className="text-sm font-medium text-white uppercase tracking-widest">ACTIVE MEMBERS</div>
               <div className="text-xs text-gray-400 uppercase tracking-widest mt-1">GROWING DAILY</div>
             </div>
