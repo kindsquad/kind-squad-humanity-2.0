@@ -385,7 +385,7 @@ export default function Missions() {
                     href="#/all-missions"
                     className="block w-full bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors text-center"
                   >
-                    View All 169+ Missions →
+                    View All 176+ Missions →
                   </a>
                 </div>
               </div>
