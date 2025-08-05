@@ -9,6 +9,7 @@ import AdminDashboardComponent from './components/AdminDashboard'
 import MemberDashboard from './pages/MemberDashboard'
 import ChapterDashboard from './pages/ChapterDashboard'
 import Missions from './pages/Missions'
+import AllMissions from './pages/AllMissions'
 import RequestHelpForm from './components/RequestHelpForm'
 import MembershipLanding from './components/MembershipLanding'
 import './App.css'
@@ -44,6 +45,7 @@ function App() {
         <Route path="/member" element={<MemberDashboard />} />
         <Route path="/chapter" element={<ChapterDashboard />} />
         <Route path="/missions" element={<Missions />} />
+        <Route path="/all-missions" element={<AllMissions />} />
         <Route path="/request-help" element={<RequestHelpForm />} />
         <Route path="/membership" element={<MembershipLanding />} />
         <Route path="/join" element={<MembershipLanding />} />

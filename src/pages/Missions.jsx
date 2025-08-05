@@ -380,10 +380,13 @@ export default function Missions() {
                   ))}
                 </div>
                 
-                <div className="pt-4 border-t border-gray-800">
-                  <button className="w-full bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors">
-                    View All 127+ Missions →
-                  </button>
+                    <div className="pt-4 border-t border-gray-800">
+                  <a 
+                    href="#/all-missions"
+                    className="block w-full bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-700 transition-colors text-center"
+                  >
+                    View All 169+ Missions →
+                  </a>
                 </div>
               </div>
             </div>
