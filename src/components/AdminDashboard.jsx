@@ -453,12 +453,12 @@ const AdminDashboard = () => {
                 </select>
               </div>
 
-              {/* Mission Cards Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+              {/* Mission Cards Grid - Mobile Friendly */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
                 {missions.length === 0 ? (
-                  <div className="col-span-full text-center py-12">
-                    <div className="text-gray-400 text-lg mb-4">No missions created yet</div>
-                    <p className="text-gray-500">Mission cards will appear here after creating them from approved requests.</p>
+                  <div className="col-span-full text-center py-8">
+                    <div className="text-gray-400 text-base mb-3">No missions created yet</div>
+                    <p className="text-gray-500 text-sm">Mission cards will appear here after creating them from approved requests.</p>
                   </div>
                 ) : (
                   missions
@@ -471,15 +471,15 @@ const AdminDashboard = () => {
                       return matchesSearch && matchesTab;
                     })
                     .map(mission => (
-                      <div key={mission.id} className="bg-gray-700 border border-gray-600 rounded-lg p-6 hover:border-yellow-500 transition-colors">
-                        <div className="flex justify-between items-start mb-4">
-                          <div>
-                            <h3 className="text-lg font-semibold text-white">
+                      <div key={mission.id} className="bg-gray-700 border border-gray-600 rounded-lg p-3 sm:p-4 hover:border-yellow-500 transition-colors">
+                        <div className="flex justify-between items-start mb-3">
+                          <div className="min-w-0 flex-1">
+                            <h3 className="text-sm sm:text-base font-semibold text-white truncate">
                               {mission.firstName} {mission.lastName}
                             </h3>
-                            <p className="text-gray-400 text-sm">{mission.assistanceType}</p>
+                            <p className="text-gray-400 text-xs sm:text-sm truncate">{mission.assistanceType}</p>
                           </div>
-                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                          <span className={`px-2 py-1 rounded text-xs font-medium shrink-0 ${
                             mission.status === 'completed' ? 'bg-green-600 text-white' :
                             mission.status === 'delivered' ? 'bg-teal-600 text-white' :
                             mission.status === 'items_purchased' ? 'bg-orange-600 text-white' :
@@ -493,16 +493,16 @@ const AdminDashboard = () => {
                           </span>
                         </div>
 
-                        <div className="space-y-2 mb-4">
-                          <div className="flex justify-between text-sm">
+                        <div className="space-y-1 sm:space-y-2 mb-3">
+                          <div className="flex justify-between text-xs sm:text-sm">
                             <span className="text-gray-400">Requested:</span>
                             <span className="text-white">${mission.amount?.toLocaleString() || 0}</span>
                           </div>
-                          <div className="flex justify-between text-sm">
+                          <div className="flex justify-between text-xs sm:text-sm">
                             <span className="text-gray-400">Raised:</span>
                             <span className="text-green-400">${mission.amountRaised?.toLocaleString() || 0}</span>
                           </div>
-                          <div className="flex justify-between text-sm">
+                          <div className="flex justify-between text-xs sm:text-sm">
                             <span className="text-gray-400">Progress:</span>
                             <span className="text-yellow-400">
                               {mission.amountRaised && mission.amount ? 
@@ -510,29 +510,29 @@ const AdminDashboard = () => {
                             </span>
                           </div>
                           {mission.dateSubmitted && (
-                            <div className="flex justify-between text-sm">
+                            <div className="flex justify-between text-xs sm:text-sm">
                               <span className="text-gray-400">Submitted:</span>
                               <span className="text-white">{new Date(mission.dateSubmitted).toLocaleDateString()}</span>
                             </div>
                           )}
                         </div>
 
-                        <div className="flex gap-2">
+                        <div className="flex gap-1 sm:gap-2">
                           <button
                             onClick={() => {
                               setSelectedMission(mission);
                               setShowMissionCard(true);
                             }}
-                            className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black py-2 px-4 rounded-lg font-medium transition-colors text-sm"
+                            className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black py-1.5 sm:py-2 px-2 sm:px-4 rounded-lg font-medium transition-colors text-xs sm:text-sm"
                           >
-                            📝 Edit Mission
+                            📝 Edit
                           </button>
                           <button
                             onClick={() => {
                               setViewMission(mission);
                               setShowViewMission(true);
                             }}
-                            className="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-2 px-4 rounded-lg font-medium transition-colors text-sm"
+                            className="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-1.5 sm:py-2 px-2 sm:px-4 rounded-lg font-medium transition-colors text-xs sm:text-sm"
                           >
                             👁️ View
                           </button>
