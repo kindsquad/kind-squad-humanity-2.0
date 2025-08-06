@@ -97,7 +97,8 @@ const AdminDashboard = () => {
         datePostedToCommunity: '2025-01-28T10:00',
         dateGoalCompleted: '2025-01-29T15:30',
         datePurchased: '2025-01-30T09:00',
-        dateDelivered: '2025-01-30'
+        dateDelivered: '2025-01-30',
+        receipt: 'utility_payment_receipt.pdf' // Sample receipt
       },
       {
         id: 'MISSION-001',
@@ -450,7 +451,38 @@ const AdminDashboard = () => {
                                 Math.round((mission.amountRaised / mission.amount) * 100) : 0}%
                             </span>
                           </div>
+                          {mission.receipt && (
+                            <div className="flex justify-between">
+                              <span className="text-gray-400">Receipt:</span>
+                              <span className="text-blue-400">📄 Uploaded</span>
+                            </div>
+                          )}
                         </div>
+
+                        {/* Receipt Display Section */}
+                        {mission.receipt && (
+                          <div className="mb-2 p-2 bg-gray-600 rounded border border-gray-500">
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-xs text-gray-300">Receipt:</span>
+                              <button
+                                onClick={() => {
+                                  if (mission.receipt instanceof File) {
+                                    const url = URL.createObjectURL(mission.receipt);
+                                    window.open(url, '_blank');
+                                  } else if (typeof mission.receipt === 'string') {
+                                    window.open(mission.receipt, '_blank');
+                                  }
+                                }}
+                                className="text-xs text-blue-400 hover:text-blue-300"
+                              >
+                                View 📄
+                              </button>
+                            </div>
+                            <div className="text-xs text-gray-400 truncate">
+                              {mission.receipt instanceof File ? mission.receipt.name : 'Receipt uploaded'}
+                            </div>
+                          </div>
+                        )}
 
                         <div className="flex flex-col gap-1">
                           <button
