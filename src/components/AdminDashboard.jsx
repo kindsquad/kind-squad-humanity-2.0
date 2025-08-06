@@ -396,8 +396,8 @@ const AdminDashboard = () => {
                 </select>
               </div>
 
-              {/* Mission Cards Grid - Mobile Friendly */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+              {/* Mission Cards Grid - Compact Mobile-Friendly Design */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3">
                 {missions.length === 0 ? (
                   <div className="col-span-full text-center py-8">
                     <div className="text-gray-400 text-base mb-3">No missions created yet</div>
@@ -414,15 +414,13 @@ const AdminDashboard = () => {
                       return matchesSearch && matchesTab;
                     })
                     .map(mission => (
-                      <div key={mission.id} className="bg-gray-700 border border-gray-600 rounded-lg p-3 sm:p-4 hover:border-yellow-500 transition-colors">
-                        <div className="flex justify-between items-start mb-3">
-                          <div className="min-w-0 flex-1">
-                            <h3 className="text-sm sm:text-base font-semibold text-white truncate">
-                              {mission.firstName} {mission.lastName}
-                            </h3>
-                            <p className="text-gray-400 text-xs sm:text-sm truncate">{mission.assistanceType}</p>
-                          </div>
-                          <span className={`px-2 py-1 rounded text-xs font-medium shrink-0 ${
+                      <div key={mission.id} className="bg-gray-700 border border-gray-600 rounded-lg p-2 hover:border-yellow-500 transition-colors">
+                        <div className="mb-2">
+                          <h3 className="text-xs font-semibold text-white truncate">
+                            {mission.firstName} {mission.lastName}
+                          </h3>
+                          <p className="text-gray-400 text-xs truncate">{mission.assistanceType}</p>
+                          <span className={`inline-block px-1 py-0.5 rounded text-xs font-medium mt-1 ${
                             mission.status === 'completed' ? 'bg-green-600 text-white' :
                             mission.status === 'delivered' ? 'bg-teal-600 text-white' :
                             mission.status === 'items_purchased' ? 'bg-orange-600 text-white' :
@@ -436,37 +434,31 @@ const AdminDashboard = () => {
                           </span>
                         </div>
 
-                        <div className="space-y-1 sm:space-y-2 mb-3">
-                          <div className="flex justify-between text-xs sm:text-sm">
-                            <span className="text-gray-400">Requested:</span>
+                        <div className="space-y-1 mb-2 text-xs">
+                          <div className="flex justify-between">
+                            <span className="text-gray-400">Need:</span>
                             <span className="text-white">${mission.amount?.toLocaleString() || 0}</span>
                           </div>
-                          <div className="flex justify-between text-xs sm:text-sm">
+                          <div className="flex justify-between">
                             <span className="text-gray-400">Raised:</span>
                             <span className="text-green-400">${mission.amountRaised?.toLocaleString() || 0}</span>
                           </div>
-                          <div className="flex justify-between text-xs sm:text-sm">
+                          <div className="flex justify-between">
                             <span className="text-gray-400">Progress:</span>
                             <span className="text-yellow-400">
                               {mission.amountRaised && mission.amount ? 
                                 Math.round((mission.amountRaised / mission.amount) * 100) : 0}%
                             </span>
                           </div>
-                          {mission.dateSubmitted && (
-                            <div className="flex justify-between text-xs sm:text-sm">
-                              <span className="text-gray-400">Submitted:</span>
-                              <span className="text-white">{new Date(mission.dateSubmitted).toLocaleDateString()}</span>
-                            </div>
-                          )}
                         </div>
 
-                        <div className="flex gap-1 sm:gap-2">
+                        <div className="flex flex-col gap-1">
                           <button
                             onClick={() => {
                               setSelectedMission(mission);
                               setShowMissionCard(true);
                             }}
-                            className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black py-1.5 sm:py-2 px-2 sm:px-4 rounded-lg font-medium transition-colors text-xs sm:text-sm"
+                            className="w-full bg-yellow-500 hover:bg-yellow-400 text-black py-1 px-2 rounded font-medium transition-colors text-xs"
                           >
                             📝 Edit
                           </button>
@@ -475,7 +467,7 @@ const AdminDashboard = () => {
                               setViewMission(mission);
                               setShowViewMission(true);
                             }}
-                            className="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-1.5 sm:py-2 px-2 sm:px-4 rounded-lg font-medium transition-colors text-xs sm:text-sm"
+                            className="w-full bg-gray-600 hover:bg-gray-500 text-white py-1 px-2 rounded font-medium transition-colors text-xs"
                           >
                             👁️ View
                           </button>
