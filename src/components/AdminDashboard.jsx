@@ -16,6 +16,8 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [showMissionCard, setShowMissionCard] = useState(false);
   const [selectedMission, setSelectedMission] = useState(null);
+  const [showViewMission, setShowViewMission] = useState(false);
+  const [viewMission, setViewMission] = useState(null);
 
   useEffect(() => {
     // Mock data for requests
@@ -527,8 +529,8 @@ const AdminDashboard = () => {
                           </button>
                           <button
                             onClick={() => {
-                              // View mission details (could open a read-only view)
-                              console.log('View mission:', mission);
+                              setViewMission(mission);
+                              setShowViewMission(true);
                             }}
                             className="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-2 px-4 rounded-lg font-medium transition-colors text-sm"
                           >
@@ -821,6 +823,190 @@ const AdminDashboard = () => {
             setSelectedMission(null);
           }}
         />
+      )}
+
+      {/* View Mission Modal */}
+      {showViewMission && viewMission && (
+        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50">
+          <div className="bg-gray-800 border border-gray-700 rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-gray-800 border-b border-gray-700 p-4 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-white">Mission Details - {viewMission.firstName} {viewMission.lastName}</h3>
+              <button
+                onClick={() => {
+                  setShowViewMission(false);
+                  setViewMission(null);
+                }}
+                className="text-gray-400 hover:text-white text-2xl"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="p-6 space-y-6">
+              {/* Mission Overview */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
+                  <h4 className="text-lg font-semibold text-white mb-3">Mission Information</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Name:</span>
+                      <span className="text-white">{viewMission.firstName} {viewMission.lastName}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Type:</span>
+                      <span className="text-white">{viewMission.assistanceType}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Status:</span>
+                      <span className={`px-2 py-1 rounded text-xs font-medium ${
+                        viewMission.status === 'completed' ? 'bg-green-600 text-white' :
+                        viewMission.status === 'delivered' ? 'bg-teal-600 text-white' :
+                        viewMission.status === 'items_purchased' ? 'bg-orange-600 text-white' :
+                        viewMission.status === 'raised' ? 'bg-emerald-600 text-white' :
+                        viewMission.status === 'posted' ? 'bg-purple-600 text-white' :
+                        viewMission.status === 'accepted' ? 'bg-blue-600 text-white' :
+                        viewMission.status === 'before_the_board' ? 'bg-yellow-600 text-black' :
+                        'bg-gray-600 text-white'
+                      }`}>
+                        {viewMission.status?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Received'}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Date Submitted:</span>
+                      <span className="text-white">{viewMission.dateSubmitted ? new Date(viewMission.dateSubmitted).toLocaleDateString() : 'N/A'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
+                  <h4 className="text-lg font-semibold text-white mb-3">Financial Details</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Amount Requested:</span>
+                      <span className="text-white">${viewMission.amount?.toLocaleString() || 0}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Amount Raised:</span>
+                      <span className="text-green-400">${viewMission.amountRaised?.toLocaleString() || 0}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Progress:</span>
+                      <span className="text-yellow-400">
+                        {viewMission.amountRaised && viewMission.amount ? 
+                          Math.round((viewMission.amountRaised / viewMission.amount) * 100) : 0}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
+                      <div 
+                        className="bg-yellow-500 h-2 rounded-full transition-all duration-300"
+                        style={{ 
+                          width: `${viewMission.amountRaised && viewMission.amount ? 
+                            Math.min((viewMission.amountRaised / viewMission.amount) * 100, 100) : 0}%` 
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mission Description */}
+              {viewMission.description && (
+                <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
+                  <h4 className="text-lg font-semibold text-white mb-3">Description</h4>
+                  <p className="text-gray-300">{viewMission.description}</p>
+                </div>
+              )}
+
+              {/* Mission Timeline */}
+              <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
+                <h4 className="text-lg font-semibold text-white mb-3">Mission Timeline</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {viewMission.dateReceived && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Date Received:</span>
+                      <span className="text-white">{new Date(viewMission.dateReceived).toLocaleDateString()}</span>
+                    </div>
+                  )}
+                  {viewMission.datePosted && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Date Posted:</span>
+                      <span className="text-white">{new Date(viewMission.datePosted).toLocaleDateString()}</span>
+                    </div>
+                  )}
+                  {viewMission.dateGoalCompleted && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Goal Completed:</span>
+                      <span className="text-white">{new Date(viewMission.dateGoalCompleted).toLocaleDateString()}</span>
+                    </div>
+                  )}
+                  {viewMission.datePurchased && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Items Purchased:</span>
+                      <span className="text-white">{new Date(viewMission.datePurchased).toLocaleDateString()}</span>
+                    </div>
+                  )}
+                  {viewMission.dateDelivered && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-400">Items Delivered:</span>
+                      <span className="text-white">{new Date(viewMission.dateDelivered).toLocaleDateString()}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Contact Information */}
+              {(viewMission.email || viewMission.phone || viewMission.address) && (
+                <div className="bg-gray-900 border border-gray-700 rounded-lg p-4">
+                  <h4 className="text-lg font-semibold text-white mb-3">Contact Information</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {viewMission.email && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Email:</span>
+                        <span className="text-white">{viewMission.email}</span>
+                      </div>
+                    )}
+                    {viewMission.phone && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-400">Phone:</span>
+                        <span className="text-white">{viewMission.phone}</span>
+                      </div>
+                    )}
+                    {viewMission.address && (
+                      <div className="col-span-full flex justify-between">
+                        <span className="text-gray-400">Address:</span>
+                        <span className="text-white">{viewMission.address}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex gap-4 pt-4">
+                <button
+                  onClick={() => {
+                    setShowViewMission(false);
+                    setViewMission(null);
+                    setSelectedMission(viewMission);
+                    setShowMissionCard(true);
+                  }}
+                  className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black py-3 px-6 rounded-lg font-medium transition-colors"
+                >
+                  📝 Edit Mission
+                </button>
+                <button
+                  onClick={() => {
+                    setShowViewMission(false);
+                    setViewMission(null);
+                  }}
+                  className="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-3 px-6 rounded-lg font-medium transition-colors"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       <Footer />
