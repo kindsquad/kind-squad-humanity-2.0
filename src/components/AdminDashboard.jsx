@@ -178,63 +178,6 @@ const AdminDashboard = () => {
               <p className="text-gray-400">Manage requests, members, and chapters</p>
             </div>
 
-            {/* Stats Grid - Clickable Navigation Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-              <button 
-                onClick={() => {
-                  setActiveSection('requests');
-                  setActiveTab('pending');
-                  setSearchTerm('');
-                }}
-                className="bg-gray-800 p-4 rounded-lg text-center border border-gray-700 hover:bg-gray-700 hover:scale-105 transition-all duration-200 cursor-pointer group"
-              >
-                <div className="text-sm text-gray-400 mb-1 group-hover:text-gray-300">Pending Requests</div>
-                <div className="text-2xl font-bold text-yellow-400 group-hover:text-yellow-300">{requests.filter(r => r.status === 'pending').length}</div>
-              </button>
-            <button 
-              onClick={() => {
-                setActiveSection('members');
-                setSearchTerm('');
-              }}
-              className="bg-gray-800 p-4 rounded-lg text-center border border-gray-700 hover:bg-gray-700 hover:scale-105 transition-all duration-200 cursor-pointer group"
-            >
-              <div className="text-sm text-gray-400 mb-1 group-hover:text-gray-300">New Members</div>
-              <div className="text-2xl font-bold text-green-400 group-hover:text-green-300">3</div>
-            </button>
-            <button 
-              onClick={() => {
-                setActiveSection('chapters');
-                setSearchTerm('');
-              }}
-              className="bg-gray-800 p-4 rounded-lg text-center border border-gray-700 hover:bg-gray-700 hover:scale-105 transition-all duration-200 cursor-pointer group"
-            >
-              <div className="text-sm text-gray-400 mb-1 group-hover:text-gray-300">New Chapters</div>
-              <div className="text-2xl font-bold text-blue-400 group-hover:text-blue-300">2</div>
-            </button>
-            <button 
-              onClick={() => {
-                setActiveSection('alerts');
-                setSearchTerm('');
-                // Scroll to birthdays section when implemented
-              }}
-              className="bg-gray-800 p-4 rounded-lg text-center border border-gray-700 hover:bg-gray-700 hover:scale-105 transition-all duration-200 cursor-pointer group"
-            >
-              <div className="text-sm text-gray-400 mb-1 group-hover:text-gray-300">🎂 Birthdays</div>
-              <div className="text-2xl font-bold text-pink-400 group-hover:text-pink-300">2</div>
-            </button>
-            <button 
-              onClick={() => {
-                setActiveSection('alerts');
-                setSearchTerm('');
-                // Scroll to anniversaries section when implemented
-              }}
-              className="bg-gray-800 p-4 rounded-lg text-center border border-gray-700 hover:bg-gray-700 hover:scale-105 transition-all duration-200 cursor-pointer group"
-            >
-              <div className="text-sm text-gray-400 mb-1 group-hover:text-gray-300">🎉 Anniversaries</div>
-              <div className="text-2xl font-bold text-purple-400 group-hover:text-purple-300">1</div>
-            </button>
-          </div>
-
           {/* Section Navigation */}
           <div className="mb-8">
             <div className="grid grid-cols-2 md:flex md:flex-wrap gap-2 bg-gray-800 rounded-lg p-2 border border-gray-700">
