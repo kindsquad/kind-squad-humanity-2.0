@@ -6,6 +6,44 @@ class NotificationService {
     this.apiEndpoint = '/api/notifications'; // This would be your backend API endpoint
   }
 
+  // Send notification to admin when new request is submitted
+  async sendAdminNewRequestNotification(request) {
+    try {
+      // Send push notification to admin
+      await this.sendPushNotification({
+        title: '🚨 New Request Submitted',
+        message: `${request.firstName} ${request.lastName} submitted a new request for $${request.amountNeeded.toLocaleString()}`,
+        type: 'admin',
+        requestId: request.id,
+        isAdminNotification: true
+      });
+
+      // Send email notification to admin
+      await this.sendEmailNotification({
+        to: 'admin@kindsquad.org', // Admin email
+        subject: 'Kind Squad - New Request Submitted',
+        template: 'admin_new_request',
+        data: {
+          firstName: request.firstName,
+          lastName: request.lastName,
+          email: request.email,
+          phone: request.phone,
+          requestType: request.assistanceType,
+          amount: request.amountNeeded,
+          description: request.description,
+          requestFor: request.requestFor,
+          submissionDate: new Date().toLocaleString(),
+          requestId: request.id
+        }
+      });
+
+      return { success: true, message: 'Admin notifications sent successfully' };
+    } catch (error) {
+      console.error('Error sending admin notification:', error);
+      return { success: false, error: error.message };
+    }
+  }
+
   // Send approval notification
   async sendApprovalNotification(request) {
     try {
@@ -152,7 +190,48 @@ class NotificationService {
 
   // Generate email content based on template
   generateEmailContent(emailData) {
-    if (emailData.template === 'approval') {
+    if (emailData.template === 'admin_new_request') {
+      return `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <div style="text-align: center; margin-bottom: 30px;">
+            <h1 style="color: #EAB308; margin: 0;">KIND SQUAD®</h1>
+            <p style="color: #666; margin: 5px 0;">ADMIN NOTIFICATION</p>
+          </div>
+          
+          <h2 style="color: #DC2626;">🚨 New Request Submitted</h2>
+          
+          <p>A new assistance request has been submitted and requires admin review.</p>
+          
+          <div style="background-color: #FEF2F2; border-left: 4px solid #DC2626; padding: 15px; margin: 20px 0;">
+            <h3 style="margin: 0 0 10px 0; color: #DC2626;">Request Details</h3>
+            <p style="margin: 5px 0;"><strong>Name:</strong> ${emailData.data.firstName} ${emailData.data.lastName}</p>
+            <p style="margin: 5px 0;"><strong>Email:</strong> ${emailData.data.email}</p>
+            <p style="margin: 5px 0;"><strong>Phone:</strong> ${emailData.data.phone}</p>
+            <p style="margin: 5px 0;"><strong>Request For:</strong> ${emailData.data.requestFor}</p>
+            <p style="margin: 5px 0;"><strong>Amount:</strong> $${emailData.data.amount.toLocaleString()}</p>
+            <p style="margin: 5px 0;"><strong>Type:</strong> ${emailData.data.requestType}</p>
+            <p style="margin: 5px 0;"><strong>Submitted:</strong> ${emailData.data.submissionDate}</p>
+            <p style="margin: 5px 0;"><strong>Request ID:</strong> ${emailData.data.requestId}</p>
+          </div>
+          
+          <div style="background-color: #F9FAFB; padding: 15px; margin: 20px 0; border-radius: 5px;">
+            <h4 style="margin: 0 0 10px 0;">Description:</h4>
+            <p style="margin: 0; font-style: italic;">${emailData.data.description}</p>
+          </div>
+          
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="https://kind-squad-humanity-2-0.vercel.app/#/admin-dashboard" 
+               style="background-color: #EAB308; color: black; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+              Review Request in Admin Dashboard
+            </a>
+          </div>
+          
+          <p style="font-size: 12px; color: #666; text-align: center;">
+            This is an automated notification from Kind Squad Admin System.
+          </p>
+        </div>
+      `;
+    } else if (emailData.template === 'approval') {
       return `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">

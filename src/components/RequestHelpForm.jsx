@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import notificationService from '../utils/notificationService';
 
 const RequestHelpForm = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -77,11 +78,39 @@ const RequestHelpForm = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
-    alert('Request submitted successfully! We will review your application and contact you within 24-48 hours.');
+    
+    try {
+      // Generate unique request ID
+      const requestId = `REQ_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      
+      // Prepare request data for admin notification
+      const requestData = {
+        id: requestId,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        assistanceType: formData.assistanceType,
+        amountNeeded: parseFloat(formData.amountNeeded) || 0,
+        description: formData.description,
+        requestFor: formData.requestFor,
+        submissionDate: new Date().toISOString(),
+        status: 'received'
+      };
+      
+      // Send admin notification
+      await notificationService.sendAdminNewRequestNotification(requestData);
+      
+      // Handle form submission (save to database, etc.)
+      console.log('Form submitted:', formData);
+      
+      alert('Request submitted successfully! We will review your application and contact you within 24-48 hours.');
+    } catch (error) {
+      console.error('Error submitting request:', error);
+      alert('There was an error submitting your request. Please try again.');
+    }
   };
 
   const validateURL = (url) => {

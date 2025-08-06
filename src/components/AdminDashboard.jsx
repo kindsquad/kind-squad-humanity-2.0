@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import notificationService from '../utils/notificationService';
+import MissionCard from './MissionCard';
 
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState('requests');
@@ -12,6 +13,8 @@ const AdminDashboard = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('date');
   const [activeTab, setActiveTab] = useState('all');
+  const [showMissionCard, setShowMissionCard] = useState(false);
+  const [selectedMission, setSelectedMission] = useState(null);
 
   useEffect(() => {
     // Mock data for requests
@@ -482,6 +485,19 @@ const AdminDashboard = () => {
                 >
                   ✓ Approve Request
                 </button>
+                
+                {/* Create Mission Card Button - Only show for approved requests */}
+                {selectedRequest?.status === 'approved' && (
+                  <button
+                    onClick={() => {
+                      setSelectedMission(selectedRequest);
+                      setShowMissionCard(true);
+                    }}
+                    className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black py-3 px-4 rounded-lg font-medium transition-colors"
+                  >
+                    📋 Create Mission Card
+                  </button>
+                )}
                 <button
                   onClick={async () => {
                     try {
@@ -563,6 +579,28 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Mission Card Modal */}
+      {showMissionCard && selectedMission && (
+        <MissionCard
+          mission={selectedMission}
+          onUpdate={(updatedMission) => {
+            // Update the mission data
+            console.log('Mission updated:', updatedMission);
+            
+            // Show success notification
+            notificationService.showInAppNotification({
+              title: '✅ Mission Card Updated',
+              message: `Mission card for ${updatedMission.firstName} ${updatedMission.lastName} has been saved.`,
+              type: 'success'
+            });
+          }}
+          onClose={() => {
+            setShowMissionCard(false);
+            setSelectedMission(null);
+          }}
+        />
+      )}
 
       <Footer />
     </div>
