@@ -9,6 +9,7 @@ const AdminDashboard = () => {
   const [requests, setRequests] = useState([]);
   const [members, setMembers] = useState([]);
   const [chapters, setChapters] = useState([]);
+  const [missions, setMissions] = useState([]);
   const [selectedRequest, setSelectedRequest] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('date');
@@ -72,6 +73,60 @@ const AdminDashboard = () => {
           id: { name: 'drivers_license.pdf', size: '2.1 MB' },
           supporting: [{ name: 'utility_bill.pdf', size: '1.5 MB' }]
         }
+      }
+    ]);
+
+    // Mock data for missions (sample saved mission cards)
+    setMissions([
+      {
+        id: 'REQ-003',
+        firstName: 'Emily',
+        lastName: 'Rodriguez',
+        email: 'emily.rodriguez@email.com',
+        phone: '(555) 456-7890',
+        assistanceType: 'Utility Bills',
+        amount: 450,
+        amountRaised: 450,
+        description: 'Electric bill past due. Risk of disconnection next week.',
+        dateSubmitted: '2025-01-27',
+        dateReceived: '2025-01-27',
+        initialStatus: 'urgent',
+        status: 'completed',
+        datePostedToCommunity: '2025-01-28T10:00',
+        dateGoalCompleted: '2025-01-29T15:30',
+        datePurchased: '2025-01-30T09:00',
+        dateDelivered: '2025-01-30'
+      },
+      {
+        id: 'MISSION-001',
+        firstName: 'David',
+        lastName: 'Thompson',
+        email: 'david.thompson@email.com',
+        phone: '(555) 321-9876',
+        assistanceType: 'Food Assistance',
+        amount: 300,
+        amountRaised: 180,
+        description: 'Family of four needs groceries for the month.',
+        dateSubmitted: '2025-01-25',
+        dateReceived: '2025-01-25',
+        initialStatus: 'within_a_week',
+        status: 'posted',
+        datePostedToCommunity: '2025-01-26T14:00'
+      },
+      {
+        id: 'MISSION-002',
+        firstName: 'Lisa',
+        lastName: 'Martinez',
+        email: 'lisa.martinez@email.com',
+        phone: '(555) 654-3210',
+        assistanceType: 'Car Repair',
+        amount: 800,
+        amountRaised: 0,
+        description: 'Car broke down, need repairs to get to work.',
+        dateSubmitted: '2025-01-30',
+        dateReceived: '2025-01-30',
+        initialStatus: 'urgent',
+        status: 'before_the_board'
       }
     ]);
   }, []);
@@ -190,6 +245,16 @@ const AdminDashboard = () => {
                 }`}
               >
                 📋 Requests
+              </button>
+              <button
+                onClick={() => setActiveSection('missions')}
+                className={`px-4 py-2 rounded-md font-medium transition-colors ${
+                  activeSection === 'missions'
+                    ? 'bg-yellow-500 text-black'
+                    : 'text-gray-300 hover:text-white hover:bg-gray-700'
+                }`}
+              >
+                🎯 Missions
               </button>
               <button
                 onClick={() => setActiveSection('members')}
@@ -331,8 +396,154 @@ const AdminDashboard = () => {
             </div>
           )}
 
+          {/* Missions Section */}
+          {activeSection === 'missions' && (
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+              <h2 className="text-2xl font-bold text-white mb-6">Mission Management</h2>
+              
+              {/* Mission Stats */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div className="bg-gray-700 p-4 rounded-lg text-center">
+                  <div className="text-sm text-gray-400 mb-1">Total Missions</div>
+                  <div className="text-2xl font-bold text-yellow-400">{missions.length}</div>
+                </div>
+                <div className="bg-gray-700 p-4 rounded-lg text-center">
+                  <div className="text-sm text-gray-400 mb-1">Active</div>
+                  <div className="text-2xl font-bold text-blue-400">{missions.filter(m => !['completed', 'delivered'].includes(m.status)).length}</div>
+                </div>
+                <div className="bg-gray-700 p-4 rounded-lg text-center">
+                  <div className="text-sm text-gray-400 mb-1">Completed</div>
+                  <div className="text-2xl font-bold text-green-400">{missions.filter(m => m.status === 'completed').length}</div>
+                </div>
+                <div className="bg-gray-700 p-4 rounded-lg text-center">
+                  <div className="text-sm text-gray-400 mb-1">Total Raised</div>
+                  <div className="text-2xl font-bold text-emerald-400">
+                    ${missions.reduce((sum, m) => sum + (m.amountRaised || 0), 0).toLocaleString()}
+                  </div>
+                </div>
+              </div>
+
+              {/* Mission Search and Filter */}
+              <div className="flex flex-col md:flex-row gap-4 mb-6">
+                <div className="flex-1">
+                  <input
+                    type="text"
+                    placeholder="Search missions..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                  />
+                </div>
+                <select
+                  value={activeTab}
+                  onChange={(e) => setActiveTab(e.target.value)}
+                  className="px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                >
+                  <option value="all">All Missions</option>
+                  <option value="received">Received</option>
+                  <option value="before_the_board">Before the Board</option>
+                  <option value="accepted">Accepted</option>
+                  <option value="posted">Posted</option>
+                  <option value="raised">Raised</option>
+                  <option value="items_purchased">Items Purchased</option>
+                  <option value="delivered">Delivered</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </div>
+
+              {/* Mission Cards Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                {missions.length === 0 ? (
+                  <div className="col-span-full text-center py-12">
+                    <div className="text-gray-400 text-lg mb-4">No missions created yet</div>
+                    <p className="text-gray-500">Mission cards will appear here after creating them from approved requests.</p>
+                  </div>
+                ) : (
+                  missions
+                    .filter(mission => {
+                      const matchesSearch = searchTerm === '' || 
+                        mission.firstName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        mission.lastName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        mission.assistanceType?.toLowerCase().includes(searchTerm.toLowerCase());
+                      const matchesTab = activeTab === 'all' || mission.status === activeTab;
+                      return matchesSearch && matchesTab;
+                    })
+                    .map(mission => (
+                      <div key={mission.id} className="bg-gray-700 border border-gray-600 rounded-lg p-6 hover:border-yellow-500 transition-colors">
+                        <div className="flex justify-between items-start mb-4">
+                          <div>
+                            <h3 className="text-lg font-semibold text-white">
+                              {mission.firstName} {mission.lastName}
+                            </h3>
+                            <p className="text-gray-400 text-sm">{mission.assistanceType}</p>
+                          </div>
+                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                            mission.status === 'completed' ? 'bg-green-600 text-white' :
+                            mission.status === 'delivered' ? 'bg-teal-600 text-white' :
+                            mission.status === 'items_purchased' ? 'bg-orange-600 text-white' :
+                            mission.status === 'raised' ? 'bg-emerald-600 text-white' :
+                            mission.status === 'posted' ? 'bg-purple-600 text-white' :
+                            mission.status === 'accepted' ? 'bg-blue-600 text-white' :
+                            mission.status === 'before_the_board' ? 'bg-yellow-600 text-black' :
+                            'bg-gray-600 text-white'
+                          }`}>
+                            {mission.status?.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) || 'Received'}
+                          </span>
+                        </div>
+
+                        <div className="space-y-2 mb-4">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-400">Requested:</span>
+                            <span className="text-white">${mission.amount?.toLocaleString() || 0}</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-400">Raised:</span>
+                            <span className="text-green-400">${mission.amountRaised?.toLocaleString() || 0}</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-400">Progress:</span>
+                            <span className="text-yellow-400">
+                              {mission.amountRaised && mission.amount ? 
+                                Math.round((mission.amountRaised / mission.amount) * 100) : 0}%
+                            </span>
+                          </div>
+                          {mission.dateSubmitted && (
+                            <div className="flex justify-between text-sm">
+                              <span className="text-gray-400">Submitted:</span>
+                              <span className="text-white">{new Date(mission.dateSubmitted).toLocaleDateString()}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => {
+                              setSelectedMission(mission);
+                              setShowMissionCard(true);
+                            }}
+                            className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black py-2 px-4 rounded-lg font-medium transition-colors text-sm"
+                          >
+                            📝 Edit Mission
+                          </button>
+                          <button
+                            onClick={() => {
+                              // View mission details (could open a read-only view)
+                              console.log('View mission:', mission);
+                            }}
+                            className="flex-1 bg-gray-600 hover:bg-gray-500 text-white py-2 px-4 rounded-lg font-medium transition-colors text-sm"
+                          >
+                            👁️ View
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Other sections placeholder */}
-          {activeSection !== 'requests' && (
+          {!['requests', 'missions'].includes(activeSection) && (
             <div className="bg-gray-800 border border-gray-700 rounded-lg p-8 text-center">
               <h2 className="text-2xl font-bold text-white mb-4">
                 {activeSection === 'members' && 'Member Management'}
@@ -445,6 +656,18 @@ const AdminDashboard = () => {
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-700">
+                {/* Create Mission Card Button - First */}
+                <button
+                  onClick={() => {
+                    setSelectedMission(selectedRequest);
+                    setShowMissionCard(true);
+                  }}
+                  className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black py-3 px-4 rounded-lg font-medium transition-colors"
+                >
+                  📋 Create Mission Card
+                </button>
+                
+                {/* Approve Request Button - Second */}
                 <button
                   onClick={async () => {
                     try {
@@ -485,19 +708,6 @@ const AdminDashboard = () => {
                 >
                   ✓ Approve Request
                 </button>
-                
-                {/* Create Mission Card Button - Only show for approved requests */}
-                {selectedRequest?.status === 'approved' && (
-                  <button
-                    onClick={() => {
-                      setSelectedMission(selectedRequest);
-                      setShowMissionCard(true);
-                    }}
-                    className="flex-1 bg-yellow-500 hover:bg-yellow-400 text-black py-3 px-4 rounded-lg font-medium transition-colors"
-                  >
-                    📋 Create Mission Card
-                  </button>
-                )}
                 <button
                   onClick={async () => {
                     try {
@@ -585,13 +795,24 @@ const AdminDashboard = () => {
         <MissionCard
           mission={selectedMission}
           onUpdate={(updatedMission) => {
-            // Update the mission data
-            console.log('Mission updated:', updatedMission);
+            // Update or add mission to missions array
+            setMissions(prevMissions => {
+              const existingIndex = prevMissions.findIndex(m => m.id === updatedMission.id);
+              if (existingIndex >= 0) {
+                // Update existing mission
+                const updated = [...prevMissions];
+                updated[existingIndex] = updatedMission;
+                return updated;
+              } else {
+                // Add new mission
+                return [...prevMissions, updatedMission];
+              }
+            });
             
             // Show success notification
             notificationService.showInAppNotification({
-              title: '✅ Mission Card Updated',
-              message: `Mission card for ${updatedMission.firstName} ${updatedMission.lastName} has been saved.`,
+              title: '✅ Mission Card Saved',
+              message: `Mission card for ${updatedMission.firstName} ${updatedMission.lastName} has been saved to the Missions section.`,
               type: 'success'
             });
           }}
