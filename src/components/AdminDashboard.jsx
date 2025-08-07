@@ -767,21 +767,15 @@ const AdminDashboard = () => {
             // Update or add mission to missions array
             setMissions(prevMissions => {
               const existingIndex = prevMissions.findIndex(m => m.id === updatedMission.id);
-              let updatedMissions;
               if (existingIndex >= 0) {
                 // Update existing mission
                 const updated = [...prevMissions];
                 updated[existingIndex] = updatedMission;
-                updatedMissions = updated;
+                return updated;
               } else {
                 // Add new mission
-                updatedMissions = [...prevMissions, updatedMission];
+                return [...prevMissions, updatedMission];
               }
-              
-              // Save to localStorage for homepage integration
-              localStorage.setItem('kindsquad_missions', JSON.stringify(updatedMissions));
-              
-              return updatedMissions;
             });
             
             // Show success notification
