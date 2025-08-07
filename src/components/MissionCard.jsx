@@ -27,7 +27,16 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
     dateDelivered: mission?.dateDelivered || '',
     
     // Mission Status
-    status: mission?.status || 'received'
+    status: mission?.status || 'received',
+    
+    // Board Approval Fields
+    boardApproval: mission?.boardApproval || {
+      member1: { name: '', date: '', vote: '' },
+      member2: { name: '', date: '', vote: '' },
+      member3: { name: '', date: '', vote: '' },
+      member4: { name: '', date: '', vote: '' },
+      member5: { name: '', date: '', vote: '' }
+    }
   });
 
   const statusOptions = [
@@ -48,10 +57,26 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
 
   const handleInputChange = (e) => {
     const { name, value, type, files } = e.target;
-    setMissionData(prev => ({
-      ...prev,
-      [name]: type === 'file' ? files[0] : value
-    }));
+    
+    // Handle board approval fields
+    if (name.startsWith('boardApproval.')) {
+      const [, member, field] = name.split('.');
+      setMissionData(prev => ({
+        ...prev,
+        boardApproval: {
+          ...prev.boardApproval,
+          [member]: {
+            ...prev.boardApproval[member],
+            [field]: value
+          }
+        }
+      }));
+    } else {
+      setMissionData(prev => ({
+        ...prev,
+        [name]: type === 'file' ? files[0] : value
+      }));
+    }
   };
 
   const handleSave = () => {
@@ -301,6 +326,83 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
                   {missionData.status === 'completed' && (
                     <span className="text-green-400 text-sm">✓ Mission Complete</span>
                   )}
+                </div>
+              </div>
+
+              {/* Board Approval Section */}
+              <div className="bg-gray-700 p-4 rounded-lg">
+                <h3 className="text-lg font-semibold text-white mb-4">Board Approval</h3>
+                <p className="text-gray-300 text-sm mb-6">All 5 board members must record their vote for mission approval</p>
+                
+                <div className="space-y-4">
+                  {[1, 2, 3, 4, 5].map(num => {
+                    const member = `member${num}`;
+                    const memberData = missionData.boardApproval[member];
+                    
+                    return (
+                      <div key={member} className="bg-gray-800 p-4 rounded-lg">
+                        <h4 className="text-white font-medium mb-3">Board Member {num}</h4>
+                        <div className="grid grid-cols-3 gap-4">
+                          <div>
+                            <label className="block text-gray-300 text-sm font-medium mb-2">Name</label>
+                            <input
+                              type="text"
+                              name={`boardApproval.${member}.name`}
+                              value={memberData.name}
+                              onChange={handleInputChange}
+                              placeholder="Board member name"
+                              className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded text-white placeholder-gray-400"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-gray-300 text-sm font-medium mb-2">Date</label>
+                            <input
+                              type="date"
+                              name={`boardApproval.${member}.date`}
+                              value={memberData.date}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded text-white"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-gray-300 text-sm font-medium mb-2">Vote</label>
+                            <select
+                              name={`boardApproval.${member}.vote`}
+                              value={memberData.vote}
+                              onChange={handleInputChange}
+                              className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded text-white"
+                            >
+                              <option value="">Select Vote</option>
+                              <option value="approve">👍 Approve</option>
+                              <option value="reject">👎 Reject</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Approval Summary */}
+                <div className="mt-6 bg-gray-800 p-4 rounded-lg">
+                  <h4 className="text-yellow-400 font-medium mb-3">Approval Summary</h4>
+                  <div className="flex space-x-6 text-sm">
+                    <span className="text-gray-300">
+                      Votes Cast: <span className="text-white font-medium">
+                        {Object.values(missionData.boardApproval).filter(m => m.vote).length}/5
+                      </span>
+                    </span>
+                    <span className="text-gray-300">
+                      Approvals: <span className="text-green-400 font-medium">
+                        {Object.values(missionData.boardApproval).filter(m => m.vote === 'approve').length}
+                      </span>
+                    </span>
+                    <span className="text-gray-300">
+                      Rejections: <span className="text-red-400 font-medium">
+                        {Object.values(missionData.boardApproval).filter(m => m.vote === 'reject').length}
+                      </span>
+                    </span>
+                  </div>
                 </div>
               </div>
 
