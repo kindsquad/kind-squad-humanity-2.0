@@ -27,7 +27,11 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
     dateDelivered: mission?.dateDelivered || '',
     
     // Mission Status
-    status: mission?.status || 'received'
+    status: mission?.status || 'received',
+    
+    // Publish Status
+    isPublished: mission?.isPublished || false,
+    publishedDate: mission?.publishedDate || ''
   });
 
   const statusOptions = [
@@ -64,6 +68,18 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
     }
     
     onUpdate(missionData);
+    onClose();
+  };
+
+  const handlePublish = () => {
+    const publishedMission = {
+      ...missionData,
+      isPublished: true,
+      publishedDate: new Date().toISOString().split('T')[0],
+      status: 'posted' // Auto-update status to posted when published
+    };
+    
+    onUpdate(publishedMission);
     onClose();
   };
 
@@ -423,19 +439,48 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-end space-x-4 mt-6 pt-6 border-t border-gray-600">
-            <button
-              onClick={onClose}
-              className="px-6 py-2 bg-gray-600 text-white rounded hover:bg-gray-500 transition-colors"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              className="px-6 py-2 bg-yellow-500 text-black rounded hover:bg-yellow-400 transition-colors font-semibold"
-            >
-              Save Mission Card
-            </button>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-6 pt-6 border-t border-gray-600">
+            {/* Publish Status Indicator */}
+            <div className="flex items-center space-x-2">
+              {missionData.isPublished ? (
+                <div className="flex items-center space-x-2">
+                  <span className="px-3 py-1 bg-green-600 text-white rounded-full text-sm font-medium">
+                    ✓ Published to Homepage
+                  </span>
+                  <span className="text-gray-400 text-sm">
+                    {missionData.publishedDate && new Date(missionData.publishedDate).toLocaleDateString()}
+                  </span>
+                </div>
+              ) : (
+                <span className="px-3 py-1 bg-gray-600 text-gray-300 rounded-full text-sm">
+                  Not Published
+                </span>
+              )}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex space-x-3">
+              <button
+                onClick={onClose}
+                className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                className="px-4 py-2 bg-yellow-500 text-black rounded hover:bg-yellow-400 transition-colors font-semibold"
+              >
+                Save Mission
+              </button>
+              {!missionData.isPublished && (
+                <button
+                  onClick={handlePublish}
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-500 transition-colors font-semibold"
+                >
+                  📢 Publish to Homepage
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </div>
