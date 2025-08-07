@@ -31,7 +31,13 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
     
     // Publish Status
     isPublished: mission?.isPublished || false,
-    publishedDate: mission?.publishedDate || ''
+    publishedDate: mission?.publishedDate || '',
+    
+    // Anonymous Story Fields (Seth Godin Style)
+    anonymousTitle: mission?.anonymousTitle || '',
+    openingHook: mission?.openingHook || '',
+    anonymousStory: mission?.anonymousStory || '',
+    urgencyMessage: mission?.urgencyMessage || ''
   });
 
   const statusOptions = [
@@ -435,6 +441,115 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Anonymous Story Section (Seth Godin Style) */}
+          <div className="bg-gray-700 p-4 rounded-lg mt-6">
+            <h3 className="text-lg font-semibold text-white mb-4">📝 Anonymous Story for Homepage</h3>
+            <p className="text-gray-400 text-sm mb-4">
+              Create a compelling, anonymous story that protects privacy while inspiring action. Follow Seth Godin's principles: lead with emotion, make it universal, show the stakes.
+            </p>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-gray-300 text-sm font-medium mb-2">
+                  Anonymous Title
+                </label>
+                <input
+                  type="text"
+                  name="anonymousTitle"
+                  value={missionData.anonymousTitle}
+                  onChange={handleInputChange}
+                  placeholder="e.g., When Cancer Steals Everything, Keeping the Lights On"
+                  className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded text-white placeholder-gray-400"
+                />
+                <p className="text-gray-400 text-xs mt-1">
+                  Universal situation everyone can understand (no names)
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-gray-300 text-sm font-medium mb-2">
+                  Opening Hook
+                </label>
+                <textarea
+                  name="openingHook"
+                  value={missionData.openingHook}
+                  onChange={handleInputChange}
+                  rows="2"
+                  placeholder="e.g., The call came at 3 AM. 'Your house is on fire.'"
+                  className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded text-white placeholder-gray-400"
+                />
+                <p className="text-gray-400 text-xs mt-1">
+                  The moment everything changed - grab attention immediately
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-gray-300 text-sm font-medium mb-2">
+                  Anonymous Story
+                </label>
+                <textarea
+                  name="anonymousStory"
+                  value={missionData.anonymousStory}
+                  onChange={handleInputChange}
+                  rows="4"
+                  placeholder="Tell the human story without revealing identity. Focus on universal experiences and emotions that create connection."
+                  className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded text-white placeholder-gray-400"
+                />
+                <p className="text-gray-400 text-xs mt-1">
+                  Build understanding and empathy without invasion of privacy
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-gray-300 text-sm font-medium mb-2">
+                  Urgency Message
+                </label>
+                <input
+                  type="text"
+                  name="urgencyMessage"
+                  value={missionData.urgencyMessage}
+                  onChange={handleInputChange}
+                  placeholder="e.g., Eviction notice: 14 days. Disconnection scheduled: 7 days."
+                  className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded text-white placeholder-gray-400"
+                />
+                <p className="text-gray-400 text-xs mt-1">
+                  Create urgency without manipulation - show real stakes
+                </p>
+              </div>
+
+              {/* Story Preview */}
+              {(missionData.anonymousTitle || missionData.openingHook || missionData.anonymousStory) && (
+                <div className="bg-gray-800 p-4 rounded-lg border border-gray-600">
+                  <h4 className="text-yellow-400 font-semibold mb-3">📖 Story Preview:</h4>
+                  <div className="text-gray-200 text-sm space-y-2">
+                    {missionData.anonymousTitle && (
+                      <div>
+                        <strong className="text-white">
+                          Mission {missionData.id?.replace(/[^0-9]/g, '') || 'XXX'}: {missionData.anonymousTitle}
+                        </strong>
+                      </div>
+                    )}
+                    {missionData.openingHook && (
+                      <div className="italic text-gray-300">
+                        {missionData.openingHook}
+                      </div>
+                    )}
+                    {missionData.anonymousStory && (
+                      <div className="whitespace-pre-line">
+                        {missionData.anonymousStory}
+                      </div>
+                    )}
+                    {missionData.urgencyMessage && (
+                      <div className="text-orange-400 font-medium">
+                        {missionData.urgencyMessage}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 

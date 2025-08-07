@@ -65,7 +65,12 @@ export default function MissionSpotlight() {
     return Math.min(Math.round((raised / amount) * 100), 100);
   };
 
-  const getAnonymousTitle = (assistanceType) => {
+  const getAnonymousTitle = (mission) => {
+    // Use custom title if provided, otherwise use default based on assistance type
+    if (mission.anonymousTitle) {
+      return mission.anonymousTitle;
+    }
+    
     const titles = {
       'Utility Bills': 'Keeping the Lights On',
       'Food Assistance': 'When Hunger Knocks',
@@ -74,10 +79,25 @@ export default function MissionSpotlight() {
       'Rent Assistance': 'A Place to Call Home',
       'Emergency Relief': 'When Crisis Strikes'
     };
-    return titles[assistanceType] || 'A Community Responds';
+    return titles[mission.assistanceType] || 'A Community Responds';
   };
 
-  const getAnonymousStory = (assistanceType, description) => {
+  const getAnonymousStory = (mission) => {
+    // Use custom story if provided, otherwise use default based on assistance type
+    if (mission.openingHook || mission.anonymousStory) {
+      let story = '';
+      if (mission.openingHook) {
+        story += mission.openingHook + '\n\n';
+      }
+      if (mission.anonymousStory) {
+        story += mission.anonymousStory;
+      }
+      if (mission.urgencyMessage) {
+        story += '\n\n' + mission.urgencyMessage;
+      }
+      return story;
+    }
+    
     const stories = {
       'Utility Bills': 'Winter came early this year. So did the disconnect notice.\n\nAn individual on fixed income, watching bills climb while savings disappear. The choice between warmth and food shouldn\'t exist, but here we are.',
       'Food Assistance': 'The math just doesn\'t add up anymore.\n\nA family working hard but still falling short. Rent went up, hours got cut, and the gap between income and survival keeps growing.',
@@ -86,7 +106,7 @@ export default function MissionSpotlight() {
       'Emergency Relief': 'Sometimes life piles on all at once.\n\nWhen crisis strikes, it doesn\'t come alone. One emergency becomes many, and the weight becomes too much to bear alone.'
     };
     
-    return stories[assistanceType] || `Life threw an unexpected challenge.\n\n${description}`;
+    return stories[mission.assistanceType] || `Life threw an unexpected challenge.\n\n${mission.description}`;
   };
 
   const getUrgencyMessage = (status, amount, amountRaised) => {
@@ -137,13 +157,13 @@ export default function MissionSpotlight() {
             </div>
             
             <h4 className="text-xl font-bold text-white mb-6">
-              Mission {displayMission.id?.replace(/[^0-9]/g, '') || '177'}: {getAnonymousTitle(displayMission.assistanceType)}
+              Mission {displayMission.id?.replace(/[^0-9]/g, '') || '177'}: {getAnonymousTitle(displayMission)}
             </h4>
             
             {/* Anonymous Story Section */}
             <div className="mb-6">
               <div className="text-gray-200 text-sm leading-relaxed whitespace-pre-line">
-                {getAnonymousStory(displayMission.assistanceType, displayMission.description)}
+                {getAnonymousStory(displayMission)}
               </div>
             </div>
 
