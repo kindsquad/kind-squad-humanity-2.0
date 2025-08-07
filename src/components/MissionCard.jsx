@@ -37,6 +37,15 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
     isPublished: mission?.isPublished || false,
     publishedDate: mission?.publishedDate || '',
     
+    // Board Approval Fields
+    boardApproval: mission?.boardApproval || {
+      member1: { name: '', date: '', vote: '' },
+      member2: { name: '', date: '', vote: '' },
+      member3: { name: '', date: '', vote: '' },
+      member4: { name: '', date: '', vote: '' },
+      member5: { name: '', date: '', vote: '' }
+    },
+    
     // Anonymous Story Fields (Seth Godin Style)
     anonymousTitle: mission?.anonymousTitle || '',
     openingHook: mission?.openingHook || '',
@@ -62,10 +71,26 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
 
   const handleInputChange = (e) => {
     const { name, value, type, files } = e.target;
-    setMissionData(prev => ({
-      ...prev,
-      [name]: type === 'file' ? files[0] : value
-    }));
+    
+    // Handle board approval fields
+    if (name.startsWith('boardApproval.')) {
+      const [, member, field] = name.split('.');
+      setMissionData(prev => ({
+        ...prev,
+        boardApproval: {
+          ...prev.boardApproval,
+          [member]: {
+            ...prev.boardApproval[member],
+            [field]: value
+          }
+        }
+      }));
+    } else {
+      setMissionData(prev => ({
+        ...prev,
+        [name]: type === 'file' ? files[0] : value
+      }));
+    }
   };
 
   const handleSave = () => {
@@ -386,6 +411,92 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
                   {missionData.status === 'completed' && (
                     <span className="text-green-400 text-sm">✓ Mission Complete</span>
                   )}
+                </div>
+              </div>
+
+              {/* Board Approval Section */}
+              <div className="bg-gray-700 p-4 rounded-lg">
+                <h3 className="text-lg font-semibold text-white mb-4">Board Approval</h3>
+                <p className="text-gray-400 text-sm mb-4">
+                  All 5 board members must record their vote for mission approval
+                </p>
+                
+                <div className="space-y-4">
+                  {Object.entries(missionData.boardApproval).map(([memberKey, member], index) => (
+                    <div key={memberKey} className="bg-gray-800 p-3 rounded-lg border border-gray-600">
+                      <h4 className="text-white font-medium mb-3">Board Member {index + 1}</h4>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div>
+                          <label className="block text-gray-300 text-xs font-medium mb-1">
+                            Name
+                          </label>
+                          <input
+                            type="text"
+                            name={`boardApproval.${memberKey}.name`}
+                            value={member.name}
+                            onChange={handleInputChange}
+                            placeholder="Board member name"
+                            className="w-full px-2 py-1 bg-gray-600 border border-gray-500 rounded text-white text-sm"
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-gray-300 text-xs font-medium mb-1">
+                            Date
+                          </label>
+                          <input
+                            type="date"
+                            name={`boardApproval.${memberKey}.date`}
+                            value={member.date}
+                            onChange={handleInputChange}
+                            className="w-full px-2 py-1 bg-gray-600 border border-gray-500 rounded text-white text-sm"
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-gray-300 text-xs font-medium mb-1">
+                            Vote
+                          </label>
+                          <select
+                            name={`boardApproval.${memberKey}.vote`}
+                            value={member.vote}
+                            onChange={handleInputChange}
+                            className="w-full px-2 py-1 bg-gray-600 border border-gray-500 rounded text-white text-sm"
+                          >
+                            <option value="">Select Vote</option>
+                            <option value="up">👍 Approve</option>
+                            <option value="down">👎 Reject</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  
+                  {/* Board Approval Summary */}
+                  <div className="bg-gray-800 p-3 rounded-lg border border-gray-600 mt-4">
+                    <h4 className="text-yellow-400 font-medium mb-2">Approval Summary</h4>
+                    <div className="grid grid-cols-3 gap-4 text-sm">
+                      <div>
+                        <span className="text-gray-300">Votes Cast:</span>
+                        <span className="text-white ml-2">
+                          {Object.values(missionData.boardApproval).filter(m => m.vote).length}/5
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-gray-300">Approvals:</span>
+                        <span className="text-green-400 ml-2">
+                          {Object.values(missionData.boardApproval).filter(m => m.vote === 'up').length}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-gray-300">Rejections:</span>
+                        <span className="text-red-400 ml-2">
+                          {Object.values(missionData.boardApproval).filter(m => m.vote === 'down').length}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
