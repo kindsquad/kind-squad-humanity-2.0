@@ -157,7 +157,12 @@ export default function MissionSpotlight() {
             </div>
             
             <h4 className="text-xl font-bold text-white mb-6">
-              Mission {displayMission.id?.replace(/[^0-9]/g, '') || '177'}: {getAnonymousTitle(displayMission)}
+              Mission {(() => {
+                // Generate mission number starting from 177
+                const baseNumber = 177;
+                const idNumber = displayMission.id?.replace(/[^0-9]/g, '');
+                return idNumber ? (baseNumber + parseInt(idNumber) - 1) : baseNumber;
+              })()}: {getAnonymousTitle(displayMission)}
             </h4>
             
             {/* Anonymous Story Section */}

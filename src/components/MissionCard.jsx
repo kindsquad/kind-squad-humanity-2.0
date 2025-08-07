@@ -8,6 +8,10 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
     lastName: mission?.lastName || '',
     email: mission?.email || '',
     phone: mission?.phone || '',
+    address: mission?.address || '',
+    city: mission?.city || '',
+    state: mission?.state || '',
+    zipCode: mission?.zipCode || '',
     assistanceType: mission?.assistanceType || '',
     amount: mission?.amount || 0,
     description: mission?.description || '',
@@ -198,6 +202,65 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
                       value={missionData.phone}
                       className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded text-white"
                       readOnly
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-gray-300 text-sm font-medium mb-2">
+                      Address
+                    </label>
+                    <input
+                      type="text"
+                      name="address"
+                      value={missionData.address}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded text-white"
+                      placeholder="Street address"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-gray-300 text-sm font-medium mb-2">
+                        City
+                      </label>
+                      <input
+                        type="text"
+                        name="city"
+                        value={missionData.city}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded text-white"
+                        placeholder="City"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-300 text-sm font-medium mb-2">
+                        State
+                      </label>
+                      <input
+                        type="text"
+                        name="state"
+                        value={missionData.state}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded text-white"
+                        placeholder="State"
+                        maxLength="2"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-gray-300 text-sm font-medium mb-2">
+                      ZIP Code
+                    </label>
+                    <input
+                      type="text"
+                      name="zipCode"
+                      value={missionData.zipCode}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded text-white"
+                      placeholder="ZIP Code"
+                      maxLength="10"
                     />
                   </div>
 
@@ -528,7 +591,12 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
                     {missionData.anonymousTitle && (
                       <div>
                         <strong className="text-white">
-                          Mission {missionData.id?.replace(/[^0-9]/g, '') || 'XXX'}: {missionData.anonymousTitle}
+                          Mission {(() => {
+                            // Generate mission number starting from 177
+                            const baseNumber = 177;
+                            const idNumber = missionData.id?.replace(/[^0-9]/g, '');
+                            return idNumber ? (baseNumber + parseInt(idNumber) - 1) : baseNumber;
+                          })()}: {missionData.anonymousTitle}
                         </strong>
                       </div>
                     )}
@@ -547,6 +615,18 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
                         {missionData.urgencyMessage}
                       </div>
                     )}
+                    
+                    {/* Community Math Section */}
+                    <div className="mt-4 bg-gray-700/50 rounded-lg p-3 border border-gray-600">
+                      <div className="text-yellow-400 font-semibold mb-2">The Math:</div>
+                      <div className="space-y-1 text-sm">
+                        <div>${missionData.amount?.toLocaleString() || '0'} needed</div>
+                        <div>Kind Squad: 2,647 members strong</div>
+                        <div className="text-yellow-400 font-medium">
+                          The Ask: {Math.ceil((missionData.amount || 0) / 5)} people × $5 each = Mission Complete
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
