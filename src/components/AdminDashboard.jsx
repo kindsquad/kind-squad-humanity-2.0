@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Header from './Header';
-import Footer from './Footer';
-import notificationService from '../utils/notificationService';
 import MissionCard from './MissionCard';
-import MissionSection from './MissionSection';
+import RequestHelpForm from './RequestHelpForm';
 
 const AdminDashboard = () => {
   const [activeSection, setActiveSection] = useState('requests');
@@ -459,8 +456,6 @@ const AdminDashboard = () => {
                             </div>
                           )}
                         </div>
-
-                        <MissionSection mission={mission} />
 
                         {/* Receipt Display Section */}
                         {mission.receipt && (
