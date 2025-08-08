@@ -406,6 +406,62 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
                 </div>
               </div>
 
+              {/* Seth Godin Anonymous Story Guidelines */}
+              <div className="bg-blue-900 p-4 rounded-lg border border-blue-600">
+                <h3 className="text-lg font-semibold text-white mb-4">📝 Seth Godin's Anonymous Story Guidelines</h3>
+                
+                <div className="space-y-4 text-sm">
+                  <div className="bg-blue-800 p-3 rounded">
+                    <h4 className="text-yellow-400 font-semibold mb-2">🎯 Core Principles for Compelling Mission Stories</h4>
+                    <ul className="text-gray-200 space-y-1 text-xs">
+                      <li>• <strong>Lead with Universal Experience:</strong> "A mother facing impossible choices" vs "Sarah needs help"</li>
+                      <li>• <strong>Create Urgency Through Specificity:</strong> "Late-stage cancer has stolen her ability to work"</li>
+                      <li>• <strong>Make the Math Human:</strong> "240 people choosing to care" vs "We need $1,200"</li>
+                      <li>• <strong>Community Over Charity:</strong> Transform donors into a movement</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-blue-800 p-3 rounded">
+                    <h4 className="text-yellow-400 font-semibold mb-2">📖 Story Structure Formula</h4>
+                    <div className="text-gray-200 space-y-2 text-xs">
+                      <div><strong>Title:</strong> "Mission [Number]: [Universal Situation]"</div>
+                      <div><strong>Opening Hook:</strong> Start with the moment everything changed</div>
+                      <div><strong>The Stakes:</strong> What happens if we don't act? (Real but not manipulative)</div>
+                      <div><strong>Community Call:</strong> "2,647 members strong. We need just 240 to step forward."</div>
+                      <div><strong>The Vision:</strong> What success looks like for the community</div>
+                    </div>
+                  </div>
+
+                  <div className="bg-blue-800 p-3 rounded">
+                    <h4 className="text-yellow-400 font-semibold mb-2">✨ Example Titles</h4>
+                    <div className="text-gray-200 space-y-1 text-xs">
+                      <div>• "Mission 177: When Cancer Steals Everything"</div>
+                      <div>• "Mission 178: A Family's Fresh Start"</div>
+                      <div>• "Mission 179: Keeping the Lights On"</div>
+                      <div>• "Mission 180: When Fire Takes Everything"</div>
+                    </div>
+                  </div>
+
+                  <div className="bg-blue-800 p-3 rounded">
+                    <h4 className="text-yellow-400 font-semibold mb-2">🔥 Powerful Opening Hooks</h4>
+                    <div className="text-gray-200 space-y-1 text-xs">
+                      <div>• "The diagnosis came on a Tuesday. By Friday, everything had changed."</div>
+                      <div>• "The call came at 3 AM. 'Your house is on fire.'"</div>
+                      <div>• "Eviction notice: 14 days. A lifetime of memories, reduced to a countdown."</div>
+                      <div>• "The machine stopped working. With it, her ability to breathe freely."</div>
+                    </div>
+                  </div>
+
+                  <div className="bg-green-800 p-3 rounded">
+                    <h4 className="text-yellow-400 font-semibold mb-2">💡 Remember: Privacy Protection</h4>
+                    <div className="text-gray-200 text-xs">
+                      <strong>Never use:</strong> Real names, specific addresses, identifying details<br/>
+                      <strong>Always use:</strong> Universal situations, emotional moments, community language
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Mission Progress Fields */}
               <div className="bg-gray-700 p-4 rounded-lg">
                 <h3 className="text-lg font-semibold text-white mb-4">Mission Progress</h3>
