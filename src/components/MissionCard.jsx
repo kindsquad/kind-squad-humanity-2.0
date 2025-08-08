@@ -595,6 +595,18 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
                       className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded text-white"
                     />
                   </div>
+
+                  {/* The Mission Section */}
+                  <div className="mt-6 pt-4 border-t border-gray-600">
+                    <h4 className="text-gray-300 text-sm font-medium mb-3">The Mission</h4>
+                    <div className="bg-gray-600 p-3 rounded border border-gray-500">
+                      <div className="text-sm text-gray-200 space-y-1">
+                        <div>• ${missionData.amount?.toLocaleString() || 0} needed</div>
+                        <div>• Our community: 2,647 members strong</div>
+                        <div>• We are asking {missionData.amount ? Math.ceil(missionData.amount / 5) : 0} people to donate $5 each to complete this mission.</div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
