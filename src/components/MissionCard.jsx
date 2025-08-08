@@ -411,9 +411,9 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
                 </div>
               </div>
 
-              {/* Seth Godin Anonymous Story Guidelines */}
+              {/* Anonymous Story Guidelines */}
               <div className="bg-blue-900 p-4 rounded-lg border border-blue-600">
-                <h3 className="text-lg font-semibold text-white mb-4">📝 Seth Godin's Anonymous Story Guidelines</h3>
+                <h3 className="text-lg font-semibold text-white mb-4">📝 Anonymous Story Guidelines</h3>
                 
                 <div className="space-y-4 text-sm">
                   <div className="bg-blue-800 p-3 rounded">
