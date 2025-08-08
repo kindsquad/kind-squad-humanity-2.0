@@ -452,11 +452,31 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
                     </div>
                   </div>
 
-                  <div className="bg-green-800 p-3 rounded">
-                    <h4 className="text-yellow-400 font-semibold mb-2">💡 Remember: Privacy Protection</h4>
-                    <div className="text-gray-200 text-xs">
-                      <strong>Never use:</strong> Real names, specific addresses, identifying details<br/>
-                      <strong>Always use:</strong> Universal situations, emotional moments, community language
+                  <div className="bg-red-900 p-3 rounded border border-red-600">
+                    <h4 className="text-yellow-400 font-semibold mb-2">🚨 CRITICAL: Keep Recipients Anonymous</h4>
+                    <div className="text-gray-200 text-xs space-y-2">
+                      <div className="bg-red-800 p-2 rounded">
+                        <strong className="text-red-300">NEVER USE WHEN PUBLISHING:</strong><br/>
+                        • Real first or last names<br/>
+                        • Specific street addresses<br/>
+                        • Phone numbers or email addresses<br/>
+                        • Photos showing faces<br/>
+                        • Workplace names or schools<br/>
+                        • Any identifying details
+                      </div>
+                      <div className="bg-green-800 p-2 rounded">
+                        <strong className="text-green-300">ALWAYS USE INSTEAD:</strong><br/>
+                        • "A mother," "A veteran," "A family"<br/>
+                        • "A woman in her 40s," "An elderly man"<br/>
+                        • City/state only (no specific addresses)<br/>
+                        • Universal situations everyone understands<br/>
+                        • Emotional moments without personal details<br/>
+                        • Community-focused language
+                      </div>
+                      <div className="bg-yellow-800 p-2 rounded">
+                        <strong className="text-yellow-300">PRIVACY = DIGNITY:</strong><br/>
+                        Protecting anonymity preserves the recipient's dignity while still allowing the community to connect with their humanity.
+                      </div>
                     </div>
                   </div>
                 </div>
