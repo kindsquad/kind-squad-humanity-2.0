@@ -36,7 +36,12 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
       member3: { name: '', date: '', vote: '' },
       member4: { name: '', date: '', vote: '' },
       member5: { name: '', date: '', vote: '' }
-    }
+    },
+    
+    // The Mission Section Fields
+    missionAmountNeeded: mission?.missionAmountNeeded || mission?.amount || 0,
+    missionCommunityCount: mission?.missionCommunityCount || 2647,
+    missionDonationAmount: mission?.missionDonationAmount || 5
   });
 
   const statusOptions = [
@@ -74,7 +79,7 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
     } else {
       setMissionData(prev => ({
         ...prev,
-        [name]: type === 'file' ? files[0] : value
+        [name]: type === 'file' ? files[0] : (type === 'number' ? parseFloat(value) || 0 : value)
       }));
     }
   };
@@ -596,14 +601,67 @@ const MissionCard = ({ mission, onUpdate, onClose }) => {
                     />
                   </div>
 
-                  {/* The Mission Section */}
+                  {/* The Mission Section - Editable */}
                   <div className="mt-6 pt-4 border-t border-gray-600">
                     <h4 className="text-gray-300 text-sm font-medium mb-3">The Mission</h4>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                      <div>
+                        <label className="block text-gray-300 text-xs font-medium mb-1">
+                          Amount Needed
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-2 text-gray-400">$</span>
+                          <input
+                            type="number"
+                            name="missionAmountNeeded"
+                            value={missionData.missionAmountNeeded}
+                            onChange={handleInputChange}
+                            className="w-full pl-8 pr-3 py-2 bg-gray-600 border border-gray-500 rounded text-white text-sm"
+                            min="0"
+                            step="0.01"
+                          />
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-gray-300 text-xs font-medium mb-1">
+                          Community Members
+                        </label>
+                        <input
+                          type="number"
+                          name="missionCommunityCount"
+                          value={missionData.missionCommunityCount}
+                          onChange={handleInputChange}
+                          className="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded text-white text-sm"
+                          min="1"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-gray-300 text-xs font-medium mb-1">
+                          Donation Amount
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-2 text-gray-400">$</span>
+                          <input
+                            type="number"
+                            name="missionDonationAmount"
+                            value={missionData.missionDonationAmount}
+                            onChange={handleInputChange}
+                            className="w-full pl-8 pr-3 py-2 bg-gray-600 border border-gray-500 rounded text-white text-sm"
+                            min="0.01"
+                            step="0.01"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    
                     <div className="bg-gray-600 p-3 rounded border border-gray-500">
                       <div className="text-sm text-gray-200 space-y-1">
-                        <div>• ${missionData.amount?.toLocaleString() || 0} needed</div>
-                        <div>• Our community: 2,647 members strong</div>
-                        <div>• We are asking {missionData.amount ? Math.ceil(missionData.amount / 5) : 0} people to donate $5 each to complete this mission.</div>
+                        <div>• ${missionData.missionAmountNeeded?.toLocaleString() || 0} needed</div>
+                        <div>• Our community: {missionData.missionCommunityCount?.toLocaleString() || 0} members strong!</div>
+                        <div>• We are asking {missionData.missionAmountNeeded && missionData.missionDonationAmount ? Math.ceil(missionData.missionAmountNeeded / missionData.missionDonationAmount) : 0} people to donate ${missionData.missionDonationAmount || 0} each to complete this mission.</div>
                       </div>
                     </div>
                   </div>
