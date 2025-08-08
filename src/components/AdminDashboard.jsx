@@ -459,6 +459,16 @@ const AdminDashboard = () => {
                           )}
                         </div>
 
+                        {/* The Mission Section */}
+                        <div className="mb-2 p-2 bg-blue-900 rounded border border-blue-600">
+                          <h4 className="text-xs font-semibold text-yellow-400 mb-1">The Mission</h4>
+                          <div className="text-xs text-gray-200 space-y-0.5">
+                            <div>• ${mission.amount?.toLocaleString() || 0} needed</div>
+                            <div>• Our community: 2,647 members strong</div>
+                            <div>• We are asking {mission.amount ? Math.ceil(mission.amount / 5) : 0} people to donate $5 each to complete this mission.</div>
+                          </div>
+                        </div>
+
                         {/* Receipt Display Section */}
                         {mission.receipt && (
                           <div className="mb-2 p-2 bg-gray-600 rounded border border-gray-500">
@@ -483,16 +493,6 @@ const AdminDashboard = () => {
                             </div>
                           </div>
                         )}
-
-                        {/* The Mission Section */}
-                        <div className="mb-2 p-2 bg-blue-900 rounded border border-blue-600">
-                          <h4 className="text-xs font-semibold text-yellow-400 mb-1">The Mission</h4>
-                          <div className="text-xs text-gray-200 space-y-0.5">
-                            <div>• ${mission.amount?.toLocaleString() || 0} needed</div>
-                            <div>• Our community: 2,647 members strong</div>
-                            <div>• We are asking {mission.amount ? Math.ceil(mission.amount / 5) : 0} people to donate $5 each to complete this mission.</div>
-                          </div>
-                        </div>
 
                         <div className="flex flex-col gap-1">
                           <button
